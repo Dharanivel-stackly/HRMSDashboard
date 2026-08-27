@@ -14,7 +14,7 @@ import {
 /** Platform-level metrics aligned to One Enterprise BRD (Platform Admin + modules) */
 const stats = [
   {
-    label: 'Active Tenants',
+    label: 'Active Tenant',
     value: '12',
     icon: Building2,
     accent: 'blue' as const,
@@ -23,7 +23,7 @@ const stats = [
     subtext: 'Multi-tenant organizations',
   },
   {
-    label: 'Platform Users',
+    label: 'Platform User',
     value: '1,248',
     icon: Users,
     accent: 'purple' as const,
