@@ -14,7 +14,7 @@ import {
 /** HRMS module metrics aligned to One Enterprise BRD */
 const hrmsStats = [
   {
-    label: 'Total Employee',
+    label: 'Total Employees',
     value: '842',
     icon: Users,
     accent: 'purple' as const,
