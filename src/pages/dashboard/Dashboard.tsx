@@ -23,7 +23,7 @@ const stats = [
     subtext: 'Multi-tenant organizations',
   },
   {
-    label: 'Platform Users',
+    label: 'Platform User',
     value: '1,248',
     icon: Users,
     accent: 'purple' as const,
