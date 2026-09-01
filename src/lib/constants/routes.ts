@@ -29,5 +29,6 @@ export const ROUTES = {
     PERFORMANCE: '/hrms/performance',
     DOCUMENTS: '/hrms/documents',
     REPORTS: '/hrms/reports',
+    EMPLOYEE_REPORTS: '/hrms/reports/employees',
   },
 } as const

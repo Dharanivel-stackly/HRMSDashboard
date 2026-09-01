@@ -69,7 +69,13 @@ export function Sidebar() {
     const hasChildren = Boolean(item.children?.length)
     const visibleChildren = item.children?.filter((child) => canSeeItem(child)) ?? []
     const isExpanded = Boolean(expandedMenus[item.path])
-    const moduleActive = hasChildren && isUnderModule(item.path)
+    // const moduleActive = hasChildren && isUnderModule(item.path)
+    const moduleActive =
+      hasChildren &&
+      isUnderModule(item.path) &&
+      !visibleChildren.some(
+        (child) => location.pathname === child.path
+      )
     const leafActive = !hasChildren && isRouteActive(location.pathname, item.path)
 
     if (hasChildren) {
