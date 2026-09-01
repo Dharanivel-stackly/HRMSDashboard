@@ -1,28 +1,21 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  LogIn,
-  LogOut,
-  PencilLine,
-  Eye,
-  FileBarChart,
-} from 'lucide-react'
+import { LogIn, LogOut, PencilLine, Eye, FileBarChart } from 'lucide-react'
 import { PageContainer } from '@/components/layout/PageContainer'
 import { PageHeader } from '@/components/common/PageHeader'
+import { LoadingState } from '@/components/common/LoadingState'
+import { ErrorState } from '@/components/common/ErrorState'
 import { Button } from '@/components/ui/button'
 import { AttendanceKpiCards } from '@/features/hrms/attendance/components/AttendanceKpiCards'
 import { AttendanceFiltersBar } from '@/features/hrms/attendance/components/AttendanceFilters'
 import { AttendanceStatusBadge } from '@/features/hrms/attendance/components/AttendanceStatusBadge'
 import { CheckInOutCard } from '@/features/hrms/attendance/components/CheckInOutCard'
 import {
-  mockAttendanceKpis,
-  mockAttendanceTrend,
-  mockCheckInSession,
-  mockCorrections,
-  mockDailyAttendance,
-  mockDepartmentDistribution,
-} from '@/features/hrms/attendance/mock/attendance.mock'
-import type { AttendanceFilters, CheckInSession } from '@/features/hrms/attendance/types/attendance.types'
+  useAttendanceDashboard,
+  useCheckIn,
+  useCheckOut,
+} from '@/features/hrms/attendance/hooks/useAttendance'
+import type { AttendanceFilters } from '@/features/hrms/attendance/types/attendance.types'
 import { ROUTES } from '@/lib/constants/routes'
 
 export default function AttendanceDashboard() {
@@ -33,48 +26,26 @@ export default function AttendanceDashboard() {
     department: 'All Departments',
     shift: 'All Shifts',
   })
-  const [session, setSession] = useState<CheckInSession>(mockCheckInSession)
+
+  const { data, isLoading, isError, refetch } = useAttendanceDashboard(filters)
+  const checkIn = useCheckIn()
+  const checkOut = useCheckOut()
 
   const maxTrend = useMemo(
-    () => Math.max(...mockAttendanceTrend.map((t) => t.present + t.absent + t.late), 1),
-    []
+    () => Math.max(...(data?.trend.map((t) => t.present + t.absent + t.late) ?? [1]), 1),
+    [data?.trend]
   )
 
-  const lateOrAbsent = mockDailyAttendance.filter(
-    (r) => r.status === 'late' || r.status === 'absent'
-  )
-  const pending = mockCorrections.filter((c) => c.status === 'pending')
-
-  const handleCheckIn = () => {
-    const time = new Date().toLocaleTimeString('en-IN', {
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-    setSession({
-      ...session,
-      checkedIn: true,
-      checkInTime: time,
-      sessionSeconds: 0,
-      statusToday: 'present',
-      lastActivity: `Checked in at ${time}`,
-      validationMessage: 'Active work session started. Remember to check out at end of day.',
-    })
+  if (isLoading) {
+    return (
+      <PageContainer>
+        <LoadingState variant="page" rows={8} />
+      </PageContainer>
+    )
   }
 
-  const handleCheckOut = () => {
-    const time = new Date().toLocaleTimeString('en-IN', {
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-    const hours = Math.max(0.1, session.sessionSeconds / 3600)
-    setSession({
-      ...session,
-      checkOutTime: time,
-      workHoursToday: Number(hours.toFixed(1)),
-      statusToday: hours >= 8 ? 'present' : 'half_day',
-      lastActivity: `Checked out at ${time}`,
-      validationMessage: 'Attendance saved. Hours and status calculated for today.',
-    })
+  if (isError || !data) {
+    return <ErrorState onRetry={() => refetch()} />
   }
 
   return (
@@ -107,7 +78,7 @@ export default function AttendanceDashboard() {
         showSearch={false}
       />
 
-      <AttendanceKpiCards kpis={mockAttendanceKpis} />
+      <AttendanceKpiCards kpis={data.kpis} />
 
       <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-5">
@@ -115,7 +86,7 @@ export default function AttendanceDashboard() {
             <h3 className="text-base font-semibold text-[#0b3d91]">Weekly Attendance Trend</h3>
             <p className="mt-1 text-xs text-muted-foreground">Present / Absent / Late</p>
             <div className="mt-5 flex h-44 items-end gap-3">
-              {mockAttendanceTrend.map((point) => (
+              {data.trend.map((point) => (
                 <div key={point.label} className="flex flex-1 flex-col items-center gap-2">
                   <div className="flex h-36 w-full items-end gap-0.5">
                     <div
@@ -143,7 +114,7 @@ export default function AttendanceDashboard() {
           <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
             <h3 className="text-base font-semibold text-[#0b3d91]">Department-wise Distribution</h3>
             <div className="mt-4 space-y-3">
-              {mockDepartmentDistribution.map((dept) => {
+              {data.departmentDistribution.map((dept) => {
                 const total = dept.present + dept.absent + dept.late + dept.onLeave
                 return (
                   <div key={dept.department}>
@@ -178,9 +149,9 @@ export default function AttendanceDashboard() {
 
         <div className="space-y-5">
           <CheckInOutCard
-            session={session}
-            onCheckIn={handleCheckIn}
-            onCheckOut={handleCheckOut}
+            session={data.session}
+            onCheckIn={() => checkIn.mutate()}
+            onCheckOut={() => checkOut.mutate()}
           />
 
           <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
@@ -195,7 +166,7 @@ export default function AttendanceDashboard() {
               </Button>
             </div>
             <div className="space-y-3">
-              {pending.map((item) => (
+              {data.pendingCorrections.map((item) => (
                 <div
                   key={item.id}
                   className="rounded-lg border border-border/60 bg-brand-soft/50 px-3 py-2.5"
@@ -212,7 +183,7 @@ export default function AttendanceDashboard() {
           <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
             <h3 className="text-base font-semibold text-[#0b3d91]">Late / Absent Today</h3>
             <div className="mt-3 space-y-2">
-              {lateOrAbsent.map((row) => (
+              {data.lateOrAbsent.map((row) => (
                 <div
                   key={row.id}
                   className="flex items-center justify-between rounded-lg border border-border/50 px-3 py-2"
@@ -228,11 +199,16 @@ export default function AttendanceDashboard() {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <Button className="flex-1" onClick={handleCheckIn}>
+            <Button className="flex-1" onClick={() => checkIn.mutate()} disabled={checkIn.isPending}>
               <LogIn className="mr-2 h-4 w-4" />
               Check-In
             </Button>
-            <Button className="flex-1" variant="outline" onClick={handleCheckOut}>
+            <Button
+              className="flex-1"
+              variant="outline"
+              onClick={() => checkOut.mutate()}
+              disabled={checkOut.isPending}
+            >
               <LogOut className="mr-2 h-4 w-4" />
               Check-Out
             </Button>

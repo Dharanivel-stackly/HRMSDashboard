@@ -1,17 +1,18 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { PageContainer } from '@/components/layout/PageContainer'
 import { PageHeader } from '@/components/common/PageHeader'
+import { LoadingState } from '@/components/common/LoadingState'
+import { ErrorState } from '@/components/common/ErrorState'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { StatCard } from '@/components/common/StatCard'
 import { AttendanceCalendar } from '@/features/hrms/attendance/components/AttendanceCalendar'
 import { CheckInOutCard } from '@/features/hrms/attendance/components/CheckInOutCard'
 import {
-  mockCalendarDays,
-  mockCheckInSession,
-  mockMySummary,
-} from '@/features/hrms/attendance/mock/attendance.mock'
-import type { CheckInSession } from '@/features/hrms/attendance/types/attendance.types'
+  useMyAttendance,
+  useCheckIn,
+  useCheckOut,
+} from '@/features/hrms/attendance/hooks/useAttendance'
 import {
   Percent,
   UserCheck,
@@ -23,16 +24,23 @@ import {
 
 export default function MyAttendance() {
   const [month, setMonth] = useState('2026-08')
-  const [session, setSession] = useState<CheckInSession>(mockCheckInSession)
+  const { data, isLoading, isError, refetch } = useMyAttendance(month)
+  const checkIn = useCheckIn()
+  const checkOut = useCheckOut()
 
-  const summary = mockMySummary
-  const monthLabel = useMemo(() => {
-    const [y, m] = month.split('-').map(Number)
-    return new Date(y, m - 1, 1).toLocaleDateString('en-IN', {
-      month: 'long',
-      year: 'numeric',
-    })
-  }, [month])
+  if (isLoading) {
+    return (
+      <PageContainer>
+        <LoadingState variant="page" rows={6} />
+      </PageContainer>
+    )
+  }
+
+  if (isError || !data) {
+    return <ErrorState onRetry={() => refetch()} />
+  }
+
+  const { summary, calendarDays, session } = data
 
   return (
     <PageContainer>
@@ -62,9 +70,19 @@ export default function MyAttendance() {
           badgeTone="success"
         />
         <StatCard label="Present" value={summary.present} icon={UserCheck} accent="blue" />
-        <StatCard label="Absent / Leave" value={`${summary.absent} / ${summary.leave}`} icon={UserX} accent="orange" />
+        <StatCard
+          label="Absent / Leave"
+          value={`${summary.absent} / ${summary.leave}`}
+          icon={UserX}
+          accent="orange"
+        />
         <StatCard label="Late" value={summary.late} icon={Clock} accent="orange" alert />
-        <StatCard label="Holiday / Week Off" value={`${summary.holiday} / ${summary.weekOff}`} icon={CalendarDays} accent="purple" />
+        <StatCard
+          label="Holiday / Week Off"
+          value={`${summary.holiday} / ${summary.weekOff}`}
+          icon={CalendarDays}
+          accent="purple"
+        />
         <StatCard
           label="Overtime Total"
           value={`${summary.overtimeHours}h`}
@@ -76,36 +94,10 @@ export default function MyAttendance() {
       <div className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
         <CheckInOutCard
           session={session}
-          onCheckIn={() => {
-            const time = new Date().toLocaleTimeString('en-IN', {
-              hour: '2-digit',
-              minute: '2-digit',
-            })
-            setSession({
-              ...session,
-              checkedIn: true,
-              checkInTime: time,
-              statusToday: 'present',
-              lastActivity: `Checked in at ${time}`,
-              validationMessage: 'Work session active.',
-            })
-          }}
-          onCheckOut={() => {
-            const time = new Date().toLocaleTimeString('en-IN', {
-              hour: '2-digit',
-              minute: '2-digit',
-            })
-            setSession({
-              ...session,
-              checkOutTime: time,
-              workHoursToday: 8.2,
-              statusToday: 'present',
-              lastActivity: `Checked out at ${time}`,
-              validationMessage: 'Daily attendance finalized for today.',
-            })
-          }}
+          onCheckIn={() => checkIn.mutate()}
+          onCheckOut={() => checkOut.mutate()}
         />
-        <AttendanceCalendar days={mockCalendarDays} monthLabel={monthLabel} />
+        <AttendanceCalendar days={calendarDays} monthLabel={summary.monthLabel} />
       </div>
     </PageContainer>
   )
