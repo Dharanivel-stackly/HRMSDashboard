@@ -30,6 +30,14 @@ export const PERMISSIONS = {
     CREATE: 'recruitment.create',
     UPDATE: 'recruitment.update',
     DELETE: 'recruitment.delete',
+    MANAGE: 'recruitment.manage',
+  },
+  ONBOARDING: {
+    VIEW: 'onboarding.view',
+    CREATE: 'onboarding.create',
+    UPDATE: 'onboarding.update',
+    DELETE: 'onboarding.delete',
+    MANAGE: 'onboarding.manage',
   },
   PERFORMANCE: {
     VIEW: 'performance.view',

@@ -27,6 +27,34 @@ import Recruitment from '@/pages/hrms/recruitment/Recruitment'
 import Performance from '@/pages/hrms/performance/Performance'
 import HRMSDocuments from '@/pages/hrms/documents/Documents'
 import HRMSReports from '@/pages/hrms/reports/Reports'
+import JobRequisition from '@/pages/hrms/recruitment/JobRequisition'
+import JobPosting from '@/pages/hrms/recruitment/JobPosting'
+import CandidateApplication from '@/pages/hrms/recruitment/CandidateApplication'
+import Screening from '@/pages/hrms/recruitment/Screening'
+import Shortlist from '@/pages/hrms/recruitment/Shortlist'
+import InterviewSchedule from '@/pages/hrms/recruitment/InterviewSchedule'
+import Evaluation from '@/pages/hrms/recruitment/Evaluation'
+import OfferGeneration from '@/pages/hrms/recruitment/OfferGeneration'
+import Selection from '@/pages/hrms/recruitment/Selection'
+import OfferAccepted from '@/pages/hrms/recruitment/OfferAccepted'
+import RequisitionApproval from '@/pages/hrms/recruitment/RequisitionApproval'
+import OnboardingDashboard from '@/pages/hrms/onboarding/OnboardingDashboard'
+import OnboardingEmployees from '@/pages/hrms/onboarding/Employees'
+//import OnboardingEmployeeProfile from '@/pages/hrms/onboarding/EmployeeProfile'
+import DocumentCollection from '@/pages/hrms/onboarding/DocumentCollection'
+import DocumentVerification from '@/pages/hrms/onboarding/DocumentVerification'
+import BackgroundVerification from '@/pages/hrms/onboarding/BackgroundVerification'
+import Orientation from '@/pages/hrms/onboarding/Orientation'
+import PolicyAcceptance from '@/pages/hrms/onboarding/PolicyAcceptance'
+import SystemAccess from '@/pages/hrms/onboarding/SystemAccess'
+import ITTasks from '@/pages/hrms/onboarding/ITTasks'
+import AssetAllocation from '@/pages/hrms/onboarding/AssetAllocation'
+import ManagerTasks from '@/pages/hrms/onboarding/ManagerTasks'
+import HRTasks from '@/pages/hrms/onboarding/HRTasks'
+import EmployeeActive from '@/pages/hrms/onboarding/EmployeeActive'
+import NewRequisition from '@/pages/hrms/recruitment/NewRequisition'
+import AppliedCandidates from '@/pages/hrms/recruitment/AppliedCandidates'
+import  EmployeeProfile from '@/pages/hrms/onboarding/EmployeeProfile'
 
 export const router = createBrowserRouter([
   {
@@ -72,6 +100,36 @@ export const router = createBrowserRouter([
       { path: 'hrms/leave', element: <Leave /> },
       { path: 'hrms/payroll', element: <Payroll /> },
       { path: 'hrms/recruitment', element: <Recruitment /> },
+      { path: 'hrms/recruitment/requisitions', element: <JobRequisition /> },
+      { path: 'hrms/recruitment/requisitions/new', element: <NewRequisition /> },
+      { path: 'hrms/recruitment/postings', element: <JobPosting /> },
+      { path: 'hrms/recruitment/candidates', element: <CandidateApplication /> },
+      { path: 'hrms/recruitment/candidates/:id', element: <CandidateApplication /> },
+      { path: 'hrms/recruitment/screening', element: <Screening /> },
+      { path: 'hrms/recruitment/shortlist', element: <Shortlist /> },
+      { path: 'hrms/recruitment/interviews', element: <InterviewSchedule /> },
+      { path: 'hrms/recruitment/evaluation', element: <Evaluation /> },
+      { path: 'hrms/recruitment/selection', element: <Selection /> },
+      { path: 'hrms/recruitment/offers', element: <OfferGeneration /> },
+      { path: 'hrms/recruitment/offers/accepted', element: <OfferAccepted /> },
+      { path: 'hrms/recruitment/approvals', element: <RequisitionApproval /> },
+      { path: 'hrms/recruitment/applied', element: <AppliedCandidates /> },
+
+      { path: 'hrms/onboarding', element: <OnboardingDashboard /> },
+      { path: 'hrms/onboarding/employees', element: <OnboardingEmployees /> },
+      { path: 'hrms/onboarding/employees/:id', element: <EmployeeProfile /> },
+      { path: 'hrms/onboarding/documents', element: <DocumentCollection /> },
+      { path: 'hrms/onboarding/documents/verify', element: <DocumentVerification /> },
+      { path: 'hrms/onboarding/background', element: <BackgroundVerification /> },
+      { path: 'hrms/onboarding/orientation', element: <Orientation /> },
+      { path: 'hrms/onboarding/policies', element: <PolicyAcceptance /> },
+      { path: 'hrms/onboarding/access', element: <SystemAccess /> },
+      { path: 'hrms/onboarding/it', element: <ITTasks /> },
+      { path: 'hrms/onboarding/assets', element: <AssetAllocation /> },
+      { path: 'hrms/onboarding/manager', element: <ManagerTasks /> },
+      { path: 'hrms/onboarding/hr', element: <HRTasks /> },
+      { path: 'hrms/onboarding/active', element: <EmployeeActive /> },
+
       { path: 'hrms/performance', element: <Performance /> },
       { path: 'hrms/documents', element: <HRMSDocuments /> },
       { path: 'hrms/reports', element: <HRMSReports /> },
