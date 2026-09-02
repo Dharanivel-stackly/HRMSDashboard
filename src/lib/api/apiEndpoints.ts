@@ -7,6 +7,10 @@ export const API_ENDPOINTS = {
     RESET_PASSWORD: '/auth/reset-password',
     ME: '/auth/me',
   },
+  USERS: {
+    BASE: '/users',
+    BY_ID: (id: string) => `/users/${id}`,
+  },
   EMPLOYEES: {
     BASE: '/employees',
     BY_ID: (id: string) => `/employees/${id}`,

@@ -4,7 +4,7 @@ import type { LoginFormData } from '@/features/auth/validation/auth.schema'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { authService } from '@/features/auth/services/authService'
 import { setToken, setRefreshToken } from '@/lib/auth/auth'
-import { ROUTES } from '@/lib/constants/routes'
+import { getHomeRoute } from '@/lib/auth/defaultRoute'
 import { ApiError } from '@/lib/api/apiError'
 import { useState } from 'react'
 import { appConfig } from '@/config/app.config'
@@ -23,7 +23,7 @@ export default function Login() {
       setToken(response.accessToken)
       setRefreshToken(response.refreshToken)
       login(response.user)
-      navigate(ROUTES.DASHBOARD)
+      navigate(getHomeRoute(response.user))
     } catch (err) {
       const message =
         err instanceof ApiError

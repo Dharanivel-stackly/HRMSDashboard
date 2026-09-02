@@ -6,7 +6,7 @@ import axios, {
 import { getToken, clearTokens } from '@/lib/auth/auth'
 import { ApiError } from './apiError'
 import { environment } from '@/config/environment'
-import { executeAttendanceMockRequest } from '@/lib/mock/mockAttendanceApiRouter'
+import { executeMockApiRequest } from '@/lib/mock/mockApiRouter'
 import { parseRequestBody, serializeRequestBody } from '@/lib/api/requestBody'
 
 const defaultAdapter = axios.getAdapter(['xhr', 'http', 'fetch'])
@@ -46,9 +46,13 @@ function parseRoutePath(url: string): { path: string; query: Record<string, stri
   return { path, query }
 }
 
-const mockAttendanceAdapter: AxiosAdapter = async (config) => {
+const mockApiAdapter: AxiosAdapter = async (config) => {
   const routeUrl = config.url ?? ''
-  if (!routeUrl.startsWith('/attendance')) {
+  const isMockRoute =
+    routeUrl.startsWith('/attendance') ||
+    routeUrl.startsWith('/users') ||
+    routeUrl.startsWith('/auth')
+  if (!isMockRoute) {
     return defaultAdapter(config)
   }
 
@@ -88,11 +92,17 @@ const mockAttendanceAdapter: AxiosAdapter = async (config) => {
     }
   }
 
-  const mockResponse = await executeAttendanceMockRequest({
+  const mockResponse = await executeMockApiRequest({
     method,
     path,
     query,
     body: parseRequestBody(config.data),
+    headers: Object.fromEntries(
+      Object.entries(config.headers ?? {}).map(([key, value]) => [
+        key,
+        value == null ? '' : String(value),
+      ])
+    ),
   })
 
   if (!mockResponse.body.success) {
@@ -108,7 +118,7 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
   timeout: 30000,
-  adapter: environment.useMockApi ? mockAttendanceAdapter : defaultAdapter,
+  adapter: environment.useMockApi ? mockApiAdapter : defaultAdapter,
 })
 
 apiClient.interceptors.request.use(

@@ -51,31 +51,36 @@ async function handleMockApiRequest(
     }
 
     const routePath = url.pathname.replace(/^\/api/, '') || '/'
-    if (!routePath.startsWith('/attendance')) {
+    const isMockRoute =
+      routePath.startsWith('/attendance') ||
+      routePath.startsWith('/users') ||
+      routePath.startsWith('/auth')
+    if (!isMockRoute) {
       next()
       return
     }
 
-    const { executeAttendanceMockRequest } = await server.ssrLoadModule(
-      '/src/lib/mock/mockAttendanceApiRouter.ts'
-    )
+    const { executeMockApiRequest } = await server.ssrLoadModule('/src/lib/mock/mockApiRouter.ts')
 
     const query = Object.fromEntries(url.searchParams.entries())
     const body = req.method === 'GET' || req.method === 'HEAD' ? undefined : await readJsonBody(req)
 
-    const attendanceResponse = await executeAttendanceMockRequest({
+    const mockResponse = await executeMockApiRequest({
       method: req.method,
       path: routePath,
       query,
       body,
+      headers: {
+        authorization: req.headers.authorization ?? '',
+      },
     })
 
-    if (attendanceResponse.status === 404) {
+    if (mockResponse.status === 404) {
       next()
       return
     }
 
-    sendJson(res, attendanceResponse.status, attendanceResponse.body)
+    sendJson(res, mockResponse.status, mockResponse.body)
   } catch (error) {
     console.error('[mock-api] request failed:', error)
     sendJson(res, 500, { success: false, message: 'Mock API handler failed' })

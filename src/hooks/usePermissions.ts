@@ -10,7 +10,7 @@ export function usePermissions() {
   const checkPermission = useCallback(
     (permission: Permission): boolean => {
       if (!user) return false
-      return hasPermission(user.permissions, permission)
+      return hasPermission(user.permissions, permission, user.roles)
     },
     [user]
   )
@@ -18,7 +18,7 @@ export function usePermissions() {
   const checkAnyPermission = useCallback(
     (permissions: Permission[]): boolean => {
       if (!user) return false
-      return hasAnyPermission(user.permissions, permissions)
+      return hasAnyPermission(user.permissions, permissions, user.roles)
     },
     [user]
   )
@@ -34,7 +34,7 @@ export function usePermissions() {
   const checkModuleAccess = useCallback(
     (modulePrefix: string): boolean => {
       if (!user) return false
-      return canAccessModule(user.permissions, modulePrefix)
+      return canAccessModule(user.permissions, modulePrefix, user.roles)
     },
     [user]
   )

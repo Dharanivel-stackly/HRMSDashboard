@@ -30,4 +30,8 @@ export const ROUTES = {
     DOCUMENTS: '/hrms/documents',
     REPORTS: '/hrms/reports',
   },
+
+  SETTINGS: {
+    USERS: '/settings/users',
+  },
 } as const
