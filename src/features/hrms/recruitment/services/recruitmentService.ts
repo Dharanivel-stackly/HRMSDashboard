@@ -23,7 +23,7 @@ import {
 } from '../mock/recruitment.mock'
 
 // Helper to simulate API delay
-const delay = (ms: number = 500) => new Promise(resolve => setTimeout(resolve, ms))
+const delay = (ms: number = 400) => new Promise(resolve => setTimeout(resolve, ms))
 
 // Mock implementations
 const mockGetRequisitions = async (params?: any): Promise<PaginatedResponse<Requisition>> => {

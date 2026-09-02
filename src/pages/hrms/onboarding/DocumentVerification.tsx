@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Download } from 'lucide-react';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/common/PageHeader';
 import { useDocuments, useVerifyDocument } from '@/features/hrms/onboarding/hooks/useDocumentUpload';
@@ -10,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import type { Document } from '@/features/hrms/onboarding/types/onboarding.types';
 
 export default function DocumentVerification() {
   const { data: documents, isLoading, isError, refetch } = useDocuments();
@@ -20,6 +22,28 @@ export default function DocumentVerification() {
   const [comments, setComments] = useState('');
 
   const pendingDocs = documents?.filter((d) => d.status === 'uploaded' || d.status === 'pending') || [];
+
+  const handleDownload = (doc: Document) => {
+    if (doc.url) {
+      window.open(doc.url, '_blank');
+    } else {
+      // Generate a text file with metadata
+      const content = `Document: ${doc.documentName}
+Type: ${doc.documentType}
+Employee: ${doc.employeeName}
+Uploaded: ${doc.uploadedDate}
+Status: ${doc.status}`;
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${doc.documentName || 'document'}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  };
 
   const handleVerify = () => {
     if (!selectedDocId) return;
@@ -55,7 +79,7 @@ export default function DocumentVerification() {
               <TableHead>Type</TableHead>
               <TableHead>Uploaded</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -77,16 +101,26 @@ export default function DocumentVerification() {
                       Pending
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        setSelectedDocId(doc.id);
-                        setDialogOpen(true);
-                      }}
-                    >
-                      Verify
-                    </Button>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleDownload(doc)}
+                        aria-label={`Download ${doc.documentName}`}
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setSelectedDocId(doc.id);
+                          setDialogOpen(true);
+                        }}
+                      >
+                        Verify
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))

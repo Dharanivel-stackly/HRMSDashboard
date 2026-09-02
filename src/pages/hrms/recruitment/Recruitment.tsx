@@ -36,6 +36,7 @@ import {
   ComposedChart,
   Line,
 } from 'recharts'
+import { usePermissions } from '@/hooks/usePermissions'
 
 // Mock data for charts – you can replace with real API data
 const departmentRequisitions = [
@@ -81,6 +82,9 @@ const statusDistribution = [
 
 export default function Recruitment() {
   const navigate = useNavigate()
+  const {isRole} = usePermissions() 
+
+  const isAdmin = isRole('ADMIN') || isRole('SUPER_ADMIN')
   const stats = recruitmentStats
 
   const statusCards = [
@@ -153,10 +157,10 @@ export default function Recruitment() {
         description="Manage job requisitions, candidates, and hiring pipeline"
         actions={
           <div className="flex flex-wrap gap-2">
-            <Button onClick={() => navigate('/hrms/recruitment/requisitions/new')}>
+            {/*<Button onClick={() => navigate('/hrms/recruitment/requisitions/new')}>
               <FileText className="mr-2 h-4 w-4" />
               New Requisition
-            </Button>
+            </Button>*/}
             <Button variant="outline" onClick={() => navigate('/hrms/recruitment/candidates')}>
               <UserPlus className="mr-2 h-4 w-4" />
               View Candidates

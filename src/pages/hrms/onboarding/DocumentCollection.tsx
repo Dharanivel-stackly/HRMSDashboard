@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Download } from 'lucide-react';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/common/PageHeader';
 import { DocumentUploadDropzone } from '@/features/hrms/onboarding/components/DocumentUploadDropzone';
@@ -8,7 +9,8 @@ import { ErrorState } from '@/components/common/ErrorState';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useState as useStateFilter } from 'react';
+import { Button } from '@/components/ui/button';
+import type { Document } from '@/features/hrms/onboarding/types/onboarding.types';
 
 export default function DocumentCollection() {
   const [employeeIdFilter, setEmployeeIdFilter] = useState<string>('');
@@ -19,6 +21,29 @@ export default function DocumentCollection() {
     upload(formData, {
       onSuccess: () => refetch(),
     });
+  };
+
+  const handleDownload = (doc: Document) => {
+    if (doc.url) {
+      // Open the URL in a new tab (works for PDFs, images, etc.)
+      window.open(doc.url, '_blank');
+    } else {
+      // Fallback: generate a text file with document metadata
+      const content = `Document: ${doc.documentName}
+Type: ${doc.documentType}
+Employee: ${doc.employeeName}
+Uploaded: ${doc.uploadedDate}
+Status: ${doc.status}`;
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${doc.documentName || 'document'}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
   };
 
   if (isLoading) return <LoadingState variant="page" />;
@@ -36,7 +61,7 @@ export default function DocumentCollection() {
       <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
         <h3 className="text-base font-semibold text-[#0b3d91] mb-4">Upload New Document</h3>
         <DocumentUploadDropzone
-          employeeId={employeeIdFilter || 'default-id'} // In real app, select employee
+          employeeId={employeeIdFilter || 'default-id'}
           onUpload={handleUpload}
           isUploading={isUploading}
         />
@@ -51,7 +76,6 @@ export default function DocumentCollection() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="">All</SelectItem>
-              {/* In a real app, fetch employee list */}
               <SelectItem value="ob-1">Aisha Patel</SelectItem>
               <SelectItem value="ob-2">Rohan Kumar</SelectItem>
             </SelectContent>
@@ -65,12 +89,13 @@ export default function DocumentCollection() {
               <TableHead>Type</TableHead>
               <TableHead>Uploaded</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {docs.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
                   No documents found.
                 </TableCell>
               </TableRow>
@@ -96,6 +121,16 @@ export default function DocumentCollection() {
                     >
                       {doc.status}
                     </Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDownload(doc)}
+                      aria-label={`Download ${doc.documentName}`}
+                    >
+                      <Download className="h-4 w-4" />
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))

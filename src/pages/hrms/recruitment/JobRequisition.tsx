@@ -1,5 +1,7 @@
 // src/pages/hrms/recruitment/JobRequisition.tsx
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Plus, Eye, Edit, MoreHorizontal } from 'lucide-react';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/button';
@@ -12,6 +14,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { mockRequisitions } from '@/features/hrms/recruitment/mock/recruitment.mock';
 import {
   REQUISITION_STATUS_LABELS,
@@ -19,19 +27,20 @@ import {
   JOB_TYPE_LABELS,
   PRIORITY_LABELS,
 } from '@/features/hrms/recruitment/constants/recruitment.constants';
-import { Plus, Eye, Edit, MoreHorizontal } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '@/lib/constants/routes';
+import { usePermissions } from '@/hooks/usePermissions';   
+// import { PERMISSIONS } from '@/lib/constants/permissions'; 
 
 export default function JobRequisition() {
   const navigate = useNavigate();
   const [requisitions] = useState(mockRequisitions);
+  const { isRole } = usePermissions(); 
+
+
+  const isAdmin = isRole('ADMIN') || isRole( 'SUPER_ADMIN'); 
+
+
+  // const { can } = usePermissions();
+  // const canCreate = can(PERMISSIONS.RECRUITMENT.CREATE);
 
   return (
     <PageContainer>
@@ -39,10 +48,14 @@ export default function JobRequisition() {
         title="Job Requisitions"
         description="Create and manage job requisitions"
         actions={
-          <Button onClick={() => navigate('/hrms/recruitment/requisitions/new')}>
-            <Plus className="mr-2 h-4 w-4" />
-            New Requisition
-          </Button>
+          isAdmin && (
+            <Button onClick={() => navigate('/hrms/recruitment/requisitions/new')}>
+              <Plus className="mr-2 h-4 w-4" />
+              New Requisition
+            </Button>
+          )
+          // Permission‑based alternative:
+          // canCreate && ( ... )
         }
       />
 
@@ -70,7 +83,9 @@ export default function JobRequisition() {
             ) : (
               requisitions.map((req) => (
                 <TableRow key={req.id}>
-                  <TableCell className="font-mono text-xs font-semibold">{req.requisitionId}</TableCell>
+                  <TableCell className="font-mono text-xs font-semibold">
+                    {req.requisitionId}
+                  </TableCell>
                   <TableCell className="font-medium">{req.title}</TableCell>
                   <TableCell>{req.department}</TableCell>
                   <TableCell>{JOB_TYPE_LABELS[req.jobType]}</TableCell>
@@ -84,10 +99,10 @@ export default function JobRequisition() {
                         req.priority === 'urgent'
                           ? 'border-red-200 bg-red-50 text-red-700'
                           : req.priority === 'high'
-                          ? 'border-orange-200 bg-orange-50 text-orange-700'
-                          : req.priority === 'medium'
-                          ? 'border-amber-200 bg-amber-50 text-amber-700'
-                          : 'border-slate-200 bg-slate-50 text-slate-600'
+                            ? 'border-orange-200 bg-orange-50 text-orange-700'
+                            : req.priority === 'medium'
+                              ? 'border-amber-200 bg-amber-50 text-amber-700'
+                              : 'border-slate-200 bg-slate-50 text-slate-600'
                       }
                     >
                       {PRIORITY_LABELS[req.priority]}
