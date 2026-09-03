@@ -32,50 +32,70 @@ function sendJson(res: ServerResponse, status: number, body: unknown) {
   res.end(JSON.stringify(body))
 }
 
+async function handleMockApiRequest(
+  server: ViteServer,
+  req: IncomingMessage,
+  res: ServerResponse,
+  next: () => void
+) {
+  try {
+    if (!req.url || !req.method) {
+      next()
+      return
+    }
+
+    const url = new URL(req.url, 'http://localhost')
+    if (!url.pathname.startsWith('/api/')) {
+      next()
+      return
+    }
+
+    const routePath = url.pathname.replace(/^\/api/, '') || '/'
+    
+    // 1. UPDATE: Add the new modules to the intercepted routes
+    const isMockRoute =
+      routePath.startsWith('/attendance') ||
+      routePath.startsWith('/users') ||
+      routePath.startsWith('/auth') ||
+      routePath.startsWith('/recruitment') ||
+      routePath.startsWith('/onboarding')
+
+    if (!isMockRoute) {
+      next()
+      return
+    }
+
+    // 2. USE CENTRAL ROUTER: Load the central mock router to handle the delegation
+    const { executeMockApiRequest } = await server.ssrLoadModule('/src/lib/mock/mockApi.ts')
+
+    const query = Object.fromEntries(url.searchParams.entries())
+    const body = req.method === 'GET' || req.method === 'HEAD' ? undefined : await readJsonBody(req)
+
+    const mockResponse = await executeMockApiRequest({
+      method: req.method,
+      path: routePath,
+      query,
+      body,
+      headers: {
+        authorization: req.headers.authorization ?? '',
+      },
+    })
+
+    if (mockResponse.status === 404) {
+      next()
+      return
+    }
+
+    sendJson(res, mockResponse.status, mockResponse.body)
+  } catch (error) {
+    console.error('[mock-api] request failed:', error)
+    sendJson(res, 500, { success: false, message: 'Mock API handler failed' })
+  }
+}
+
 function attachMockMiddleware(server: ViteServer) {
   server.middlewares.use((req, res, next) => {
-    void (async () => {
-      try {
-        if (!req.url || !req.method) {
-          next()
-          return
-        }
-
-        const url = new URL(req.url, 'http://localhost')
-        if (!url.pathname.startsWith('/api/recruitment/')) {
-          next()
-          return
-        }
-
-        const module = await server.ssrLoadModule(
-          '/src/lib/mock/mockRecruitmentApiRouter.ts'
-        )
-        const query = Object.fromEntries(url.searchParams.entries())
-        const body =
-          req.method === 'GET' || req.method === 'HEAD'
-            ? undefined
-            : await readJsonBody(req)
-        const response = await module.executeMockRequest({
-          method: req.method,
-          path: url.pathname.replace(/^\/api/, ''),
-          query,
-          body,
-        })
-
-        if (response.status === 404) {
-          next()
-          return
-        }
-
-        sendJson(res, response.status, response.body)
-      } catch (error) {
-        console.error('[mock-api] recruitment request failed:', error)
-        sendJson(res, 500, {
-          success: false,
-          message: 'Recruitment mock API handler failed',
-        })
-      }
-    })()
+    void handleMockApiRequest(server, req, res, next)
   })
 }
 
@@ -90,10 +110,12 @@ export function mockApiPlugin(): Plugin {
       useMockApi = env.VITE_USE_MOCK_API !== 'false'
     },
     configureServer(server) {
-      if (useMockApi) attachMockMiddleware(server)
+      if (!useMockApi) return
+      attachMockMiddleware(server)
     },
     configurePreviewServer(server) {
-      if (useMockApi) attachMockMiddleware(server)
+      if (!useMockApi) return
+      attachMockMiddleware(server)
     },
   }
 }

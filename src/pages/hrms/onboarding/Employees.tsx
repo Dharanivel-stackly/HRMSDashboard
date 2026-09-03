@@ -1,18 +1,17 @@
-// src/pages/hrms/onboarding/Employees.tsx
 import { useState } from 'react';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/common/PageHeader';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-import { mockOnboardingEmployees } from '@/features/hrms/onboarding/mock/onboarding.mock';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { StatusBadge } from '@/components/common/StatusBadge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/lib/constants/routes';
 import { Progress } from '@/components/ui/progress';
+import { useOnboardingEmployees } from '@/features/hrms/onboarding/hooks/useOnboarding';
+import { LoadingState } from '@/components/common/LoadingState';
+import { ErrorState } from '@/components/common/ErrorState';
 
 const statusMap: Record<string, { label: string; variant: 'active' | 'pending' | 'warning' | 'error' | 'inactive' }> = {
   not_started: { label: 'Not Started', variant: 'inactive' },
@@ -27,16 +26,24 @@ const statusMap: Record<string, { label: string; variant: 'active' | 'pending' |
   manager_tasks: { label: 'Manager Tasks', variant: 'pending' },
   hr_tasks: { label: 'HR Tasks', variant: 'pending' },
   completed: { label: 'Completed', variant: 'active' },
-};
+}
 
 export default function OnboardingEmployees() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
-  const [filtered] = useState(mockOnboardingEmployees);
+
+  // FETCH VIA API
+  const { data, isLoading, isError, refetch } = useOnboardingEmployees({ search });
 
   const getInitials = (e: { firstName: string; lastName: string }) =>
     `${e.firstName.charAt(0)}${e.lastName.charAt(0)}`;
 
+  if (isLoading) return <LoadingState variant="page" />;
+  if (isError) return <ErrorState onRetry={refetch} />;
+
+  const filtered = data?.data || [];
+
+  // Keep identical return statement
   return (
     <PageContainer>
       <PageHeader
@@ -54,7 +61,6 @@ export default function OnboardingEmployees() {
           </div>
         }
       />
-
       <div className="ui-card-elevated overflow-hidden rounded-xl border border-border/60 bg-card">
         <Table>
           <TableHeader>
@@ -81,7 +87,7 @@ export default function OnboardingEmployees() {
                   <TableRow
                     key={emp.id}
                     className="cursor-pointer hover:bg-muted/50"
-                    onClick={() => navigate(ROUTES.HRMS.ONBOARDING.EMPLOYEE(emp.id))}
+                    onClick={() => navigate(ROUTES.HRMS.ONBOARDING.PROFILE(emp.id))}
                   >
                     <TableCell>
                       <div className="flex items-center gap-3">

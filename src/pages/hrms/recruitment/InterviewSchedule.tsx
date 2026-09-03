@@ -6,7 +6,10 @@ import { PageContainer } from '@/components/layout/PageContainer'
 import { PageHeader } from '@/components/common/PageHeader'
 import { Button } from '@/components/ui/button'
 import { InterviewPanel } from '@/features/hrms/recruitment/components/InterviewPanel'
-import { mockInterviews } from '@/features/hrms/recruitment/mock/recruitment.mock'
+//import { mockInterviews } from '@/features/hrms/recruitment/mock/recruitment.mock'
+import { useInterviews } from '@/features/hrms/recruitment/hooks/useRecruitment'
+import { LoadingState } from '@/components/common/LoadingState'
+import { ErrorState } from '@/components/common/ErrorState'
 import {
   Dialog,
   DialogContent,
@@ -35,7 +38,7 @@ import type { Interview } from '@/features/hrms/recruitment/types/recruitment.ty
 
 export default function InterviewSchedule() {
   const navigate = useNavigate()
-  const [interviews] = useState(mockInterviews)
+  //const [interviews] = useState(mockInterviews)
   const [selectedInterview, setSelectedInterview] = useState<Interview | null>(
     null
   )
@@ -54,6 +57,10 @@ export default function InterviewSchedule() {
     location: '',
     notes: '',
   })
+const { data: interviews = [], isLoading, isError, refetch } = useInterviews()
+
+if (isLoading) return <LoadingState variant="page" />
+if (isError) return <ErrorState onRetry={refetch} />
 
   const handleSelectInterview = (interview: Interview) => {
     setSelectedInterview(interview)

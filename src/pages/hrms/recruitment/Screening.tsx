@@ -9,9 +9,11 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Star, CalendarDays, Mail, Phone, Briefcase, GraduationCap } from 'lucide-react'
 import { CandidateList } from '@/features/hrms/recruitment/components/CandidateList'
-import { mockCandidates } from '@/features/hrms/recruitment/mock/recruitment.mock'
-import { useNavigate } from 'react-router-dom'
-import { Filter, CheckCircle, Users } from 'lucide-react'
+//import { mockCandidates } from '@/features/hrms/recruitment/mock/recruitment.mock'
+import { useCandidates } from '@/features/hrms/recruitment/hooks/useCandidates'
+import { LoadingState } from '@/components/common/LoadingState'
+import { ErrorState } from '@/components/common/ErrorState'
+import { Filter, CheckCircle } from 'lucide-react'
 import {
   CANDIDATE_STATUS_LABELS,
   CANDIDATE_STATUS_STYLES,
@@ -19,16 +21,23 @@ import {
 import type { Candidate } from '@/features/hrms/recruitment/types/recruitment.types'
 
 export default function Screening() {
-  const navigate = useNavigate()
-  const [candidates] = useState(
-    mockCandidates.filter(c => c.status === 'applied' || c.status === 'screening')
-  )
+  const { data, isLoading, isError, refetch } = useCandidates()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [shortlistDialogOpen, setShortlistDialogOpen] = useState(false)
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
   const [contactDialogOpen, setContactDialogOpen] = useState(false)
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null)
+
+  const allCandidates = data?.data || []
+  const candidates = allCandidates.filter(
+    (candidate) =>
+      candidate.status === 'applied' ||
+      candidate.status === 'screening'
+  )
+
+  if (isLoading) return <LoadingState variant="page" />
+  if (isError) return <ErrorState onRetry={refetch} />
 
   const handleView = (candidate: Candidate) => {
     setSelectedCandidate(candidate)

@@ -24,8 +24,11 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { JOB_TYPE_LABELS } from '@/features/hrms/recruitment/constants/recruitment.constants'
-import { mockJobPostings } from '@/features/hrms/recruitment/mock/recruitment.mock'
+//import { mockJobPostings } from '@/features/hrms/recruitment/mock/recruitment.mock'
 import type { JobPosting } from '@/features/hrms/recruitment/types/recruitment.types'
+import { useJobPostings } from '@/features/hrms/recruitment/hooks/useRecruitment'
+import { LoadingState } from '@/components/common/LoadingState'
+import { ErrorState } from '@/components/common/ErrorState'
 import { Plus, Eye, Edit, MoreHorizontal } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -54,12 +57,12 @@ type JobPostingFormData = z.infer<typeof jobPostingSchema>
 const generateId = () => `jp-${Date.now()}`
 
 export default function JobPosting() {
-  const [postings, setPostings] = useState<JobPosting[]>(mockJobPostings)
+  const { data: postings = [], isLoading, isError, refetch} = useJobPostings()
   const [dialogOpen, setDialogOpen] = useState(false)
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
   const [editingPost, setEditingPost] = useState<JobPosting | null>(null)
   const [viewingPost, setViewingPost] = useState<JobPosting | null>(null)
-
+  
   const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<JobPostingFormData>({
     resolver: zodResolver(jobPostingSchema),
     defaultValues: {
@@ -183,6 +186,8 @@ export default function JobPosting() {
     setEditingPost(null)
     reset()
   }
+  if (isLoading) return <LoadingState variant="page" />
+  if (isError) return <ErrorState onRetry={refetch} />
 
   return (
     <PageContainer>

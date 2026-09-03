@@ -1,47 +1,30 @@
-// src/pages/hrms/recruitment/JobRequisition.tsx
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Eye, Edit, MoreHorizontal } from 'lucide-react';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { mockRequisitions } from '@/features/hrms/recruitment/mock/recruitment.mock';
-import {
-  REQUISITION_STATUS_LABELS,
-  REQUISITION_STATUS_STYLES,
-  JOB_TYPE_LABELS,
-  PRIORITY_LABELS,
-} from '@/features/hrms/recruitment/constants/recruitment.constants';
-import { usePermissions } from '@/hooks/usePermissions';   
-// import { PERMISSIONS } from '@/lib/constants/permissions'; 
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { REQUISITION_STATUS_LABELS, REQUISITION_STATUS_STYLES, JOB_TYPE_LABELS, PRIORITY_LABELS } from '@/features/hrms/recruitment/constants/recruitment.constants';
+import { usePermissions } from '@/hooks/usePermissions';
+import { useRequisitions } from '@/features/hrms/recruitment/hooks/useRequisition';
+import { LoadingState } from '@/components/common/LoadingState';
+import { ErrorState } from '@/components/common/ErrorState';
 
 export default function JobRequisition() {
   const navigate = useNavigate();
-  const [requisitions] = useState(mockRequisitions);
-  const { isRole } = usePermissions(); 
+  const { isRole } = usePermissions();
+  const isAdmin = isRole('ADMIN') || isRole('SUPER_ADMIN');
 
+  // FETCH VIA API
+  const { data, isLoading, isError, refetch } = useRequisitions();
+  const requisitions = data?.data || [];
 
-  const isAdmin = isRole('ADMIN') || isRole( 'SUPER_ADMIN'); 
+  if (isLoading) return <LoadingState variant="page" />;
+  if (isError) return <ErrorState onRetry={refetch} />;
 
-
-  // const { can } = usePermissions();
-  // const canCreate = can(PERMISSIONS.RECRUITMENT.CREATE);
-
+  // Keep identical return statement
   return (
     <PageContainer>
       <PageHeader
@@ -54,11 +37,8 @@ export default function JobRequisition() {
               New Requisition
             </Button>
           )
-          // Permission‑based alternative:
-          // canCreate && ( ... )
         }
       />
-
       <div className="ui-card-elevated overflow-hidden rounded-xl border border-border/60 bg-card">
         <Table>
           <TableHeader>
@@ -83,28 +63,13 @@ export default function JobRequisition() {
             ) : (
               requisitions.map((req) => (
                 <TableRow key={req.id}>
-                  <TableCell className="font-mono text-xs font-semibold">
-                    {req.requisitionId}
-                  </TableCell>
+                  <TableCell className="font-mono text-xs font-semibold">{req.requisitionId}</TableCell>
                   <TableCell className="font-medium">{req.title}</TableCell>
                   <TableCell>{req.department}</TableCell>
                   <TableCell>{JOB_TYPE_LABELS[req.jobType]}</TableCell>
+                  <TableCell>{req.filledPositions}/{req.positions}</TableCell>
                   <TableCell>
-                    {req.filledPositions}/{req.positions}
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant="outline"
-                      className={
-                        req.priority === 'urgent'
-                          ? 'border-red-200 bg-red-50 text-red-700'
-                          : req.priority === 'high'
-                            ? 'border-orange-200 bg-orange-50 text-orange-700'
-                            : req.priority === 'medium'
-                              ? 'border-amber-200 bg-amber-50 text-amber-700'
-                              : 'border-slate-200 bg-slate-50 text-slate-600'
-                      }
-                    >
+                    <Badge variant="outline" className={ req.priority === 'urgent' ? 'border-red-200 bg-red-50 text-red-700' : req.priority === 'high' ? 'border-orange-200 bg-orange-50 text-orange-700' : req.priority === 'medium' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-slate-50 text-slate-600' }>
                       {PRIORITY_LABELS[req.priority]}
                     </Badge>
                   </TableCell>
@@ -121,14 +86,8 @@ export default function JobRequisition() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                          <Eye className="mr-2 h-4 w-4" />
-                          View
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
+                        <DropdownMenuItem><Eye className="mr-2 h-4 w-4" />View</DropdownMenuItem>
+                        <DropdownMenuItem><Edit className="mr-2 h-4 w-4" />Edit</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
