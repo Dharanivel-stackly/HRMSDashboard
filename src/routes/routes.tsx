@@ -28,6 +28,7 @@ import Performance from '@/pages/hrms/performance/Performance'
 import HRMSDocuments from '@/pages/hrms/documents/Documents'
 import HRMSReports from '@/pages/hrms/reports/Reports'
 import EmployeeReports from '@/pages/hrms/reports/employees/EmployeeReports'
+import AttendanceReportsPage from '@/pages/hrms/reports/attendance/AttendanceReports'
 export const router = createBrowserRouter([
   {
     path: ROUTES.LOGIN,
@@ -76,6 +77,7 @@ export const router = createBrowserRouter([
       { path: 'hrms/documents', element: <HRMSDocuments /> },
       { path: 'hrms/reports', element: <HRMSReports /> },
       { path: 'hrms/reports/employees', element: <EmployeeReports /> },
+      { path: 'hrms/reports/attendance', element: <AttendanceReportsPage /> },
     ],
   },
 ])

@@ -30,5 +30,7 @@ export const ROUTES = {
     DOCUMENTS: '/hrms/documents',
     REPORTS: '/hrms/reports',
     EMPLOYEE_REPORTS: '/hrms/reports/employees',
+    ATTENDANCE_REPORTS_RS: '/hrms/reports/attendance',
+    
   },
 } as const

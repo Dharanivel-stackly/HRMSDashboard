@@ -163,21 +163,28 @@ export const navigationConfig: NavigationGroup[] = [
         permission: PERMISSIONS.DOCUMENTS.VIEW,
       },
       {
-  label: 'Reports',
-  path: ROUTES.HRMS.REPORTS,
-  icon: BarChart3,
-  module: 'hrms',
-  permission: PERMISSIONS.REPORTS.VIEW,
-  children: [
-    {
-      label: 'Employee Reports',
-      path: ROUTES.HRMS.EMPLOYEE_REPORTS,
-      icon: Users,
-      module: 'hrms',
-      permission: PERMISSIONS.REPORTS.VIEW,
-    },
-  ],
-}
+        label: 'Reports',
+        path: ROUTES.HRMS.REPORTS,
+        icon: BarChart3,
+        module: 'hrms',
+        permission: PERMISSIONS.REPORTS.VIEW,
+        children: [
+          {
+            label: 'Employee Reports',
+            path: ROUTES.HRMS.EMPLOYEE_REPORTS,
+            icon: Users,
+            module: 'hrms',
+            permission: PERMISSIONS.REPORTS.VIEW,
+          },
+          {
+            label: 'Attendance Reports',
+            path: ROUTES.HRMS.ATTENDANCE_REPORTS_RS,
+            icon: BarChart3,
+            module: 'hrms',
+            permission: PERMISSIONS.REPORTS.VIEW,
+          },
+        ],
+      }
     ],
   },
 ]
