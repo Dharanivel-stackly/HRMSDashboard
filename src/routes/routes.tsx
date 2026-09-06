@@ -25,6 +25,10 @@ import Leave from '@/pages/hrms/leave/Leave'
 import Payroll from '@/pages/hrms/payroll/Payroll'
 import Recruitment from '@/pages/hrms/recruitment/Recruitment'
 import Performance from '@/pages/hrms/performance/Performance'
+import Goals from '@/pages/hrms/performance/Goals'
+import KPIs from '@/pages/hrms/performance/KPIs'
+import Appraisal from '@/pages/hrms/performance/Appraisal'
+import Feedback from '@/pages/hrms/performance/Feedback'
 import HRMSDocuments from '@/pages/hrms/documents/Documents'
 import HRMSReports from '@/pages/hrms/reports/Reports'
 
@@ -73,6 +77,10 @@ export const router = createBrowserRouter([
       { path: 'hrms/payroll', element: <Payroll /> },
       { path: 'hrms/recruitment', element: <Recruitment /> },
       { path: 'hrms/performance', element: <Performance /> },
+      { path: 'hrms/performance/goals', element: <Goals /> },
+      { path: 'hrms/performance/kpis', element: <KPIs /> },
+      { path: 'hrms/performance/appraisal', element: <Appraisal /> },
+      { path: 'hrms/performance/360-feedback', element: <Feedback /> },
       { path: 'hrms/documents', element: <HRMSDocuments /> },
       { path: 'hrms/reports', element: <HRMSReports /> },
     ],
