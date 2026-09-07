@@ -23,6 +23,7 @@ export const API_ENDPOINTS = {
     BY_ID: (id: string) => `/leave/${id}`,
     APPROVE: (id: string) => `/leave/${id}/approve`,
     REJECT: (id: string) => `/leave/${id}/reject`,
+    CANCEL: (id: string) => `/leave/${id}/cancel`,
   },
   PAYROLL: {
     BASE: '/payroll',
