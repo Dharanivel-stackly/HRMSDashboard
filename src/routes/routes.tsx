@@ -34,15 +34,12 @@ import Appraisal from '@/pages/hrms/performance/Appraisal'
 import Feedback from '@/pages/hrms/performance/Feedback'
 import HRMSDocuments from '@/pages/hrms/documents/Documents'
 import HRMSReports from '@/pages/hrms/reports/Reports'
-<<<<<<< HEAD
-import UserManagement from '@/pages/settings/UserManagement'
-import ScreenPrivileges from '@/pages/settings/ScreenPrivileges'
-=======
 import ApplyLeave from '@/pages/hrms/leave/ApplyLeave'
 import MyLeaveRequests from '@/pages/hrms/leave/MyLeaveRequests'
 import LeaveDetails from '@/pages/hrms/leave/LeaveDetails'
 import LeaveApprovals from '@/pages/hrms/leave/LeaveApprovals'
->>>>>>> upstream/Hari_Vignesh
+import UserManagement from '@/pages/settings/UserManagement'
+import ScreenPrivileges from '@/pages/settings/ScreenPrivileges'
 
 export const router = createBrowserRouter([
   {
@@ -196,27 +193,43 @@ export const router = createBrowserRouter([
         ),
       },
 
-      //Leave module
-      { path: 'hrms/leave', element: <Leave /> },
-      { path: 'hrms/leave/apply', element: <ApplyLeave /> },
-      { path: 'hrms/leave/my', element: <MyLeaveRequests /> },
-      { path: 'hrms/leave/:id', element: <LeaveDetails /> },
-      { path: 'hrms/leave/approvals', element: <LeaveApprovals /> },
-
-      { path: 'hrms/payroll', element: <Payroll /> },
-      { path: 'hrms/recruitment', element: <Recruitment /> },
-      { path: 'hrms/performance', element: <Performance /> },
-      { path: 'hrms/performance/goals', element: <Goals /> },
-      { path: 'hrms/performance/kpis', element: <KPIs /> },
-      { path: 'hrms/performance/appraisal', element: <Appraisal /> },
-      { path: 'hrms/performance/360-feedback', element: <Feedback /> },
-      { path: 'hrms/documents', element: <HRMSDocuments /> },
-      { path: 'hrms/reports', element: <HRMSReports /> },
       {
         path: 'hrms/leave',
         element: (
           <RoleRoute permission={PERMISSIONS.LEAVE.VIEW}>
             <Leave />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/leave/apply',
+        element: (
+          <RoleRoute permission={PERMISSIONS.LEAVE.CREATE}>
+            <ApplyLeave />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/leave/my',
+        element: (
+          <RoleRoute permission={PERMISSIONS.LEAVE.VIEW}>
+            <MyLeaveRequests />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/leave/approvals',
+        element: (
+          <RoleRoute permission={PERMISSIONS.LEAVE.APPROVE}>
+            <LeaveApprovals />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/leave/:id',
+        element: (
+          <RoleRoute permission={PERMISSIONS.LEAVE.VIEW}>
+            <LeaveDetails />
           </RoleRoute>
         ),
       },
@@ -241,6 +254,38 @@ export const router = createBrowserRouter([
         element: (
           <RoleRoute permission={PERMISSIONS.PERFORMANCE.VIEW}>
             <Performance />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/performance/goals',
+        element: (
+          <RoleRoute permission={PERMISSIONS.PERFORMANCE.VIEW}>
+            <Goals />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/performance/kpis',
+        element: (
+          <RoleRoute permission={PERMISSIONS.PERFORMANCE.VIEW}>
+            <KPIs />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/performance/appraisal',
+        element: (
+          <RoleRoute permission={PERMISSIONS.PERFORMANCE.VIEW}>
+            <Appraisal />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/performance/360-feedback',
+        element: (
+          <RoleRoute permission={PERMISSIONS.PERFORMANCE.VIEW}>
+            <Feedback />
           </RoleRoute>
         ),
       },
