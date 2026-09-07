@@ -197,6 +197,21 @@ export const navigationConfig: NavigationGroup[] = [
             module: 'hrms',
             permission: PERMISSIONS.REPORTS.VIEW,
           },
+          {
+            label: 'Leave Reports', 
+            path: ROUTES.HRMS.LEAVE_REPORTS,
+            icon: BarChart3,
+            module: 'hrms',
+            permission: PERMISSIONS.REPORTS.VIEW,
+
+          },
+          {
+            label: 'Payroll Reports',
+            path: ROUTES.HRMS.PAYROLL_REPORTS,
+            icon: BarChart3,
+            module: 'hrms',
+            permission: PERMISSIONS.REPORTS.VIEW,
+          }
         ],
       }
     ],
