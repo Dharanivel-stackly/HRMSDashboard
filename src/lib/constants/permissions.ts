@@ -74,6 +74,10 @@ export const PERMISSIONS = {
     UPDATE: 'users.update',
     DELETE: 'users.delete',
   },
+  PRIVILEGES: {
+    VIEW: 'privileges.view',
+    UPDATE: 'privileges.update',
+  },
 } as const
 
 type FlatPermissions = {

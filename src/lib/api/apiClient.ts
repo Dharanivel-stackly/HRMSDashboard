@@ -51,7 +51,8 @@ const mockApiAdapter: AxiosAdapter = async (config) => {
   const isMockRoute =
     routeUrl.startsWith('/attendance') ||
     routeUrl.startsWith('/users') ||
-    routeUrl.startsWith('/auth')
+    routeUrl.startsWith('/auth') ||
+    routeUrl.startsWith('/role-privileges')
   if (!isMockRoute) {
     return defaultAdapter(config)
   }

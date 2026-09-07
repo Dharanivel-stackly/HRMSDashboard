@@ -33,5 +33,6 @@ export const ROUTES = {
 
   SETTINGS: {
     USERS: '/settings/users',
+    PRIVILEGES: '/settings/privileges',
   },
 } as const

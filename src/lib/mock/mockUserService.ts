@@ -1,13 +1,13 @@
 import { ApiError } from '@/lib/api/apiError'
-import { getPermissionsForRoles } from '@/lib/auth/rolePermissions'
-import { ROLES } from '@/lib/constants/roles'
+import { ALL_PERMISSIONS, getPermissionsForRoles } from '@/lib/auth/rolePermissions'
+import { ROLES, type Role } from '@/lib/constants/roles'
+import { readMockState, writeMockState } from '@/lib/mock/mockStateStore'
 import type { AuthUser } from '@/types/auth.types'
 import type {
   CreateUserPayload,
   ManagedUser,
   UpdateUserPayload,
 } from '@/features/admin/users/types/user.types'
-import { ALL_PERMISSIONS } from '@/lib/auth/rolePermissions'
 
 const delay = (ms = 300) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -40,75 +40,107 @@ function toAuthUser(user: StoredUser): AuthUser {
   }
 }
 
-const seedUsers: StoredUser[] = [
-  {
-    id: 'demo-user-1',
-    email: 'admin@oneenterprise.com',
-    password: 'admin123',
-    firstName: 'Alex',
-    lastName: 'Admin',
-    roles: [ROLES.SUPER_ADMIN],
-    permissions: ALL_PERMISSIONS,
-    status: 'active',
-    lastLoginAt: formatDateTime(),
-    createdAt: '2026-01-01 09:00',
-  },
-  {
-    id: 'demo-user-2',
-    email: 'hr@oneenterprise.com',
-    password: 'hr12345',
-    firstName: 'Jordan',
-    lastName: 'HR',
-    roles: [ROLES.HR_MANAGER],
-    permissions: getPermissionsForRoles([ROLES.HR_MANAGER]),
-    status: 'active',
-    lastLoginAt: '2026-08-20 10:30',
-    createdAt: '2026-02-15 11:00',
-  },
-  {
-    id: 'demo-user-3',
-    email: 'employee@oneenterprise.com',
-    password: 'employee123',
-    firstName: 'Priya',
-    lastName: 'Sharma',
-    roles: [ROLES.EMPLOYEE],
-    permissions: getPermissionsForRoles([ROLES.EMPLOYEE]),
-    status: 'active',
-    lastLoginAt: '2026-08-25 08:45',
-    createdAt: '2026-03-10 14:20',
-  },
-  {
-    id: 'demo-user-4',
-    email: 'ldharanivel@thestackly.com',
-    password: '123456',
-    firstName: 'Dharanivel',
-    lastName: 'L',
-    roles: [ROLES.EMPLOYEE],
-    permissions: getPermissionsForRoles([ROLES.EMPLOYEE]),
-    status: 'active',
-    lastLoginAt: null,
-    createdAt: '2026-09-01 10:00',
-  },
-]
+/** Built lazily so permissions resolve after the persistence adapter is attached */
+function createSeedUsers(): StoredUser[] {
+  return [
+    {
+      id: 'demo-user-1',
+      email: 'admin@oneenterprise.com',
+      password: 'admin123',
+      firstName: 'Alex',
+      lastName: 'Admin',
+      roles: [ROLES.SUPER_ADMIN],
+      permissions: ALL_PERMISSIONS,
+      status: 'active',
+      lastLoginAt: formatDateTime(),
+      createdAt: '2026-01-01 09:00',
+    },
+    {
+      id: 'demo-user-2',
+      email: 'hr@oneenterprise.com',
+      password: 'hr12345',
+      firstName: 'Jordan',
+      lastName: 'HR',
+      roles: [ROLES.HR_MANAGER],
+      permissions: getPermissionsForRoles([ROLES.HR_MANAGER]),
+      status: 'active',
+      lastLoginAt: '2026-08-20 10:30',
+      createdAt: '2026-02-15 11:00',
+    },
+    {
+      id: 'demo-user-3',
+      email: 'employee@oneenterprise.com',
+      password: 'employee123',
+      firstName: 'Priya',
+      lastName: 'Sharma',
+      roles: [ROLES.EMPLOYEE],
+      permissions: getPermissionsForRoles([ROLES.EMPLOYEE]),
+      status: 'active',
+      lastLoginAt: '2026-08-25 08:45',
+      createdAt: '2026-03-10 14:20',
+    },
+    {
+      id: 'demo-user-4',
+      email: 'ldharanivel@thestackly.com',
+      password: '123456',
+      firstName: 'Dharanivel',
+      lastName: 'L',
+      roles: [ROLES.EMPLOYEE],
+      permissions: getPermissionsForRoles([ROLES.EMPLOYEE]),
+      status: 'active',
+      lastLoginAt: null,
+      createdAt: '2026-09-01 10:00',
+    },
+  ]
+}
 
-let users: StoredUser[] = [...seedUsers]
+let users: StoredUser[] | null = null
+
+function getStore(): StoredUser[] {
+  if (users) return users
+
+  const persisted = readMockState().users as StoredUser[] | undefined
+  users = persisted?.length ? persisted.map((user) => ({ ...user })) : createSeedUsers()
+  return users
+}
+
+function setStore(next: StoredUser[]): void {
+  users = next
+  writeMockState({ users: next })
+}
 
 export const mockUserService = {
   async getUsers(): Promise<ManagedUser[]> {
     await delay()
-    return users.map(toManagedUser)
+    return getStore().map(toManagedUser)
   },
 
   async getUserById(id: string): Promise<ManagedUser> {
     await delay(200)
-    const user = users.find((item) => item.id === id)
+    const user = getStore().find((item) => item.id === id)
     if (!user) throw new ApiError('User not found', 404)
     return toManagedUser(user)
   },
 
+  /** Auth profile with permissions recomputed from the current privilege store */
+  async getAuthUserById(id: string): Promise<AuthUser> {
+    await delay(150)
+    const store = getStore()
+    const user = store.find((item) => item.id === id)
+    if (!user) throw new ApiError('User not found', 404)
+    if (user.status !== 'active') {
+      throw new ApiError('Your account is inactive. Contact your administrator.', 403)
+    }
+
+    const permissions = getPermissionsForRoles(user.roles)
+    setStore(store.map((item) => (item.id === id ? { ...item, permissions } : item)))
+    return toAuthUser({ ...user, permissions })
+  },
+
   async createUser(payload: CreateUserPayload): Promise<ManagedUser> {
     await delay()
-    const emailExists = users.some(
+    const store = getStore()
+    const emailExists = store.some(
       (user) => user.email.toLowerCase() === payload.email.toLowerCase()
     )
     if (emailExists) {
@@ -127,18 +159,19 @@ export const mockUserService = {
       lastLoginAt: null,
       createdAt: formatDateTime(),
     }
-    users = [user, ...users]
+    setStore([user, ...store])
     return toManagedUser(user)
   },
 
   async updateUser(id: string, payload: UpdateUserPayload): Promise<ManagedUser> {
     await delay()
-    const index = users.findIndex((user) => user.id === id)
+    const store = getStore()
+    const index = store.findIndex((user) => user.id === id)
     if (index === -1) throw new ApiError('User not found', 404)
 
     if (
       payload.email &&
-      users.some(
+      store.some(
         (user, itemIndex) =>
           itemIndex !== index && user.email.toLowerCase() === payload.email!.toLowerCase()
       )
@@ -146,7 +179,7 @@ export const mockUserService = {
       throw new ApiError('A user with this email already exists', 409)
     }
 
-    const current = users[index]
+    const current = store[index]
     const roles = payload.roles ?? current.roles
     const updated: StoredUser = {
       ...current,
@@ -158,24 +191,28 @@ export const mockUserService = {
       permissions: getPermissionsForRoles(roles),
       status: payload.status ?? current.status,
     }
-    users[index] = updated
+    const next = [...store]
+    next[index] = updated
+    setStore(next)
     return toManagedUser(updated)
   },
 
   async deleteUser(id: string): Promise<{ id: string }> {
     await delay()
-    const user = users.find((item) => item.id === id)
+    const store = getStore()
+    const user = store.find((item) => item.id === id)
     if (!user) throw new ApiError('User not found', 404)
     if (user.roles.includes(ROLES.SUPER_ADMIN)) {
       throw new ApiError('Super Admin account cannot be deleted', 400)
     }
-    users = users.filter((item) => item.id !== id)
+    setStore(store.filter((item) => item.id !== id))
     return { id }
   },
 
   async authenticate(email: string, password: string): Promise<AuthUser> {
     await delay(400)
-    const user = users.find(
+    const store = getStore()
+    const user = store.find(
       (item) => item.email.toLowerCase() === email.toLowerCase() && item.password === password
     )
     if (!user) {
@@ -185,10 +222,27 @@ export const mockUserService = {
       throw new ApiError('Your account is inactive. Contact your administrator.', 403)
     }
 
-    users = users.map((item) =>
-      item.id === user.id ? { ...item, lastLoginAt: formatDateTime() } : item
+    const permissions = getPermissionsForRoles(user.roles)
+    setStore(
+      store.map((item) =>
+        item.id === user.id
+          ? { ...item, permissions, lastLoginAt: formatDateTime() }
+          : item
+      )
     )
 
-    return toAuthUser(users.find((item) => item.id === user.id)!)
+    return toAuthUser({ ...user, permissions })
+  },
+
+  /** Recompute permissions for every user holding the given role */
+  syncPermissionsForRole(role: Role): void {
+    const store = getStore()
+    setStore(
+      store.map((user) =>
+        user.roles.includes(role)
+          ? { ...user, permissions: getPermissionsForRoles(user.roles) }
+          : user
+      )
+    )
   },
 }

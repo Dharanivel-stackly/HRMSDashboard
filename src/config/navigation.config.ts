@@ -16,6 +16,7 @@ import {
   Settings2,
   ClipboardList,
   UserCog,
+  ShieldCheck,
 } from 'lucide-react'
 import type { NavigationGroup } from '@/types/navigation.types'
 import { ROUTES } from '@/lib/constants/routes'
@@ -181,6 +182,12 @@ export const navigationConfig: NavigationGroup[] = [
         path: ROUTES.SETTINGS.USERS,
         icon: UserCog,
         permission: PERMISSIONS.USERS.VIEW,
+      },
+      {
+        label: 'Screen Privileges',
+        path: ROUTES.SETTINGS.PRIVILEGES,
+        icon: ShieldCheck,
+        permission: PERMISSIONS.PRIVILEGES.VIEW,
       },
     ],
   },

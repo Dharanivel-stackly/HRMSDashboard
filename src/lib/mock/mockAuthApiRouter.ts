@@ -51,8 +51,7 @@ export async function executeAuthMockRequest(
       if (!userId) {
         return failure(new ApiError('Unauthorized', 401))
       }
-      const user = await mockUserService.getUserById(userId)
-      return success(user)
+      return success(await mockUserService.getAuthUserById(userId))
     }
 
     return { status: 404, body: { success: false, message: `Route not found: ${method} ${path}` } }
