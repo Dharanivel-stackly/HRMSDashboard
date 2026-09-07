@@ -69,7 +69,7 @@ export default function Goals() {
       <section className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="font-semibold text-[#0b3d91]">Performance workspace</h2>
+            <h2 className="font-semibold text-brand-navy">Performance workspace</h2>
             <p className="text-xs text-muted-foreground">Demo data only · changes are not sent to an API</p>
           </div>
           <label className="relative block sm:w-72">
@@ -170,7 +170,7 @@ function StatusBadge({ status }: { status: string }) {
 //             <Target className="h-8 w-8 text-primary" />
 //           </div>
 
-//           <h1 className="text-3xl font-bold text-[#0b3d91]">
+//           <h1 className="text-3xl font-bold text-brand-navy">
 //             Welcome to Goals
 //           </h1>
 

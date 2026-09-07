@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { QueryProvider } from './QueryProvider'
 import { AuthProvider } from './AuthProvider'
 import { ThemeProvider } from './ThemeProvider'
+import { LocaleProvider } from './LocaleProvider'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
 interface AppProvidersProps {
@@ -13,9 +14,11 @@ export function AppProviders({ children }: AppProvidersProps) {
     <QueryProvider>
       <AuthProvider>
         <ThemeProvider defaultTheme="light">
-          <TooltipProvider>
-            {children}
-          </TooltipProvider>
+          <LocaleProvider>
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
+          </LocaleProvider>
         </ThemeProvider>
       </AuthProvider>
     </QueryProvider>

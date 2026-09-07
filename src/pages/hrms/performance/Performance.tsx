@@ -141,17 +141,17 @@
 //             ].map(([label, value, note, Icon]) => (
 //               <div key={label as string} className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
 //                 <div className="flex items-center justify-between"><p className="text-sm text-muted-foreground">{label as string}</p><Icon className="h-5 w-5 text-primary" /></div>
-//                 <p className="mt-3 text-3xl font-bold text-[#0b3d91]">{value as string}</p><p className="mt-1 text-xs text-muted-foreground">{note as string}</p>
+//                 <p className="mt-3 text-3xl font-bold text-brand-navy">{value as string}</p><p className="mt-1 text-xs text-muted-foreground">{note as string}</p>
 //               </div>
 //             ))}
 //           </div>
 //           <div className="grid gap-5 lg:grid-cols-2">
 //             <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
-//               <div className="mb-4 flex items-center justify-between"><div><h2 className="font-semibold text-[#0b3d91]">Goal progress</h2><p className="text-xs text-muted-foreground">Current cycle · Q3 2026</p></div><Button variant="ghost" size="sm" onClick={() => selectTab(tabs[1])}>View all</Button></div>
+//               <div className="mb-4 flex items-center justify-between"><div><h2 className="font-semibold text-brand-navy">Goal progress</h2><p className="text-xs text-muted-foreground">Current cycle · Q3 2026</p></div><Button variant="ghost" size="sm" onClick={() => selectTab(tabs[1])}>View all</Button></div>
 //               <div className="space-y-4">{goals.slice(0, 3).map((goal) => <ProgressRow key={goal.title} label={goal.title} value={goal.progress} />)}</div>
 //             </div>
 //             <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
-//               <div className="mb-4 flex items-center justify-between"><div><h2 className="font-semibold text-[#0b3d91]">Upcoming actions</h2><p className="text-xs text-muted-foreground">Items needing your attention</p></div><CheckCircle2 className="h-5 w-5 text-emerald-500" /></div>
+//               <div className="mb-4 flex items-center justify-between"><div><h2 className="font-semibold text-brand-navy">Upcoming actions</h2><p className="text-xs text-muted-foreground">Items needing your attention</p></div><CheckCircle2 className="h-5 w-5 text-emerald-500" /></div>
 //               <div className="space-y-3 text-sm"><ActionRow title="Complete Arjun Rao's self-review" due="Due in 2 days" /><ActionRow title="Review Q3 sales KPI targets" due="Due in 5 days" /><ActionRow title="Nominate 360 feedback respondents" due="Due Sep 12, 2026" /></div>
 //             </div>
 //           </div>
@@ -162,7 +162,7 @@
 
 //       {activeSection === 'appraisal' && <section className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5"><SectionToolbar search={search} setSearch={setSearch} placeholder="Search employees or reviewers" /><div className="mt-4 overflow-x-auto"><table className="w-full min-w-[680px] text-left text-sm"><thead><tr className="border-b text-xs uppercase text-muted-foreground"><th className="pb-3">Employee</th><th className="pb-3">Reviewer</th><th className="pb-3">Cycle</th><th className="pb-3">Rating</th><th className="pb-3">Status</th></tr></thead><tbody>{appraisals.filter((item) => `${item.employee} ${item.reviewer}`.toLowerCase().includes(search.toLowerCase())).map((item) => <tr key={item.employee} className="border-b last:border-0"><td className="py-4 font-medium">{item.employee}<p className="text-xs text-muted-foreground">{item.role}</p></td><td className="py-4">{item.reviewer}</td><td className="py-4">{item.cycle}</td><td className="py-4 font-semibold">{item.rating}</td><td className="py-4"><StatusBadge status={item.status} /></td></tr>)}</tbody></table></div></section>}
 
-//       {activeSection === 'feedback' && <section className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5"><div className="mb-4 flex items-center justify-between"><div><h2 className="font-semibold text-[#0b3d91]">360 feedback campaigns</h2><p className="text-xs text-muted-foreground">Collect structured feedback from peers, managers, and direct reports</p></div><Button onClick={() => showToast('New campaign created in demo mode')}><Plus className="h-4 w-4" /> New campaign</Button></div><div className="grid gap-4 md:grid-cols-3">{feedback.map((item) => <div key={item.employee} className="rounded-xl border border-border/60 p-4"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-semibold text-primary">{item.employee.split(' ').map((part) => part[0]).join('')}</div><div><p className="font-semibold">{item.employee}</p><p className="text-xs text-muted-foreground">{item.respondents} respondents</p></div></div><ProgressRow label={`${item.completed} of ${item.respondents} responses`} value={(item.completed / item.respondents) * 100} /><div className="mt-3 flex items-center justify-between text-xs"><StatusBadge status={item.status} /><span className="text-muted-foreground">Due {item.deadline}</span></div></div>)}</div></section>}
+//       {activeSection === 'feedback' && <section className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5"><div className="mb-4 flex items-center justify-between"><div><h2 className="font-semibold text-brand-navy">360 feedback campaigns</h2><p className="text-xs text-muted-foreground">Collect structured feedback from peers, managers, and direct reports</p></div><Button onClick={() => showToast('New campaign created in demo mode')}><Plus className="h-4 w-4" /> New campaign</Button></div><div className="grid gap-4 md:grid-cols-3">{feedback.map((item) => <div key={item.employee} className="rounded-xl border border-border/60 p-4"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-semibold text-primary">{item.employee.split(' ').map((part) => part[0]).join('')}</div><div><p className="font-semibold">{item.employee}</p><p className="text-xs text-muted-foreground">{item.respondents} respondents</p></div></div><ProgressRow label={`${item.completed} of ${item.respondents} responses`} value={(item.completed / item.respondents) * 100} /><div className="mt-3 flex items-center justify-between text-xs"><StatusBadge status={item.status} /><span className="text-muted-foreground">Due {item.deadline}</span></div></div>)}</div></section>}
 
 //       <Dialog open={formOpen} onOpenChange={setFormOpen}>
 //         <DialogContent className="sm:max-w-lg">
@@ -252,7 +252,7 @@
 // }
 
 // function SectionToolbar({ search, setSearch, placeholder }: { search: string; setSearch: (value: string) => void; placeholder: string }) {
-//   return <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><h2 className="font-semibold text-[#0b3d91]">Performance workspace</h2><p className="text-xs text-muted-foreground">Demo data only · changes are not sent to an API</p></div><label className="relative block sm:w-72"><Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={placeholder} className="h-9 w-full rounded-md border border-input bg-background pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring" /></label></div>
+//   return <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><h2 className="font-semibold text-brand-navy">Performance workspace</h2><p className="text-xs text-muted-foreground">Demo data only · changes are not sent to an API</p></div><label className="relative block sm:w-72"><Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={placeholder} className="h-9 w-full rounded-md border border-input bg-background pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring" /></label></div>
 // }
 
 // function ActionRow({ title, due }: { title: string; due: string }) {
@@ -593,7 +593,7 @@ export default function Performance({
                 </p>
 
                 <div className="mt-1 flex items-center gap-3">
-                  <h2 className="text-2xl font-bold text-[#0b3d91]">
+                  <h2 className="text-2xl font-bold text-brand-navy">
                     Q3 2026
                   </h2>
 
@@ -635,7 +635,7 @@ export default function Performance({
                     Overall Performance Score
                   </p>
 
-                  <p className="mt-2 text-5xl font-bold text-[#0b3d91]">
+                  <p className="mt-2 text-5xl font-bold text-brand-navy">
                     86%
                   </p>
 
@@ -672,7 +672,7 @@ export default function Performance({
 
               <div className="mt-5 grid grid-cols-3 gap-3 text-center">
                 <div className="rounded-lg bg-brand-soft p-3">
-                  <p className="text-lg font-bold text-[#0b3d91]">
+                  <p className="text-lg font-bold text-brand-navy">
                     24
                   </p>
                   <p className="text-xs text-muted-foreground">
@@ -681,7 +681,7 @@ export default function Performance({
                 </div>
 
                 <div className="rounded-lg bg-brand-soft p-3">
-                  <p className="text-lg font-bold text-[#0b3d91]">
+                  <p className="text-lg font-bold text-brand-navy">
                     32
                   </p>
                   <p className="text-xs text-muted-foreground">
@@ -690,7 +690,7 @@ export default function Performance({
                 </div>
 
                 <div className="rounded-lg bg-brand-soft p-3">
-                  <p className="text-lg font-bold text-[#0b3d91]">
+                  <p className="text-lg font-bold text-brand-navy">
                     120
                   </p>
                   <p className="text-xs text-muted-foreground">
@@ -709,7 +709,7 @@ export default function Performance({
               <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-[#0b3d91]">
+                    <p className="text-sm font-semibold text-brand-navy">
                       Goals
                     </p>
 
@@ -721,7 +721,7 @@ export default function Performance({
                   <Target className="h-5 w-5 text-primary" />
                 </div>
 
-                <p className="mt-4 text-3xl font-bold text-[#0b3d91]">
+                <p className="mt-4 text-3xl font-bold text-brand-navy">
                   78%
                 </p>
 
@@ -758,7 +758,7 @@ export default function Performance({
               <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-[#0b3d91]">
+                    <p className="text-sm font-semibold text-brand-navy">
                       KPI Management
                     </p>
 
@@ -770,7 +770,7 @@ export default function Performance({
                   <ArrowUpRight className="h-5 w-5 text-primary" />
                 </div>
 
-                <p className="mt-4 text-3xl font-bold text-[#0b3d91]">
+                <p className="mt-4 text-3xl font-bold text-brand-navy">
                   86%
                 </p>
 
@@ -803,7 +803,7 @@ export default function Performance({
               <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-[#0b3d91]">
+                    <p className="text-sm font-semibold text-brand-navy">
                       Appraisal
                     </p>
 
@@ -815,7 +815,7 @@ export default function Performance({
                   <CircleDashed className="h-5 w-5 text-primary" />
                 </div>
 
-                <p className="mt-4 text-3xl font-bold text-[#0b3d91]">
+                <p className="mt-4 text-3xl font-bold text-brand-navy">
                   12
                 </p>
 
@@ -869,7 +869,7 @@ export default function Performance({
               <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-[#0b3d91]">
+                    <p className="text-sm font-semibold text-brand-navy">
                       360 Feedback
                     </p>
 
@@ -881,7 +881,7 @@ export default function Performance({
                   <MessageCircleMore className="h-5 w-5 text-primary" />
                 </div>
 
-                <p className="mt-4 text-3xl font-bold text-[#0b3d91]">
+                <p className="mt-4 text-3xl font-bold text-brand-navy">
                   72%
                 </p>
 
@@ -921,7 +921,7 @@ export default function Performance({
             <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
               <div className="mb-5 flex items-center justify-between">
                 <div>
-                  <h2 className="font-semibold text-[#0b3d91]">
+                  <h2 className="font-semibold text-brand-navy">
                     Goal Progress
                   </h2>
 
@@ -969,7 +969,7 @@ export default function Performance({
             <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
               <div className="mb-5 flex items-center justify-between">
                 <div>
-                  <h2 className="font-semibold text-[#0b3d91]">
+                  <h2 className="font-semibold text-brand-navy">
                     KPI Performance
                   </h2>
 
@@ -1023,7 +1023,7 @@ export default function Performance({
           <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <h2 className="font-semibold text-[#0b3d91]">
+                <h2 className="font-semibold text-brand-navy">
                   Performance Trend
                 </h2>
 
@@ -1052,7 +1052,7 @@ export default function Performance({
                       {cycle as string}
                     </p>
 
-                    <p className="text-lg font-bold text-[#0b3d91]">
+                    <p className="text-lg font-bold text-brand-navy">
                       {score as string}
                     </p>
                   </div>
@@ -1073,7 +1073,7 @@ export default function Performance({
           <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <h2 className="font-semibold text-[#0b3d91]">
+                <h2 className="font-semibold text-brand-navy">
                   Upcoming Actions
                 </h2>
 
@@ -1109,7 +1109,7 @@ export default function Performance({
 
           {/* <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
             <div className="mb-4">
-              <h2 className="font-semibold text-[#0b3d91]">
+              <h2 className="font-semibold text-brand-navy">
                 Quick Actions
               </h2>
 
@@ -1380,7 +1380,7 @@ export default function Performance({
         <section className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <h2 className="font-semibold text-[#0b3d91]">
+              <h2 className="font-semibold text-brand-navy">
                 360 Feedback Campaigns
               </h2>
 
@@ -1715,7 +1715,7 @@ function SectionToolbar({
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h2 className="font-semibold text-[#0b3d91]">
+        <h2 className="font-semibold text-brand-navy">
           Performance Workspace
         </h2>
 
