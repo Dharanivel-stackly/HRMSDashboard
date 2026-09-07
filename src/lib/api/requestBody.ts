@@ -1,5 +1,3 @@
-// src/lib/api/requestBody.ts
-
 export function serializeRequestBody(data: unknown): string | undefined {
   if (data === undefined || data === null) return undefined
   if (typeof data === 'string') return data

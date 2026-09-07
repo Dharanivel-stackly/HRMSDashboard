@@ -8,6 +8,7 @@ import { getToken, clearTokens } from '@/lib/auth/auth'
 import { ApiError } from './apiError'
 import { environment } from '@/config/environment'
 import { executeMockApiRequest } from '@/lib/mock/mockApi'
+import { executeMockApiRequest } from '@/lib/mock/mockApiRouter'
 import { parseRequestBody, serializeRequestBody } from '@/lib/api/requestBody'
 
 const defaultAdapter = axios.getAdapter(['xhr', 'http', 'fetch'])
@@ -17,9 +18,11 @@ function buildUrl(config: InternalAxiosRequestConfig): string {
     ...config,
     baseURL: config.baseURL ?? environment.apiBaseUrl,
   })
+
   if (uri.startsWith('http://') || uri.startsWith('https://')) {
     return uri
   }
+
   return new URL(uri, window.location.origin).toString()
 }
 
@@ -55,6 +58,10 @@ const mockApiAdapter: AxiosAdapter = async (config) => {
     routeUrl.startsWith('/onboarding') ||
     routeUrl.startsWith('/notifications')
 
+    routeUrl.startsWith('/attendance') ||
+    routeUrl.startsWith('/users') ||
+    routeUrl.startsWith('/auth') ||
+    routeUrl.startsWith('/role-privileges')
   if (!isMockRoute) {
     return defaultAdapter(config)
   }
@@ -62,9 +69,9 @@ const mockApiAdapter: AxiosAdapter = async (config) => {
   const method = (config.method ?? 'get').toUpperCase()
   const requestUrl = buildUrl(config)
   const { path, query } = parseRoutePath(requestUrl)
+
   const headers = new Headers({ 'Content-Type': 'application/json' })
   const token = getToken()
-
   if (token) {
     headers.set('Authorization', `Bearer ${token}`)
   }
@@ -153,15 +160,19 @@ export const api = {
   get<T>(url: string, config?: Parameters<typeof apiClient.get>[1]): Promise<AxiosResponse<T>> {
     return apiClient.get<T>(url, config)
   },
+
   post<T>(url: string, data?: unknown, config?: Parameters<typeof apiClient.post>[2]): Promise<AxiosResponse<T>> {
     return apiClient.post<T>(url, data, config)
   },
+
   put<T>(url: string, data?: unknown, config?: Parameters<typeof apiClient.put>[2]): Promise<AxiosResponse<T>> {
     return apiClient.put<T>(url, data, config)
   },
+
   patch<T>(url: string, data?: unknown, config?: Parameters<typeof apiClient.patch>[2]): Promise<AxiosResponse<T>> {
     return apiClient.patch<T>(url, data, config)
   },
+
   delete<T>(url: string, config?: Parameters<typeof apiClient.delete>[1]): Promise<AxiosResponse<T>> {
     return apiClient.delete<T>(url, config)
   },

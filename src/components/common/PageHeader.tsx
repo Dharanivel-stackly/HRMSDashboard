@@ -23,7 +23,7 @@ export function PageHeader({
     <div className={cn('flex items-center justify-between gap-4', className)}>
       <div>
         {!hideTitle && (
-          <h1 className="text-2xl font-bold tracking-tight text-[#0b3d91]">{title}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-brand-navy">{title}</h1>
         )}
         {description && (
           <p className={cn('text-sm text-muted-foreground', !hideTitle && 'mt-0.5')}>

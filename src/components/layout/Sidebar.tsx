@@ -1,13 +1,23 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { ChevronDown, ChevronLeft, LogOut } from 'lucide-react'
+import { Check, ChevronDown, ChevronLeft, Languages, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import { navigationConfig } from '@/config/navigation.config'
 import { usePermissions } from '@/hooks/usePermissions'
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useLocale } from '@/hooks/useLocale'
 import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { appConfig } from '@/config/app.config'
 import { ROUTES } from '@/lib/constants/routes'
+import { LANGUAGES } from '@/lib/i18n/locale'
+import { ROLE_HIERARCHY, ROLE_LABELS, type Role } from '@/lib/constants/roles'
 import type { NavigationItem } from '@/types/navigation.types'
 import type { Permission } from '@/lib/constants/permissions'
 
@@ -26,7 +36,8 @@ export function Sidebar() {
   const location = useLocation()
   const navigate = useNavigate()
   const { can } = usePermissions()
-  const { logout } = useAuth()
+  const { user, logout } = useAuth()
+  const { locale, setLocale, language, t } = useLocale()
 
 const canSeeItem = (item: NavigationItem): boolean => {
   if (item.permission && !can(item.permission as Permission)) {
@@ -60,6 +71,19 @@ const canSeeItem = (item: NavigationItem): boolean => {
     logout()
     navigate(ROUTES.LOGIN)
   }
+
+  const displayName = user
+    ? `${user.firstName} ${user.lastName}`.trim()
+    : 'Guest'
+  const initials = user
+    ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase()
+    : '?'
+  const primaryRole = user?.roles?.length
+    ? [...user.roles].sort((a, b) => ROLE_HIERARCHY[b] - ROLE_HIERARCHY[a])[0]
+    : undefined
+  const roleLabel = primaryRole
+    ? ROLE_LABELS[primaryRole as Role] || primaryRole
+    : 'User'
 
   const goTo = (path: string) => {
     navigate(path)
@@ -97,10 +121,10 @@ const canSeeItem = (item: NavigationItem): boolean => {
             aria-label={isExpanded ? `Collapse ${item.label}` : `Expand ${item.label}`}
             onClick={toggleExpanded}
             className={cn(
-              'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors',
+              'flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm font-medium transition-colors',
               moduleActive
-                ? 'bg-white/20 text-white shadow-sm'
-                : 'text-white/80 hover:bg-white/10 hover:text-white',
+                ? 'border-[#2C41F4] bg-[#2C41F41F] text-white shadow-[0_0_12px_rgba(44,65,244,0.2)]'
+                : 'border-transparent text-white/75 hover:bg-white/10 hover:text-white',
               collapsed && 'justify-center px-2'
             )}
           >
@@ -135,10 +159,10 @@ const canSeeItem = (item: NavigationItem): boolean => {
                       goTo(child.path)
                     }}
                     className={cn(
-                      'flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[13px] font-medium transition-colors',
+                      'flex w-full items-center gap-2.5 rounded-lg border px-3 py-2 text-left text-[13px] font-medium transition-colors',
                       childActive
-                        ? 'bg-white/25 text-white'
-                        : 'text-white/75 hover:bg-white/10 hover:text-white'
+                        ? 'border-[#2C41F4] bg-[#2C41F41F] text-white shadow-[0_0_10px_rgba(44,65,244,0.18)]'
+                        : 'border-transparent text-white/70 hover:bg-white/10 hover:text-white'
                     )}
                   >
                     {ChildIcon && (
@@ -161,10 +185,10 @@ const canSeeItem = (item: NavigationItem): boolean => {
         title={collapsed ? item.label : undefined}
         onClick={() => goTo(item.path)}
         className={cn(
-          'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors',
+          'flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm font-medium transition-colors',
           leafActive
-            ? 'bg-white/20 text-white shadow-sm'
-            : 'text-white/80 hover:bg-white/10 hover:text-white',
+            ? 'border-[#2C41F4] bg-[#2C41F41F] text-white shadow-[0_0_12px_rgba(44,65,244,0.2)]'
+            : 'border-transparent text-white/75 hover:bg-white/10 hover:text-white',
           collapsed && 'justify-center px-2'
         )}
       >
@@ -195,7 +219,7 @@ const canSeeItem = (item: NavigationItem): boolean => {
               className="h-9 w-auto max-w-[120px] shrink-0 object-contain object-left"
             />
             <div className="min-w-0 border-l border-slate-200 pl-2.5">
-              <p className="truncate text-sm font-bold leading-tight text-[#1e3a5f]">
+              <p className="truncate text-sm font-bold leading-tight text-brand-navy">
                 {appConfig.name}
               </p>
               <p className="truncate text-[10px] text-muted-foreground">Cloud Platform</p>
@@ -240,19 +264,95 @@ const canSeeItem = (item: NavigationItem): boolean => {
         })}
       </div>
 
-      <div className="shrink-0 border-t border-white/15 p-3">
-        <button
-          type="button"
-          onClick={handleLogout}
+      <div className="shrink-0 space-y-2 border-t border-white/15 p-3">
+        <div
           className={cn(
-            'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white',
-            collapsed && 'justify-center px-2'
+            'flex items-center gap-2 rounded-xl bg-white/10 px-2 py-2',
+            collapsed && 'flex-col justify-center gap-1.5 px-1.5'
           )}
-          title="Logout"
         >
-          <LogOut className="h-[18px] w-[18px] shrink-0" />
-          {!collapsed && <span>Logout</span>}
-        </button>
+          {user && (
+            <div
+              className={cn(
+                'flex min-w-0 flex-1 items-center gap-3 px-1',
+                collapsed && 'flex-none justify-center px-0'
+              )}
+              title={collapsed ? `${displayName} · ${roleLabel}` : undefined}
+            >
+              <Avatar className="h-9 w-9 border border-white/25">
+                {user.avatar && <AvatarImage src={user.avatar} alt={displayName} />}
+                <AvatarFallback className="bg-white/20 text-xs font-semibold text-white">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+              {!collapsed && (
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold leading-tight text-white">
+                    {displayName}
+                  </p>
+                  <p className="truncate text-[11px] font-medium text-white/70">{roleLabel}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-red-400 transition-colors hover:bg-red-500/20 hover:text-red-300"
+            title={t.logout}
+            aria-label={t.logout}
+          >
+            <LogOut className="h-[18px] w-[18px]" />
+          </button>
+        </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              className={cn(
+                'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white',
+                collapsed && 'justify-center px-2'
+              )}
+              title={t.language}
+              aria-label={t.language}
+            >
+              <Languages className="h-[18px] w-[18px] shrink-0" />
+              {!collapsed && (
+                <>
+                  <span className="min-w-0 flex-1 truncate text-left">
+                    {language.nativeLabel}
+                  </span>
+                  <ChevronDown className="h-4 w-4 shrink-0 opacity-80" />
+                </>
+              )}
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            side={collapsed ? 'right' : 'top'}
+            align={collapsed ? 'end' : 'start'}
+            className="w-52"
+          >
+            {LANGUAGES.map((option) => (
+              <DropdownMenuItem
+                key={option.code}
+                onClick={() => setLocale(option.code)}
+                className="flex items-center justify-between gap-2"
+              >
+                <span>
+                  <span className="font-medium">{option.nativeLabel}</span>
+                  {option.nativeLabel !== option.label && (
+                    <span className="ml-1.5 text-xs text-muted-foreground">
+                      {option.label}
+                    </span>
+                  )}
+                </span>
+                {locale === option.code && <Check className="h-4 w-4 text-primary" />}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </aside>
   )
