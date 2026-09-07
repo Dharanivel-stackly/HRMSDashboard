@@ -31,6 +31,7 @@ import Performance from '@/pages/hrms/performance/Performance'
 import HRMSDocuments from '@/pages/hrms/documents/Documents'
 import HRMSReports from '@/pages/hrms/reports/Reports'
 import UserManagement from '@/pages/settings/UserManagement'
+import ScreenPrivileges from '@/pages/settings/ScreenPrivileges'
 
 export const router = createBrowserRouter([
   {
@@ -237,6 +238,14 @@ export const router = createBrowserRouter([
         element: (
           <RoleRoute permission={PERMISSIONS.USERS.VIEW}>
             <UserManagement />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'settings/privileges',
+        element: (
+          <RoleRoute permission={PERMISSIONS.PRIVILEGES.VIEW}>
+            <ScreenPrivileges />
           </RoleRoute>
         ),
       },

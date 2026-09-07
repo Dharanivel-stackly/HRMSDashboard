@@ -11,6 +11,10 @@ export const API_ENDPOINTS = {
     BASE: '/users',
     BY_ID: (id: string) => `/users/${id}`,
   },
+  ROLE_PRIVILEGES: {
+    BASE: '/role-privileges',
+    RESET: (role: string) => `/role-privileges/${role}/reset`,
+  },
   EMPLOYEES: {
     BASE: '/employees',
     BY_ID: (id: string) => `/employees/${id}`,
