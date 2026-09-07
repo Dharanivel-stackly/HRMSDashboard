@@ -25,7 +25,7 @@ export default function ForgotPassword() {
 
   return (
     <div className="flex min-h-screen">
-      <div className="relative hidden w-1/2 overflow-hidden bg-gradient-to-br from-[#0b3d91] via-[#1565c0] to-[#0d47a1] lg:flex">
+      <div className="relative hidden w-1/2 overflow-hidden bg-gradient-to-br from-brand-navy via-[#151a3d] to-brand-blue lg:flex">
         <div className="relative z-10 mt-auto p-12 pb-16">
           <h1 className="max-w-md text-4xl font-bold leading-tight text-white">
             Reset your password
@@ -37,7 +37,7 @@ export default function ForgotPassword() {
         </div>
       </div>
 
-      <div className="flex w-full items-center justify-center bg-[#f4f7fb] px-6 py-12 lg:w-1/2">
+      <div className="flex w-full items-center justify-center bg-brand-soft px-6 py-12 lg:w-1/2">
         {isSuccess ? (
           <div className="w-full max-w-md space-y-4 text-center">
             <img
@@ -45,7 +45,7 @@ export default function ForgotPassword() {
               alt="Stackly"
               className="mx-auto mb-2 h-14 w-auto max-w-[200px] object-contain"
             />
-            <h2 className="text-2xl font-bold text-[#0b3d91]">Check your email</h2>
+            <h2 className="text-2xl font-bold text-brand-navy">Check your email</h2>
             <p className="text-muted-foreground">
               If an account exists, we&apos;ve sent a password reset link.
             </p>

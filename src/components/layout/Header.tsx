@@ -58,7 +58,7 @@ export function Header() {
       {/* Top bar */}
       <div className="flex items-start justify-between gap-4 px-6 pt-5 pb-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#0b3d91]">{title}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-brand-navy">{title}</h1>
           <p className="mt-0.5 text-sm text-muted-foreground">
             {getGreeting()}, {displayName}
           </p>
@@ -71,11 +71,10 @@ export function Header() {
 
       {/* Breadcrumb bar — flush under top bar (no gap) */}
       <div
-        className="breadcrumb-bar flex items-center gap-2 rounded-bl-xl px-6 py-2.5 text-sm text-white"
+        className="breadcrumb-bar flex items-center gap-2 rounded-bl-xl bg-brand-navy px-6 py-2.5 text-sm text-white"
         style={{
-          backgroundColor: '#1a73e8',
           backgroundImage:
-            'repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(0,0,0,0.06) 8px, rgba(0,0,0,0.06) 16px)',
+            'repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(47,107,255,0.12) 8px, rgba(47,107,255,0.12) 16px)',
         }}
       >
         <Home className="h-3.5 w-3.5 shrink-0 opacity-90" />
