@@ -23,12 +23,13 @@ import {
   DEPARTMENTS,
 } from '../constants/attendance.constants'
 import { correctionFormSchema, type CorrectionFormData } from '../validation/attendance.schema'
-import type { CorrectionRequest } from '../types/attendance.types'
+import type { CreateCorrectionPayload } from '../types/attendance.types'
 
 interface CorrectionFormDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onSubmit: (correction: CorrectionRequest) => void
+  onSubmit: (payload: CreateCorrectionPayload) => void | Promise<void>
+  isLoading?: boolean
 }
 
 const departmentOptions = DEPARTMENTS.filter((d) => d !== 'All Departments')
@@ -37,6 +38,7 @@ export function CorrectionFormDialog({
   open,
   onOpenChange,
   onSubmit,
+  isLoading,
 }: CorrectionFormDialogProps) {
   const {
     register,
@@ -62,29 +64,19 @@ export function CorrectionFormDialog({
     },
   })
 
-  const handleFormSubmit = (data: CorrectionFormData) => {
-    onSubmit({
-      id: `corr-${Date.now()}`,
-      employeeId: `emp-${Date.now()}`,
+  const handleFormSubmit = async (data: CorrectionFormData) => {
+    await onSubmit({
       employeeName: data.employeeName,
       department: data.department,
       attendanceDate: data.attendanceDate,
-      existingCheckIn: data.existingCheckIn || null,
-      existingCheckOut: data.existingCheckOut || null,
-      requestedCheckIn: data.requestedCheckIn || null,
-      requestedCheckOut: data.requestedCheckOut || null,
+      existingCheckIn: data.existingCheckIn,
+      existingCheckOut: data.existingCheckOut,
+      requestedCheckIn: data.requestedCheckIn,
+      requestedCheckOut: data.requestedCheckOut,
       correctionType: data.correctionType,
       reason: data.reason,
-      attachmentName: data.attachmentName || undefined,
+      attachmentName: data.attachmentName,
       approver: data.approver,
-      status: 'pending',
-      submittedAt: new Date().toLocaleString('en-IN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      }),
     })
     reset()
     onOpenChange(false)
@@ -219,7 +211,9 @@ export function CorrectionFormDialog({
             <Button type="button" variant="outline" onClick={() => handleClose(false)}>
               Cancel
             </Button>
-            <Button type="submit">Submit Request</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Submitting...' : 'Submit Request'}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

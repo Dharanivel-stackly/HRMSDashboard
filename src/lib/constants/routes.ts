@@ -27,10 +27,19 @@ export const ROUTES = {
     PAYROLL: '/hrms/payroll',
     RECRUITMENT: '/hrms/recruitment',
     PERFORMANCE: '/hrms/performance',
+    PERFORMANCE_GOALS: '/hrms/performance/goals',
+    PERFORMANCE_KPIS: '/hrms/performance/kpis',
+    PERFORMANCE_APPRAISAL: '/hrms/performance/appraisal',
+    PERFORMANCE_FEEDBACK: '/hrms/performance/360-feedback',
     DOCUMENTS: '/hrms/documents',
     REPORTS: '/hrms/reports',
     EMPLOYEE_REPORTS: '/hrms/reports/employees',
     ATTENDANCE_REPORTS_RS: '/hrms/reports/attendance',
     
+  },
+
+  SETTINGS: {
+    USERS: '/settings/users',
+    PRIVILEGES: '/settings/privileges',
   },
 } as const
