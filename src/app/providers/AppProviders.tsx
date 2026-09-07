@@ -3,6 +3,7 @@ import { QueryProvider } from './QueryProvider'
 import { AuthProvider } from './AuthProvider'
 import { ThemeProvider } from './ThemeProvider'
 import { LocaleProvider } from './LocaleProvider'
+import { ToastProvider } from '@/components/ui/toast'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
 interface AppProvidersProps {
@@ -15,9 +16,11 @@ export function AppProviders({ children }: AppProvidersProps) {
       <AuthProvider>
         <ThemeProvider defaultTheme="light">
           <LocaleProvider>
-            <TooltipProvider>
-              {children}
-            </TooltipProvider>
+            <ToastProvider>
+              <TooltipProvider>
+                {children}
+              </TooltipProvider>
+            </ToastProvider>
           </LocaleProvider>
         </ThemeProvider>
       </AuthProvider>

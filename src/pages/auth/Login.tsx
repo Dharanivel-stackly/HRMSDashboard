@@ -8,10 +8,12 @@ import { getHomeRoute } from '@/lib/auth/defaultRoute'
 import { ApiError } from '@/lib/api/apiError'
 import { useState } from 'react'
 import { appConfig } from '@/config/app.config'
+import { useToast } from '@/hooks/useToast'
 
 export default function Login() {
   const navigate = useNavigate()
   const { login } = useAuth()
+  const { success } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -23,6 +25,10 @@ export default function Login() {
       setToken(response.accessToken)
       setRefreshToken(response.refreshToken)
       login(response.user)
+      success(
+        'Login successful',
+        `Welcome back, ${response.user.firstName}!`
+      )
       navigate(getHomeRoute(response.user))
     } catch (err) {
       const message =
