@@ -34,8 +34,15 @@ import Appraisal from '@/pages/hrms/performance/Appraisal'
 import Feedback from '@/pages/hrms/performance/Feedback'
 import HRMSDocuments from '@/pages/hrms/documents/Documents'
 import HRMSReports from '@/pages/hrms/reports/Reports'
+<<<<<<< HEAD
 import UserManagement from '@/pages/settings/UserManagement'
 import ScreenPrivileges from '@/pages/settings/ScreenPrivileges'
+=======
+import ApplyLeave from '@/pages/hrms/leave/ApplyLeave'
+import MyLeaveRequests from '@/pages/hrms/leave/MyLeaveRequests'
+import LeaveDetails from '@/pages/hrms/leave/LeaveDetails'
+import LeaveApprovals from '@/pages/hrms/leave/LeaveApprovals'
+>>>>>>> upstream/Hari_Vignesh
 
 export const router = createBrowserRouter([
   {
@@ -189,7 +196,13 @@ export const router = createBrowserRouter([
         ),
       },
 
+      //Leave module
       { path: 'hrms/leave', element: <Leave /> },
+      { path: 'hrms/leave/apply', element: <ApplyLeave /> },
+      { path: 'hrms/leave/my', element: <MyLeaveRequests /> },
+      { path: 'hrms/leave/:id', element: <LeaveDetails /> },
+      { path: 'hrms/leave/approvals', element: <LeaveApprovals /> },
+
       { path: 'hrms/payroll', element: <Payroll /> },
       { path: 'hrms/recruitment', element: <Recruitment /> },
       { path: 'hrms/performance', element: <Performance /> },
