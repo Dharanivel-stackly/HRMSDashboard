@@ -1,28 +1,18 @@
 import type { LoginCredentials, LoginResponse, ForgotPasswordRequest } from '@/types/auth.types'
 import type { AuthUser } from '@/types/auth.types'
-import { DEMO_USERS } from './demoUsers'
+import { mockUserService } from '@/lib/mock/mockUserService'
 import { ApiError } from '@/lib/api/apiError'
 
 const delay = (ms = 400) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const mockAuthService = {
   async login(credentials: LoginCredentials): Promise<LoginResponse> {
-    await delay()
-
-    const match = DEMO_USERS.find(
-      (u) =>
-        u.email.toLowerCase() === credentials.email.toLowerCase() &&
-        u.password === credentials.password
-    )
-
-    if (!match) {
-      throw new ApiError('Invalid email or password', 401)
-    }
+    const user = await mockUserService.authenticate(credentials.email, credentials.password)
 
     return {
-      user: match.user,
-      accessToken: `demo-token-${match.user.id}`,
-      refreshToken: `demo-refresh-${match.user.id}`,
+      user,
+      accessToken: `demo-token-${user.id}`,
+      refreshToken: `demo-refresh-${user.id}`,
     }
   },
 
@@ -36,6 +26,9 @@ export const mockAuthService = {
 
   async getMe(): Promise<AuthUser> {
     await delay()
-    return DEMO_USERS[0].user
+    const users = await mockUserService.getUsers()
+    if (!users[0]) throw new ApiError('User not found', 404)
+    const { permissions, roles, ...profile } = users[0]
+    return { ...profile, permissions, roles }
   },
 }
