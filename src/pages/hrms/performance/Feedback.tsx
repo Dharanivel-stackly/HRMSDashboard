@@ -65,7 +65,7 @@ export default function Feedback() {
       <section className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="font-semibold text-[#0b3d91]">360 feedback campaigns</h2>
+            <h2 className="font-semibold text-brand-navy">360 feedback campaigns</h2>
             <p className="text-xs text-muted-foreground">Collect structured feedback from peers, managers, and direct reports</p>
           </div>
           <label className="relative block sm:w-72">
@@ -159,7 +159,7 @@ function StatusBadge({ status }: { status: string }) {
 //             <CircleDashed className="h-8 w-8 text-primary" />
 //           </div>
 
-//           <h1 className="text-3xl font-bold text-[#0b3d91]">
+//           <h1 className="text-3xl font-bold text-brand-navy">
 //             Welcome to 360 Feedback
 //           </h1>
 
@@ -178,7 +178,7 @@ function StatusBadge({ status }: { status: string }) {
 
 //           <div className="mt-8 grid gap-3 sm:grid-cols-3">
 //             <div className="rounded-xl border border-border/60 p-4">
-//               <p className="text-sm font-semibold text-[#0b3d91]">
+//               <p className="text-sm font-semibold text-brand-navy">
 //                 Collect
 //               </p>
 
@@ -188,7 +188,7 @@ function StatusBadge({ status }: { status: string }) {
 //             </div>
 
 //             <div className="rounded-xl border border-border/60 p-4">
-//               <p className="text-sm font-semibold text-[#0b3d91]">
+//               <p className="text-sm font-semibold text-brand-navy">
 //                 Evaluate
 //               </p>
 
@@ -198,7 +198,7 @@ function StatusBadge({ status }: { status: string }) {
 //             </div>
 
 //             <div className="rounded-xl border border-border/60 p-4">
-//               <p className="text-sm font-semibold text-[#0b3d91]">
+//               <p className="text-sm font-semibold text-brand-navy">
 //                 Improve
 //               </p>
 

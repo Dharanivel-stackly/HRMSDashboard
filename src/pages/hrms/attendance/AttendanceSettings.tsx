@@ -63,7 +63,7 @@ export default function AttendanceSettings() {
 
       <div className="space-y-5">
         <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
-          <h3 className="text-base font-semibold text-[#0b3d91]">Work day rules</h3>
+          <h3 className="text-base font-semibold text-brand-navy">Work day rules</h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-muted-foreground">
@@ -99,7 +99,7 @@ export default function AttendanceSettings() {
         </div>
 
         <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
-          <h3 className="text-base font-semibold text-[#0b3d91]">Overtime policy</h3>
+          <h3 className="text-base font-semibold text-brand-navy">Overtime policy</h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-muted-foreground">
@@ -132,7 +132,7 @@ export default function AttendanceSettings() {
         </div>
 
         <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
-          <h3 className="text-base font-semibold text-[#0b3d91]">Correction policy</h3>
+          <h3 className="text-base font-semibold text-brand-navy">Correction policy</h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-muted-foreground">
