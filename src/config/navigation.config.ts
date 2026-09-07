@@ -15,6 +15,10 @@ import {
   Gift,
   Settings2,
   ClipboardList,
+  Gauge,
+  ClipboardCheck,
+  MessageCircleMore,
+  Target,
   UserCog,
   ShieldCheck,
 } from 'lucide-react'
@@ -157,6 +161,13 @@ export const navigationConfig: NavigationGroup[] = [
         icon: TrendingUp,
         module: 'hrms',
         permission: PERMISSIONS.PERFORMANCE.VIEW,
+        children: [
+          { label: 'Overview', path: ROUTES.HRMS.PERFORMANCE, icon: TrendingUp, module: 'hrms', permission: PERMISSIONS.PERFORMANCE.VIEW },
+          { label: 'Goals', path: ROUTES.HRMS.PERFORMANCE_GOALS, icon: Target, module: 'hrms', permission: PERMISSIONS.PERFORMANCE.VIEW },
+          { label: 'KPI Management', path: ROUTES.HRMS.PERFORMANCE_KPIS, icon: Gauge, module: 'hrms', permission: PERMISSIONS.PERFORMANCE.VIEW },
+          { label: 'Appraisal', path: ROUTES.HRMS.PERFORMANCE_APPRAISAL, icon: ClipboardCheck, module: 'hrms', permission: PERMISSIONS.PERFORMANCE.VIEW },
+          { label: '360 Feedback', path: ROUTES.HRMS.PERFORMANCE_FEEDBACK, icon: MessageCircleMore, module: 'hrms', permission: PERMISSIONS.PERFORMANCE.VIEW },
+        ],
       },
       {
         label: 'Documents',
