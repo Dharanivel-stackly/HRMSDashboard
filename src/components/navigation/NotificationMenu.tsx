@@ -12,6 +12,18 @@ import {
 
 import { ROUTES } from '@/lib/constants/routes'
 import { cn } from '@/lib/utils/cn'
+import { useMarkAllNotificationsAsRead, useNotifications } from '@/features/notifications/hooks/useNotifications'
+import { useState } from 'react'
+
+const notificationIcons = {
+  bell: Bell,
+  calendar: CalendarDays,
+  clock: Clock,
+  'user-check': UserCheck,
+  briefcase: Briefcase,
+  'user-plus': UserPlus,
+  'file-text': FileText,
+} as const
 
 interface NotificationItem {
   id: string
@@ -24,168 +36,6 @@ interface NotificationItem {
   tone?: 'default' | 'warning' | 'success'
 }
 
-const notifications: NotificationItem[] = [
-  {
-    id: 'n1',
-    title: 'Pending correction',
-    message: 'Rahul Mehta submitted an attendance correction for review.',
-    time: '12 min ago',
-    unread: true,
-    href: ROUTES.HRMS.ATTENDANCE_CORRECTIONS,
-    icon: Clock,
-    tone: 'warning',
-  },
-  {
-    id: 'n2',
-    title: 'Leave request',
-    message: 'Sneha Kapoor applied for leave on Aug 28.',
-    time: '1 hr ago',
-    unread: true,
-    href: ROUTES.HRMS.LEAVE,
-    icon: CalendarDays,
-    tone: 'default',
-  },
-  {
-    id: 'n3',
-    title: 'Late check-ins',
-    message: '27 employees checked in late today across departments.',
-    time: '2 hrs ago',
-    unread: true,
-    href: ROUTES.HRMS.ATTENDANCE_DAILY,
-    icon: UserCheck,
-    tone: 'warning',
-  },
-  {
-    id: 'n4',
-    title: 'Overtime approval',
-    message: 'Arjun Nair overtime request is awaiting your approval.',
-    time: 'Yesterday',
-    unread: false,
-    href: ROUTES.HRMS.ATTENDANCE_OVERTIME,
-    icon: Clock,
-    tone: 'default',
-  },
-    {
-    id: 'n5',
-    title: 'New job applications',
-    message: 'New candidates are waiting for screening.',
-    time: '30 min ago',
-    unread: true,
-    href: '/hrms/recruitment/screening',
-    icon: UserPlus,
-    tone: 'default',
-  },
-  {
-    id: 'n6',
-    title: 'Job posting update',
-    message: 'Review and update active job postings.',
-    time: '1 hr ago',
-    unread: true,
-    href: '/hrms/recruitment/postings',
-    icon: Briefcase,
-    tone: 'success',
-  },
-  {
-    id: 'n7',
-    title: 'Pending onboarding documents',
-    message: 'New employees have documents waiting for verification.',
-    time: '2 hrs ago',
-    unread: true,
-    href: '/hrms/onboarding/documents/verify',
-    icon: FileText,
-    tone: 'warning',
-  },
-  {
-    id: 'n8',
-    title: 'Onboarding employees',
-    message: 'Track recently joined employees and their onboarding progress.',
-    time: 'Today',
-    unread: false,
-    href: '/hrms/onboarding/employees',
-    icon: UserCheck,
-    tone: 'default',
-  },
-    {
-    id: 'n9',
-    title: 'Interview scheduled',
-    message: 'A new interview is scheduled for the Software Engineer position.',
-    time: '3 hrs ago',
-    unread: true,
-    href: '/hrms/recruitment/interviews',
-    icon: CalendarDays,
-    tone: 'default',
-  },
-  {
-    id: 'n10',
-    title: 'Candidate evaluation pending',
-    message: 'Complete pending evaluations for interviewed candidates.',
-    time: '4 hrs ago',
-    unread: true,
-    href: '/hrms/recruitment/evaluation',
-    icon: UserCheck,
-    tone: 'warning',
-  },
-  {
-    id: 'n11',
-    title: 'Shortlisted candidates',
-    message: 'Review candidates shortlisted for the next hiring stage.',
-    time: 'Yesterday',
-    unread: false,
-    href: '/hrms/recruitment/shortlist',
-    icon: UserPlus,
-    tone: 'success',
-  },
-  {
-    id: 'n12',
-    title: 'Offer approval required',
-    message: 'Review and approve newly generated candidate offers.',
-    time: 'Yesterday',
-    unread: true,
-    href: '/hrms/recruitment/offers',
-    icon: Briefcase,
-    tone: 'warning',
-  },
-  {
-    id: 'n13',
-    title: 'Document verification pending',
-    message: 'Several onboarding documents require verification.',
-    time: 'Today',
-    unread: true,
-    href: '/hrms/onboarding/documents/verify',
-    icon: FileText,
-    tone: 'warning',
-  },
-  {
-    id: 'n14',
-    title: 'Background verification update',
-    message: 'Background verification status has been updated for new employees.',
-    time: 'Today',
-    unread: false,
-    href: '/hrms/onboarding/background',
-    icon: Clock,
-    tone: 'default',
-  },
-  {
-    id: 'n15',
-    title: 'Onboarding tasks pending',
-    message: 'HR and IT onboarding tasks are waiting for completion.',
-    time: 'Today',
-    unread: true,
-    href: '/hrms/onboarding/employees',
-    icon: UserCheck,
-    tone: 'warning',
-  },
-  {
-    id: 'n16',
-    title: 'New employee onboarding',
-    message: 'Track the onboarding progress of recently joined employees.',
-    time: 'Today',
-    unread: false,
-    href: '/hrms/onboarding/employees',
-    icon: UserPlus,
-    tone: 'success',
-  },
-]
 
 const toneStyles = {
   default: 'bg-primary/10 text-primary',
@@ -194,10 +44,14 @@ const toneStyles = {
 }
 
 export function NotificationMenu() {
-  const unreadCount = notifications.filter((n) => n.unread).length
+  const [open, setOpen] = useState(false)
+  const { data: notifications = [], isLoading } = useNotifications()
+   const markAllAsRead = useMarkAllNotificationsAsRead()
+
+const unreadCount = notifications.filter((item) => item.unread).length
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
@@ -226,18 +80,24 @@ export function NotificationMenu() {
         </DropdownMenuLabel>
 
         <div className="max-h-[320px] overflow-y-auto py-1">
-          {notifications.map((item) => {
-            const Icon = item.icon
-            const content = (
-              <>
-                <div
-                  className={cn(
-                    'mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
-                    toneStyles[item.tone ?? 'default']
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                </div>
+           {isLoading ? (
+              <div className="px-4 py-6 text-center text-sm text-muted-foreground">
+                Loading notifications...
+              </div>
+            ) : (
+              notifications.map((item) => {
+             const Icon = notificationIcons[item.icon] ?? Bell
+           
+             const content = (
+               <>
+                 <div
+                   className={cn(
+                     'mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
+                     toneStyles[item.tone ?? 'default']
+                   )}
+                 >
+                   <Icon className="h-4 w-4" />
+                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <p className="text-sm font-semibold leading-tight text-foreground">
@@ -270,13 +130,19 @@ export function NotificationMenu() {
                 {content}
               </DropdownMenuItem>
             )
-          })}
+          })
+        )}
         </div>
 
         <DropdownMenuSeparator className="m-0" />
         <div className="p-2">
-          <Button variant="ghost" className="h-9 w-full text-sm font-medium text-primary">
-            Mark all as read
+          <Button
+            variant="ghost"
+            className="h-9 w-full text-sm font-medium text-primary"
+            onClick={() => markAllAsRead.mutate()}
+            disabled={markAllAsRead.isPending || unreadCount === 0}
+          >
+            {markAllAsRead.isPending ? 'Marking as read...' : 'Mark all as read'}
           </Button>
         </div>
       </DropdownMenuContent>

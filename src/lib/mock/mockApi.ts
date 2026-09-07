@@ -7,6 +7,7 @@ import type { ApiResponse } from '@/types/api.types'
 //import { executeUsersMockRequest } from './mockUsersApiRouter'
 import { executeRecruitmentMockRequest } from './mockRecruitmentApi'
 import { executeOnboardingMockRequest } from './mockOnboardingApi'
+import { executeNotificationMockRequest } from './mockNotificationApi'
 
 // --- Shared Types ---
 export type MockHttpRequest = {
@@ -55,6 +56,9 @@ export async function executeMockApiRequest(
   }
   if (path.startsWith('/onboarding')) {
     return executeOnboardingMockRequest(request)
+  }
+  if (path.startsWith('/notifications')) {
+    return executeNotificationMockRequest(request)
   }
 
   // Fallback for unhandled routes

@@ -70,4 +70,8 @@ export const API_ENDPOINTS = {
   DESIGNATIONS: {
     BASE: '/designations',
   },
+  NOTIFICATIONS: {
+  BASE: '/notifications',
+  MARK_ALL_READ: '/notifications/read-all',
+},
 } as const
