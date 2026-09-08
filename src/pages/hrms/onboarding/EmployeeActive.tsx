@@ -16,21 +16,21 @@ export default function EmployeeActive() {
   const employees = data?.data || [];
 
   return (
-    <PageContainer>
+    <PageContainer className="bg-gradient-to-b from-[#f0f4ff] to-white min-h-screen">
       <PageHeader
         title="Active Employees"
         description="View active employees who completed onboarding"
       />
 
-      <div className="ui-card-elevated overflow-hidden rounded-xl border border-border/60 bg-card">
+      <div className="mt-6 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg shadow-[#0b3d91]/5 overflow-hidden transition-all hover:shadow-[#0b3d91]/10">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Employee</TableHead>
-              <TableHead>Department</TableHead>
-              <TableHead>Designation</TableHead>
-              <TableHead>Joining Date</TableHead>
-              <TableHead>Status</TableHead>
+            <TableRow className="bg-[#f0f4ff] hover:bg-[#f0f4ff]/80">
+              <TableHead className="text-[#0b3d91] font-semibold">Employee</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Department</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Designation</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Joining Date</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -42,11 +42,13 @@ export default function EmployeeActive() {
               </TableRow>
             ) : (
               employees.map((emp) => (
-                <TableRow key={emp.id}>
+                <TableRow key={emp.id} className="hover:bg-[#f0f4ff]/40 transition-colors">
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback>{emp.firstName[0]}{emp.lastName[0]}</AvatarFallback>
+                      <Avatar className="h-8 w-8 border border-[#0b3d91]/10">
+                        <AvatarFallback className="bg-gradient-to-br from-[#0b3d91]/10 to-[#0b3d91]/5 text-xs font-semibold text-[#0b3d91]">
+                          {emp.firstName[0]}{emp.lastName[0]}
+                        </AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="font-medium">{emp.firstName} {emp.lastName}</p>

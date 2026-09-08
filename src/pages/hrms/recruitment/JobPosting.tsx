@@ -273,7 +273,7 @@ export default function JobPosting() {
       <Dialog open={dialogOpen} onOpenChange={handleCloseDialog}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl p-0">
           {/* Header with multi-color gradient */}
-          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 px-6 py-5">
+          <div className="bg-gradient-to-br from-[#0b1a2e] via-[#152b44] to-[#1a3350] px-6 py-5">
             <div className="flex items-center gap-3">
               <div className="rounded-full bg-white/20 p-2">
                 {editingPost ? <Edit className="h-5 w-5 text-white" /> : <Plus className="h-5 w-5 text-white" />}
@@ -540,7 +540,7 @@ export default function JobPosting() {
           {viewingPost && (
             <div className="flex flex-col">
               {/* Header with multi-color gradient */}
-              <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 px-6 py-5 animate-in slide-in-from-top-5 duration-500">
+              <div className="bg-gradient-to-br from-[#0b1a2e] via-[#152b44] to-[#1a3350] px-6 py-5 animate-in slide-in-from-top-5 duration-500">
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="text-xl font-bold text-white flex items-center gap-2">

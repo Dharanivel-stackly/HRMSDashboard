@@ -25,10 +25,8 @@ export default function DocumentCollection() {
 
   const handleDownload = (doc: Document) => {
     if (doc.url) {
-      // Open the URL in a new tab (works for PDFs, images, etc.)
       window.open(doc.url, '_blank');
     } else {
-      // Fallback: generate a text file with document metadata
       const content = `Document: ${doc.documentName}
 Type: ${doc.documentType}
 Employee: ${doc.employeeName}
@@ -52,13 +50,13 @@ Status: ${doc.status}`;
   const docs = documents || [];
 
   return (
-    <PageContainer>
+    <PageContainer className="bg-gradient-to-b from-[#f0f4ff] to-white min-h-screen">
       <PageHeader
         title="Document Collection"
         description="Collect and manage employee documents for onboarding"
       />
 
-      <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
+      <div className="mt-6 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg shadow-[#0b3d91]/5 p-6 transition-all hover:shadow-[#0b3d91]/10">
         <h3 className="text-base font-semibold text-[#0b3d91] mb-4">Upload New Document</h3>
         <DocumentUploadDropzone
           employeeId={employeeIdFilter || 'default-id'}
@@ -67,11 +65,11 @@ Status: ${doc.status}`;
         />
       </div>
 
-      <div className="ui-card-elevated overflow-hidden rounded-xl border border-border/60 bg-card">
-        <div className="p-4 flex items-center gap-4 border-b">
-          <span className="text-sm font-medium">Filter by Employee:</span>
+      <div className="mt-6 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg shadow-[#0b3d91]/5 overflow-hidden transition-all hover:shadow-[#0b3d91]/10">
+        <div className="p-4 flex items-center gap-4 border-b border-[#0b3d91]/5">
+          <span className="text-sm font-medium text-[#0b3d91]">Filter by Employee:</span>
           <Select value={employeeIdFilter} onValueChange={setEmployeeIdFilter}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-[200px] border-[#0b3d91]/10 focus:border-[#0b3d91] focus:ring-[#0b3d91]/20">
               <SelectValue placeholder="All employees" />
             </SelectTrigger>
             <SelectContent>
@@ -83,13 +81,13 @@ Status: ${doc.status}`;
         </div>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Document</TableHead>
-              <TableHead>Employee</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Uploaded</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+            <TableRow className="bg-[#f0f4ff] hover:bg-[#f0f4ff]/80">
+              <TableHead className="text-[#0b3d91] font-semibold">Document</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Employee</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Type</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Uploaded</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Status</TableHead>
+              <TableHead className="text-right text-[#0b3d91] font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -101,7 +99,7 @@ Status: ${doc.status}`;
               </TableRow>
             ) : (
               docs.map((doc) => (
-                <TableRow key={doc.id}>
+                <TableRow key={doc.id} className="hover:bg-[#f0f4ff]/40 transition-colors">
                   <TableCell className="font-medium">{doc.documentName}</TableCell>
                   <TableCell>{doc.employeeName}</TableCell>
                   <TableCell>{doc.documentType}</TableCell>
@@ -128,6 +126,7 @@ Status: ${doc.status}`;
                       size="sm"
                       onClick={() => handleDownload(doc)}
                       aria-label={`Download ${doc.documentName}`}
+                      className="text-[#0b3d91] hover:text-[#0b3d91]/80 hover:bg-[#f0f4ff]"
                     >
                       <Download className="h-4 w-4" />
                     </Button>

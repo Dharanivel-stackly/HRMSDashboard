@@ -90,17 +90,24 @@ export default function OnboardingDashboard() {
   ];
 
   return (
-    <PageContainer>
+    <PageContainer className="bg-gradient-to-b from-[#f0f4ff] to-white min-h-screen">
       <PageHeader
         title="Onboarding Dashboard"
         description="Track new employee onboarding progress"
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" onClick={() => navigate('/hrms/onboarding/employees')}>
+            <Button
+              variant="outline"
+              onClick={() => navigate('/hrms/onboarding/employees')}
+              className="border-[#0b3d91]/20 text-[#0b3d91] hover:bg-[#0b3d91]/5 hover:border-[#0b3d91]/40"
+            >
               <Users className="mr-2 h-4 w-4" />
               View All
             </Button>
-            <Button onClick={() => navigate('/hrms/onboarding/hr')}>
+            <Button
+              onClick={() => navigate('/hrms/onboarding/hr')}
+              className="bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] text-white hover:from-[#0a357a] hover:to-[#154f9e] shadow-md shadow-[#0b3d91]/20"
+            >
               <Banknote className="mr-2 h-4 w-4" />
               Add Bank Account
             </Button>
@@ -110,12 +117,17 @@ export default function OnboardingDashboard() {
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {statCards.map((stat) => (
-          <StatCard key={stat.label} {...stat} />
+          <div
+            key={stat.label}
+            className="rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg shadow-[#0b3d91]/5 p-1 transition-all hover:shadow-[#0b3d91]/10"
+          >
+            <StatCard {...stat} />
+          </div>
         ))}
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-2">
-        <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
+      <div className="mt-6 grid gap-5 xl:grid-cols-2">
+        <div className="rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg shadow-[#0b3d91]/5 p-6 transition-all hover:shadow-[#0b3d91]/10">
           <h3 className="text-base font-semibold text-[#0b3d91]">Recent Onboardings</h3>
           <div className="mt-4 space-y-3">
             {stats.totalEmployees > 0 ? (
@@ -127,7 +139,7 @@ export default function OnboardingDashboard() {
             )}
             <Button
               variant="outline"
-              className="w-full"
+              className="w-full border-[#0b3d91]/20 text-[#0b3d91] hover:bg-[#0b3d91]/5 hover:border-[#0b3d91]/40"
               onClick={() => navigate('/hrms/onboarding/employees')}
             >
               View All Onboarding Profiles
@@ -135,12 +147,12 @@ export default function OnboardingDashboard() {
           </div>
         </div>
 
-        <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
+        <div className="rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg shadow-[#0b3d91]/5 p-6 transition-all hover:shadow-[#0b3d91]/10">
           <h3 className="text-base font-semibold text-[#0b3d91]">Quick Actions</h3>
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
             <Button
               variant="outline"
-              className="justify-start"
+              className="justify-start border-[#0b3d91]/20 text-[#0b3d91] hover:bg-[#0b3d91]/5 hover:border-[#0b3d91]/40"
               onClick={() => navigate(ROUTES.HRMS.ONBOARDING.DOCUMENTS)}
             >
               <FileText className="mr-2 h-4 w-4" />
@@ -148,7 +160,7 @@ export default function OnboardingDashboard() {
             </Button>
             <Button
               variant="outline"
-              className="justify-start"
+              className="justify-start border-[#0b3d91]/20 text-[#0b3d91] hover:bg-[#0b3d91]/5 hover:border-[#0b3d91]/40"
               onClick={() => navigate('/hrms/onboarding/documents/verify')}
             >
               <ShieldCheck className="mr-2 h-4 w-4" />
@@ -156,7 +168,7 @@ export default function OnboardingDashboard() {
             </Button>
             <Button
               variant="outline"
-              className="justify-start"
+              className="justify-start border-[#0b3d91]/20 text-[#0b3d91] hover:bg-[#0b3d91]/5 hover:border-[#0b3d91]/40"
               onClick={() => navigate('/hrms/onboarding/it')}
             >
               <Laptop className="mr-2 h-4 w-4" />
@@ -164,7 +176,7 @@ export default function OnboardingDashboard() {
             </Button>
             <Button
               variant="outline"
-              className="justify-start"
+              className="justify-start border-[#0b3d91]/20 text-[#0b3d91] hover:bg-[#0b3d91]/5 hover:border-[#0b3d91]/40"
               onClick={() => navigate(ROUTES.HRMS.ONBOARDING.ASSETS)}
             >
               <Laptop className="mr-2 h-4 w-4" />
@@ -172,7 +184,7 @@ export default function OnboardingDashboard() {
             </Button>
             <Button
               variant="outline"
-              className="justify-start col-span-2"
+              className="justify-start col-span-2 border-[#0b3d91]/20 text-[#0b3d91] hover:bg-[#0b3d91]/5 hover:border-[#0b3d91]/40"
               onClick={() => navigate('/hrms/onboarding/hr')}
             >
               <Banknote className="mr-2 h-4 w-4" />

@@ -1,13 +1,12 @@
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/common/PageHeader';
-import { useBackgroundVerifications } from '@/features/hrms/onboarding/hooks/useDocumentUpload'; 
+import { useBackgroundVerifications } from '@/features/hrms/onboarding/hooks/useDocumentUpload';
 import { LoadingState } from '@/components/common/LoadingState';
 import { ErrorState } from '@/components/common/ErrorState';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 
-// We need to add a hook for background verifications – we'll define it later.
-// For now we'll use the service directly.
+// We'll use the service directly if the hook isn't defined yet.
 import { onboardingService } from '@/features/hrms/onboarding/services/onboardingService';
 import { useQuery } from '@tanstack/react-query';
 
@@ -23,22 +22,22 @@ export default function BackgroundVerification() {
   const list = verifications || [];
 
   return (
-    <PageContainer>
+    <PageContainer className="bg-gradient-to-b from-[#f0f4ff] to-white min-h-screen">
       <PageHeader
         title="Background Verification"
         description="Conduct background checks for new employees"
       />
 
-      <div className="ui-card-elevated overflow-hidden rounded-xl border border-border/60 bg-card">
+      <div className="mt-6 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg shadow-[#0b3d91]/5 overflow-hidden transition-all hover:shadow-[#0b3d91]/10">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Employee</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Submitted</TableHead>
-              <TableHead>Completed</TableHead>
-              <TableHead>Verified By</TableHead>
+            <TableRow className="bg-[#f0f4ff] hover:bg-[#f0f4ff]/80">
+              <TableHead className="text-[#0b3d91] font-semibold">Employee</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Type</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Status</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Submitted</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Completed</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Verified By</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -50,7 +49,7 @@ export default function BackgroundVerification() {
               </TableRow>
             ) : (
               list.map((bg) => (
-                <TableRow key={bg.id}>
+                <TableRow key={bg.id} className="hover:bg-[#f0f4ff]/40 transition-colors">
                   <TableCell className="font-medium">{bg.employeeName}</TableCell>
                   <TableCell>{bg.type}</TableCell>
                   <TableCell>

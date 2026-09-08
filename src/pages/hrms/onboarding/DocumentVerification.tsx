@@ -27,7 +27,6 @@ export default function DocumentVerification() {
     if (doc.url) {
       window.open(doc.url, '_blank');
     } else {
-      // Generate a text file with metadata
       const content = `Document: ${doc.documentName}
 Type: ${doc.documentType}
 Employee: ${doc.employeeName}
@@ -64,22 +63,22 @@ Status: ${doc.status}`;
   if (isError) return <ErrorState onRetry={refetch} />;
 
   return (
-    <PageContainer>
+    <PageContainer className="bg-gradient-to-b from-[#f0f4ff] to-white min-h-screen">
       <PageHeader
         title="Document Verification"
         description="Verify employee documents for compliance"
       />
 
-      <div className="ui-card-elevated overflow-hidden rounded-xl border border-border/60 bg-card">
+      <div className="mt-6 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg shadow-[#0b3d91]/5 overflow-hidden transition-all hover:shadow-[#0b3d91]/10">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Document</TableHead>
-              <TableHead>Employee</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Uploaded</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+            <TableRow className="bg-[#f0f4ff] hover:bg-[#f0f4ff]/80">
+              <TableHead className="text-[#0b3d91] font-semibold">Document</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Employee</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Type</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Uploaded</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Status</TableHead>
+              <TableHead className="text-right text-[#0b3d91] font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -91,7 +90,7 @@ Status: ${doc.status}`;
               </TableRow>
             ) : (
               pendingDocs.map((doc) => (
-                <TableRow key={doc.id}>
+                <TableRow key={doc.id} className="hover:bg-[#f0f4ff]/40 transition-colors">
                   <TableCell className="font-medium">{doc.documentName}</TableCell>
                   <TableCell>{doc.employeeName}</TableCell>
                   <TableCell>{doc.documentType}</TableCell>
@@ -108,6 +107,7 @@ Status: ${doc.status}`;
                         variant="outline"
                         onClick={() => handleDownload(doc)}
                         aria-label={`Download ${doc.documentName}`}
+                        className="border-[#0b3d91]/20 text-[#0b3d91] hover:bg-[#f0f4ff]"
                       >
                         <Download className="h-4 w-4" />
                       </Button>
@@ -117,6 +117,7 @@ Status: ${doc.status}`;
                           setSelectedDocId(doc.id);
                           setDialogOpen(true);
                         }}
+                        className="bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] text-white hover:from-[#0a357a] hover:to-[#154f9e] shadow-sm shadow-[#0b3d91]/20"
                       >
                         Verify
                       </Button>
@@ -129,17 +130,22 @@ Status: ${doc.status}`;
         </Table>
       </div>
 
+      {/* Verify Dialog - Themed */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Verify Document</DialogTitle>
-            <DialogDescription>Approve or reject this document.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div>
-              <label className="text-sm font-medium">Verification Result</label>
+        <DialogContent className="sm:max-w-md rounded-2xl border-[#0b3d91]/10 shadow-2xl shadow-[#0b3d91]/15 p-0 gap-0">
+          <div className="bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] px-6 py-5 rounded-t-2xl">
+            <DialogHeader className="space-y-1">
+              <DialogTitle className="text-white text-xl font-bold">Verify Document</DialogTitle>
+              <DialogDescription className="text-white/70 text-sm">
+                Approve or reject this document.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+          <div className="px-6 py-6 space-y-4 bg-white rounded-b-2xl">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Verification Result</label>
               <Select value={verifyStatus} onValueChange={(v) => setVerifyStatus(v as 'verified' | 'rejected')}>
-                <SelectTrigger>
+                <SelectTrigger className="border-[#0b3d91]/10 focus:border-[#0b3d91] focus:ring-[#0b3d91]/20">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -148,18 +154,21 @@ Status: ${doc.status}`;
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <label className="text-sm font-medium">Comments</label>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Comments</label>
               <Textarea
                 value={comments}
                 onChange={(e) => setComments(e.target.value)}
                 placeholder="Optional feedback"
+                className="border-[#0b3d91]/10 focus:border-[#0b3d91] focus:ring-[#0b3d91]/20"
               />
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleVerify} disabled={isPending}>
+          <DialogFooter className="px-6 pb-6 gap-2">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-[#0b3d91]/20 text-[#0b3d91] hover:bg-[#0b3d91]/5">
+              Cancel
+            </Button>
+            <Button onClick={handleVerify} disabled={isPending} className="bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] text-white hover:from-[#0a357a] hover:to-[#154f9e] shadow-md shadow-[#0b3d91]/20">
               {isPending ? 'Submitting...' : 'Confirm'}
             </Button>
           </DialogFooter>

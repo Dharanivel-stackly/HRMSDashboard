@@ -3,6 +3,9 @@ import { executeUsersMockRequest } from '@/lib/mock/mockUsersApiRouter'
 import { executeAuthMockRequest } from '@/lib/mock/mockAuthApiRouter'
 import { executePrivilegesMockRequest } from '@/lib/mock/mockPrivilegesApiRouter'
 import type { MockHttpRequest, MockHttpResponse } from '@/lib/mock/mockAttendanceApiRouter'
+import { executeNotificationMockRequest } from './mockNotificationApi'
+import { executeOnboardingMockRequest } from './mockOnboardingApi'
+import { executeRecruitmentMockRequest } from './mockRecruitmentApi'
 
 export type { MockHttpRequest, MockHttpResponse }
 
@@ -24,6 +27,15 @@ export async function executeMockApiRequest(
   if (request.path.startsWith('/role-privileges')) {
     return executePrivilegesMockRequest(request)
   }
+  if (request.path.startsWith('/recruitment')) {
+      return executeRecruitmentMockRequest(request)
+    }
+    if (request.path.startsWith('/onboarding')) {
+      return executeOnboardingMockRequest(request)
+    }
+    if (request.path.startsWith('/notifications')) {
+      return executeNotificationMockRequest(request)
+    }
 
   return {
     status: 404,

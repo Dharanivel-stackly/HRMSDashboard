@@ -16,29 +16,35 @@ export default function OfferAccepted() {
   )
 
   return (
-    <PageContainer>
+    <PageContainer className="bg-gradient-to-b from-[#f0f4ff] to-white min-h-screen">
       <PageHeader
         title="Offer Accepted"
         description="Track offer acceptance and onboarding status"
         actions={
-          <Button size="sm" onClick={() => navigate(ROUTES.HRMS.ONBOARDING.DASHBOARD)}>
+          <Button
+            size="sm"
+            onClick={() => navigate(ROUTES.HRMS.ONBOARDING.DASHBOARD)}
+            className="bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] text-white hover:from-[#0a357a] hover:to-[#154f9e] shadow-md shadow-[#0b3d91]/20"
+          >
             <UserPlus className="mr-2 h-4 w-4" />
             Initiate Onboarding
           </Button>
         }
       />
 
-      {offers.length === 0 ? (
-        <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-12 text-center">
-          <p className="text-muted-foreground">No accepted offers yet.</p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {offers.map((offer) => (
-            <OfferLetterPreview key={offer.id} offer={offer} />
-          ))}
-        </div>
-      )}
+      <div className="mt-6 space-y-4">
+        {offers.length === 0 ? (
+          <div className="rounded-xl border border-[#0b3d91]/5 bg-white/80 backdrop-blur-sm p-12 text-center shadow-lg shadow-[#0b3d91]/5">
+            <p className="text-muted-foreground">No accepted offers yet.</p>
+          </div>
+        ) : (
+          offers.map((offer) => (
+            <div key={offer.id} className="rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg shadow-[#0b3d91]/5 border border-white/50 p-1">
+              <OfferLetterPreview offer={offer} />
+            </div>
+          ))
+        )}
+      </div>
     </PageContainer>
   )
 }

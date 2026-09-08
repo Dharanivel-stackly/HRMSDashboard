@@ -43,9 +43,8 @@ export default function OnboardingEmployees() {
 
   const filtered = data?.data || [];
 
-  // Keep identical return statement
   return (
-    <PageContainer>
+    <PageContainer className="bg-gradient-to-b from-[#f0f4ff] to-white min-h-screen">
       <PageHeader
         title="Onboarding Employees"
         description="Track all employees going through onboarding"
@@ -54,23 +53,23 @@ export default function OnboardingEmployees() {
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search employees..."
-              className="w-64 pl-9"
+              className="w-64 pl-9 border-[#0b3d91]/10 focus:border-[#0b3d91] focus:ring-[#0b3d91]/20"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         }
       />
-      <div className="ui-card-elevated overflow-hidden rounded-xl border border-border/60 bg-card">
+      <div className="mt-6 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg shadow-[#0b3d91]/5 overflow-hidden transition-all hover:shadow-[#0b3d91]/10">
         <Table>
           <TableHeader>
-            <TableRow className="bg-brand-soft/60 hover:bg-brand-soft/60">
-              <TableHead>Employee</TableHead>
-              <TableHead>Department</TableHead>
-              <TableHead>Designation</TableHead>
-              <TableHead>Joining Date</TableHead>
-              <TableHead>Progress</TableHead>
-              <TableHead>Status</TableHead>
+            <TableRow className="bg-[#f0f4ff] hover:bg-[#f0f4ff]/80">
+              <TableHead className="text-[#0b3d91] font-semibold">Employee</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Department</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Designation</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Joining Date</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Progress</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -86,13 +85,13 @@ export default function OnboardingEmployees() {
                 return (
                   <TableRow
                     key={emp.id}
-                    className="cursor-pointer hover:bg-muted/50"
+                    className="cursor-pointer hover:bg-[#f0f4ff]/40 transition-colors"
                     onClick={() => navigate(ROUTES.HRMS.ONBOARDING.PROFILE(emp.id))}
                   >
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9 border border-border">
-                          <AvatarFallback className="bg-primary/10 text-xs font-semibold text-primary">
+                        <Avatar className="h-9 w-9 border-2 border-[#0b3d91]/10">
+                          <AvatarFallback className="bg-gradient-to-br from-[#0b3d91]/10 to-[#0b3d91]/5 text-xs font-semibold text-[#0b3d91]">
                             {getInitials(emp)}
                           </AvatarFallback>
                         </Avatar>
@@ -107,7 +106,10 @@ export default function OnboardingEmployees() {
                     <TableCell>{emp.joiningDate}</TableCell>
                     <TableCell className="min-w-[120px]">
                       <div className="flex items-center gap-2">
-                        <Progress value={emp.progress} className="h-2 flex-1" />
+                        <Progress 
+                          value={emp.progress} 
+                          className="h-2 flex-1 [&>div]:bg-[#0b3d91]" 
+                        />
                         <span className="text-xs font-medium">{emp.progress}%</span>
                       </div>
                     </TableCell>

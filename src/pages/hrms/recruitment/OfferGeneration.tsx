@@ -1,3 +1,4 @@
+// src/pages/hrms/recruitment/OfferGeneration.tsx
 import { useState } from 'react'
 import { PageContainer } from '@/components/layout/PageContainer'
 import { PageHeader } from '@/components/common/PageHeader'
@@ -5,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { OfferLetterPreview } from '@/features/hrms/recruitment/components/OfferLetterPreview'
 import { mockCandidates, mockOffers } from '@/features/hrms/recruitment/mock/recruitment.mock'
 import { useNavigate } from 'react-router-dom'
-import { Plus, Send, X } from 'lucide-react'
+import { Plus, Send, X, Mail, Phone, Briefcase, CalendarDays, Building, Award, ExternalLink } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -53,9 +54,7 @@ export default function OfferGeneration() {
   }
 
   const handleCardClick = (candidate: Candidate) => {
-    if (flippedCandidateId === candidate.id) {
-      return
-    }
+    if (flippedCandidateId === candidate.id) return
     setFlippedCandidateId(candidate.id)
     setSelectedCandidate(candidate)
   }
@@ -117,7 +116,7 @@ export default function OfferGeneration() {
     }
   }
 
-    const handleAcceptOffer = (offerId: string) => {
+  const handleAcceptOffer = (offerId: string) => {
     const updated = offers.map((o) =>
       o.id === offerId ? { ...o, status: 'accepted' as const, acceptedDate: new Date().toISOString().slice(0, 10) } : o
     )
@@ -127,181 +126,220 @@ export default function OfferGeneration() {
       mockOffers[idx] = { ...mockOffers[idx], status: 'accepted', acceptedDate: new Date().toISOString().slice(0, 10) }
     }
   }
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'draft':
+        return 'bg-gray-50 text-gray-700 border-gray-200'
+      case 'sent':
+        return 'bg-amber-50 text-amber-700 border-amber-200'
+      case 'accepted':
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200'
+      case 'declined':
+        return 'bg-red-50 text-red-700 border-red-200'
+      default:
+        return 'bg-blue-50 text-blue-700 border-blue-200'
+    }
+  }
+
   return (
-    <PageContainer>
+    <PageContainer className="bg-gradient-to-b from-[#f0f4ff] to-white min-h-screen">
       <PageHeader
         title="Offer Generation"
         description="Generate and send offer letters to selected candidates"
         actions={
-          <Button size="sm" onClick={handleNewOffer}>
+          <Button
+            size="sm"
+            onClick={handleNewOffer}
+            className="bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] text-white hover:from-[#0a357a] hover:to-[#154f9e] shadow-md shadow-[#0b3d91]/20"
+          >
             <Plus className="mr-2 h-4 w-4" />
             New Offer
           </Button>
         }
       />
 
-      <div className="space-y-4">
+      <div className="mt-6 space-y-4">
         {offers.length === 0 ? (
-          <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-12 text-center">
+          <div className="rounded-xl border border-[#0b3d91]/5 bg-white/80 backdrop-blur-sm p-12 text-center shadow-lg shadow-[#0b3d91]/5">
             <p className="text-muted-foreground">No offers generated yet.</p>
           </div>
         ) : (
           offers.map((offer) => (
-            <OfferLetterPreview
-              key={offer.id}
-              offer={offer}
-              onDownload={() => console.log('Download offer', offer.id)}
-              onSend={() => handleSendOffer(offer.id)}
-              onAccept={() => handleAcceptOffer(offer.id)}
-            />
+            <div key={offer.id} className="rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg shadow-[#0b3d91]/5 border border-white/50 p-1">
+              <OfferLetterPreview
+                offer={offer}
+                onDownload={() => console.log('Download offer', offer.id)}
+                onSend={() => handleSendOffer(offer.id)}
+                onAccept={() => handleAcceptOffer(offer.id)}
+              />
+            </div>
           ))
         )}
       </div>
 
+      {/* ========== SELECT CANDIDATE DIALOG – THEMED ========== */}
       <Dialog open={showCandidateDialog} onOpenChange={setShowCandidateDialog}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>Select Candidate for Offer</DialogTitle>
-            <DialogDescription>
-              Choose a candidate who has completed the interview process.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {eligibleCandidates.length === 0 ? (
-              <div className="col-span-2 text-center py-8 text-muted-foreground">
-                No eligible candidates found. Candidates must be in "Interviewed", "Evaluated", or "Selected" status.
-              </div>
-            ) : (
-              eligibleCandidates.map((candidate) => {
-                const isFlipped = flippedCandidateId === candidate.id
-                return (
-                  <div
-                    key={candidate.id}
-                    className="relative h-48 w-full cursor-pointer perspective"
-                    onClick={() => handleCardClick(candidate)}
-                  >
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl p-0 gap-0 rounded-2xl border-[#0b3d91]/10 shadow-2xl shadow-[#0b3d91]/15">
+          <div className="bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] px-6 py-5 rounded-t-2xl">
+            <DialogHeader className="space-y-1">
+              <DialogTitle className="text-white text-xl font-bold">Select Candidate for Offer</DialogTitle>
+              <DialogDescription className="text-white/70 text-sm">
+                Choose a candidate who has completed the interview process.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+          <div className="px-6 py-6 space-y-4 bg-white rounded-b-2xl">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {eligibleCandidates.length === 0 ? (
+                <div className="col-span-2 text-center py-8 text-muted-foreground">
+                  No eligible candidates found. Candidates must be in "Interviewed", "Evaluated", or "Selected" status.
+                </div>
+              ) : (
+                eligibleCandidates.map((candidate) => {
+                  const isFlipped = flippedCandidateId === candidate.id
+                  return (
                     <div
-                      className={cn(
-                        'relative h-full w-full transition-transform duration-500 transform-style-3d',
-                        isFlipped && 'rotate-y-180'
-                      )}
+                      key={candidate.id}
+                      className="relative h-48 w-full cursor-pointer perspective"
+                      onClick={() => handleCardClick(candidate)}
                     >
-                      <div className="absolute inset-0 backface-hidden">
-                        <Card className="ui-card-elevated h-full border border-border/60 transition-shadow hover:shadow-md">
-                          <CardContent className="flex h-full flex-col items-center justify-center p-4">
-                            <Avatar className="h-12 w-12 border border-border">
-                              <AvatarFallback className="bg-primary/10 text-sm font-semibold text-primary">
-                                {getInitials(candidate)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <p className="mt-2 font-semibold text-foreground">
-                              {candidate.firstName} {candidate.lastName}
-                            </p>
-                            <p className="text-sm text-muted-foreground">{candidate.position}</p>
-                            <Badge variant="outline" className="mt-1 border-sky-200 bg-sky-50 text-sky-700">
-                              {candidate.status}
-                            </Badge>
-                          </CardContent>
-                        </Card>
-                      </div>
-                      <div className="absolute inset-0 backface-hidden rotate-y-180">
-                        <Card className="ui-card-elevated flex h-full flex-col items-center justify-center border border-border/60 bg-card p-4">
-                          <p className="text-sm font-medium text-foreground">Ready to send offer?</p>
-                          <Button
-                            className="mt-3"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleSendOfferClick(candidate)
-                            }}
-                          >
-                            <Send className="mr-2 h-4 w-4" />
-                            Send Offer Letter
-                          </Button>
-                        </Card>
+                      <div
+                        className={cn(
+                          'relative h-full w-full transition-transform duration-500 transform-style-3d',
+                          isFlipped && 'rotate-y-180'
+                        )}
+                      >
+                        {/* Front */}
+                        <div className="absolute inset-0 backface-hidden">
+                          <Card className="h-full border-[#0b3d91]/5 bg-white/80 backdrop-blur-sm shadow-md hover:shadow-lg transition-shadow rounded-xl">
+                            <CardContent className="flex h-full flex-col items-center justify-center p-4">
+                              <Avatar className="h-14 w-14 border-2 border-[#0b3d91]/10">
+                                <AvatarFallback className="bg-gradient-to-br from-[#0b3d91]/10 to-[#0b3d91]/5 text-base font-semibold text-[#0b3d91]">
+                                  {getInitials(candidate)}
+                                </AvatarFallback>
+                              </Avatar>
+                              <p className="mt-2 font-semibold text-foreground">
+                                {candidate.firstName} {candidate.lastName}
+                              </p>
+                              <p className="text-sm text-muted-foreground">{candidate.position}</p>
+                              <Badge
+                                variant="outline"
+                                className={`mt-1 border font-medium ${getStatusColor(candidate.status)}`}
+                              >
+                                {candidate.status}
+                              </Badge>
+                            </CardContent>
+                          </Card>
+                        </div>
+                        {/* Back */}
+                        <div className="absolute inset-0 backface-hidden rotate-y-180">
+                          <Card className="flex h-full flex-col items-center justify-center border-[#0b3d91]/5 bg-gradient-to-br from-[#f0f4ff] to-white rounded-xl shadow-md">
+                            <p className="text-sm font-medium text-[#0b3d91]">Ready to send offer?</p>
+                            <Button
+                              className="mt-3 bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] text-white hover:from-[#0a357a] hover:to-[#154f9e] shadow-md shadow-[#0b3d91]/20"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleSendOfferClick(candidate)
+                              }}
+                            >
+                              <Send className="mr-2 h-4 w-4" />
+                              Send Offer Letter
+                            </Button>
+                          </Card>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )
-              })
-            )}
+                  )
+                })
+              )}
+            </div>
+            <DialogFooter className="gap-2 pt-2">
+              <Button variant="outline" onClick={() => setShowCandidateDialog(false)} className="border-[#0b3d91]/20 text-[#0b3d91] hover:bg-[#0b3d91]/5">
+                Cancel
+              </Button>
+            </DialogFooter>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCandidateDialog(false)}>
-              Cancel
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
 
+      {/* ========== CREATE OFFER DIALOG – THEMED ========== */}
       <Dialog open={showOfferDialog} onOpenChange={setShowOfferDialog}>
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Create Offer Letter</DialogTitle>
-            <DialogDescription>
-              Review and send offer to {selectedCandidate?.firstName} {selectedCandidate?.lastName}
-            </DialogDescription>
-          </DialogHeader>
-          {selectedCandidate && (
-            <div className="space-y-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="candidate-name">Candidate</Label>
-                  <div className="mt-1 font-medium">
-                    {selectedCandidate.firstName} {selectedCandidate.lastName}
+        <DialogContent className="sm:max-w-lg rounded-2xl border-[#0b3d91]/10 shadow-2xl shadow-[#0b3d91]/15 p-0 gap-0">
+          <div className="bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] px-6 py-5 rounded-t-2xl">
+            <DialogHeader className="space-y-1">
+              <DialogTitle className="text-white text-xl font-bold">Create Offer Letter</DialogTitle>
+              <DialogDescription className="text-white/70 text-sm">
+                Review and send offer to {selectedCandidate?.firstName} {selectedCandidate?.lastName}
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+          <div className="px-6 py-6 space-y-4 bg-white rounded-b-2xl">
+            {selectedCandidate && (
+              <>
+                <div className="grid grid-cols-2 gap-4 rounded-xl bg-[#f8faff] border border-[#0b3d91]/5 p-4">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Candidate</p>
+                    <p className="font-medium text-foreground">{selectedCandidate.firstName} {selectedCandidate.lastName}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Position</p>
+                    <p className="font-medium text-foreground">{selectedCandidate.position}</p>
                   </div>
                 </div>
-                <div>
-                  <Label htmlFor="position">Position</Label>
-                  <div className="mt-1 font-medium">{selectedCandidate.position}</div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="salary" className="text-sm font-medium">Annual CTC (₹)</Label>
+                  <Input
+                    id="salary"
+                    type="number"
+                    value={offerForm.salary}
+                    onChange={(e) => setOfferForm({ ...offerForm, salary: Number(e.target.value) })}
+                    className="border-[#0b3d91]/10 focus:border-[#0b3d91] focus:ring-[#0b3d91]/20"
+                  />
                 </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="salary">Annual CTC (₹)</Label>
-                <Input
-                  id="salary"
-                  type="number"
-                  value={offerForm.salary}
-                  onChange={(e) => setOfferForm({ ...offerForm, salary: Number(e.target.value) })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="benefits">Benefits (comma separated)</Label>
-                <Input
-                  id="benefits"
-                  value={offerForm.benefits}
-                  onChange={(e) => setOfferForm({ ...offerForm, benefits: e.target.value })}
-                  placeholder="e.g. Health Insurance, Performance Bonus"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="joiningDate">Joining Date</Label>
-                <Input
-                  id="joiningDate"
-                  type="date"
-                  value={offerForm.joiningDate}
-                  onChange={(e) => setOfferForm({ ...offerForm, joiningDate: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="notes">Notes</Label>
-                <Textarea
-                  id="notes"
-                  value={offerForm.notes}
-                  onChange={(e) => setOfferForm({ ...offerForm, notes: e.target.value })}
-                  placeholder="Additional notes"
-                />
-              </div>
-            </div>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowOfferDialog(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleOfferSubmit}>
-              <Send className="mr-2 h-4 w-4" />
-              Send Offer
-            </Button>
-          </DialogFooter>
+                <div className="space-y-2">
+                  <Label htmlFor="benefits" className="text-sm font-medium">Benefits (comma separated)</Label>
+                  <Input
+                    id="benefits"
+                    value={offerForm.benefits}
+                    onChange={(e) => setOfferForm({ ...offerForm, benefits: e.target.value })}
+                    placeholder="e.g. Health Insurance, Performance Bonus"
+                    className="border-[#0b3d91]/10 focus:border-[#0b3d91] focus:ring-[#0b3d91]/20"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="joiningDate" className="text-sm font-medium">Joining Date</Label>
+                  <Input
+                    id="joiningDate"
+                    type="date"
+                    value={offerForm.joiningDate}
+                    onChange={(e) => setOfferForm({ ...offerForm, joiningDate: e.target.value })}
+                    className="border-[#0b3d91]/10 focus:border-[#0b3d91] focus:ring-[#0b3d91]/20"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="notes" className="text-sm font-medium">Notes</Label>
+                  <Textarea
+                    id="notes"
+                    value={offerForm.notes}
+                    onChange={(e) => setOfferForm({ ...offerForm, notes: e.target.value })}
+                    placeholder="Additional notes"
+                    className="border-[#0b3d91]/10 focus:border-[#0b3d91] focus:ring-[#0b3d91]/20"
+                  />
+                </div>
+              </>
+            )}
+            <DialogFooter className="gap-2 pt-2">
+              <Button variant="outline" onClick={() => setShowOfferDialog(false)} className="border-[#0b3d91]/20 text-[#0b3d91] hover:bg-[#0b3d91]/5">
+                Cancel
+              </Button>
+              <Button onClick={handleOfferSubmit} className="bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] text-white hover:from-[#0a357a] hover:to-[#154f9e] shadow-md shadow-[#0b3d91]/20">
+                <Send className="mr-2 h-4 w-4" />
+                Send Offer
+              </Button>
+            </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
 

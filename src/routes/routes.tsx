@@ -34,7 +34,6 @@ import Appraisal from '@/pages/hrms/performance/Appraisal'
 import Feedback from '@/pages/hrms/performance/Feedback'
 import HRMSDocuments from '@/pages/hrms/documents/Documents'
 import HRMSReports from '@/pages/hrms/reports/Reports'
-<<<<<<< HEAD
 import JobRequisition from '@/pages/hrms/recruitment/JobRequisition'
 import JobPosting from '@/pages/hrms/recruitment/JobPosting'
 import CandidateApplication from '@/pages/hrms/recruitment/CandidateApplication'
@@ -63,14 +62,12 @@ import EmployeeActive from '@/pages/hrms/onboarding/EmployeeActive'
 import NewRequisition from '@/pages/hrms/recruitment/NewRequisition'
 import AppliedCandidates from '@/pages/hrms/recruitment/AppliedCandidates'
 import  EmployeeProfile from '@/pages/hrms/onboarding/EmployeeProfile'
-=======
 import ApplyLeave from '@/pages/hrms/leave/ApplyLeave'
 import MyLeaveRequests from '@/pages/hrms/leave/MyLeaveRequests'
 import LeaveDetails from '@/pages/hrms/leave/LeaveDetails'
 import LeaveApprovals from '@/pages/hrms/leave/LeaveApprovals'
 import UserManagement from '@/pages/settings/UserManagement'
 import ScreenPrivileges from '@/pages/settings/ScreenPrivileges'
->>>>>>> Dev
 
 export const router = createBrowserRouter([
   {
@@ -224,7 +221,6 @@ export const router = createBrowserRouter([
         ),
       },
 
-<<<<<<< HEAD
       { path: 'hrms/leave', element: <Leave /> },
       { path: 'hrms/payroll', element: <Payroll /> },
       { path: 'hrms/recruitment', element: <Recruitment /> },
@@ -261,7 +257,6 @@ export const router = createBrowserRouter([
       { path: 'hrms/performance', element: <Performance /> },
       { path: 'hrms/documents', element: <HRMSDocuments /> },
       { path: 'hrms/reports', element: <HRMSReports /> },
-=======
       {
         path: 'hrms/leave',
         element: (
@@ -390,7 +385,6 @@ export const router = createBrowserRouter([
           </RoleRoute>
         ),
       },
->>>>>>> Dev
     ],
   },
 ])

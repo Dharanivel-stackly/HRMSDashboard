@@ -103,21 +103,24 @@ export default function EmployeeProfile() {
   };
 
   return (
-    <PageContainer>
+    <PageContainer className="bg-gradient-to-b from-[#f0f4ff] to-white min-h-screen">
       <PageHeader title="Onboarding Profile" description={`${employee.firstName} ${employee.lastName}`} />
 
       <div className="grid gap-6 lg:grid-cols-[1fr_2fr]">
-        <Card>
+        {/* Left Card - Profile */}
+        <Card className="border-[#0b3d91]/5 bg-white/80 backdrop-blur-sm shadow-lg shadow-[#0b3d91]/5 rounded-2xl overflow-hidden">
           <CardContent className="pt-6">
             <div className="flex flex-col items-center text-center">
-              <Avatar className="h-24 w-24 border-4 border-border">
-                <AvatarFallback className="text-3xl font-semibold text-primary">{initials}</AvatarFallback>
+              <Avatar className="h-24 w-24 border-4 border-[#0b3d91]/10 shadow-sm">
+                <AvatarFallback className="bg-gradient-to-br from-[#0b3d91]/10 to-[#0b3d91]/5 text-3xl font-semibold text-[#0b3d91]">
+                  {initials}
+                </AvatarFallback>
               </Avatar>
-              <h2 className="mt-4 text-xl font-bold">{employee.firstName} {employee.lastName}</h2>
+              <h2 className="mt-4 text-xl font-bold text-[#0b3d91]">{employee.firstName} {employee.lastName}</h2>
               <p className="text-muted-foreground">{employee.designation}</p>
               <p className="text-sm text-muted-foreground">{employee.department}</p>
               <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
-                <Badge variant="outline" className="border-sky-200 bg-sky-50 text-sky-700">
+                <Badge variant="outline" className="border-[#0b3d91]/10 bg-[#f0f4ff] text-[#0b3d91]">
                   {employee.employeeId}
                 </Badge>
                 <StatusBadge status={statusInfo.variant} label={statusInfo.label} />
@@ -156,15 +159,17 @@ export default function EmployeeProfile() {
                 <span className="text-muted-foreground">Progress</span>
                 <span className="font-medium">{employee.progress}%</span>
               </div>
-              <Progress value={employee.progress} className="mt-2 h-2" />
+              <Progress value={employee.progress} className="mt-2 h-2 [&>div]:bg-[#0b3d91]" />
             </div>
           </CardContent>
         </Card>
 
+        {/* Right Column */}
         <div className="space-y-6">
-          <Card>
+          {/* Onboarding Status Card */}
+          <Card className="border-[#0b3d91]/5 bg-white/80 backdrop-blur-sm shadow-lg shadow-[#0b3d91]/5 rounded-2xl overflow-hidden">
             <CardHeader>
-              <CardTitle>Onboarding Status</CardTitle>
+              <CardTitle className="text-[#0b3d91]">Onboarding Status</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -178,7 +183,7 @@ export default function EmployeeProfile() {
                       <div
                         className={`h-3 w-3 rounded-full ${
                           isActive
-                            ? 'bg-blue-500'
+                            ? 'bg-[#0b3d91]'
                             : isCompleted || isPast
                             ? 'bg-emerald-500'
                             : 'bg-slate-200'
@@ -187,7 +192,7 @@ export default function EmployeeProfile() {
                       <span
                         className={`text-sm ${
                           isActive
-                            ? 'font-semibold text-foreground'
+                            ? 'font-semibold text-[#0b3d91]'
                             : isCompleted || isPast
                             ? 'text-muted-foreground'
                             : 'text-muted-foreground/60'
@@ -196,7 +201,9 @@ export default function EmployeeProfile() {
                         {value.label}
                       </span>
                       {isActive && (
-                        <Badge className="ml-auto bg-blue-100 text-blue-700 hover:bg-blue-100">Current</Badge>
+                        <Badge className="ml-auto bg-[#0b3d91]/10 text-[#0b3d91] hover:bg-[#0b3d91]/20 border-0">
+                          Current
+                        </Badge>
                       )}
                       {(isCompleted || isPast) && !isActive && (
                         <span className="ml-auto text-xs text-emerald-600">✓</span>
@@ -208,12 +215,17 @@ export default function EmployeeProfile() {
             </CardContent>
           </Card>
 
-          <Card>
+          {/* HR Tasks Card */}
+          <Card className="border-[#0b3d91]/5 bg-white/80 backdrop-blur-sm shadow-lg shadow-[#0b3d91]/5 rounded-2xl overflow-hidden">
             <CardHeader>
-              <CardTitle className="flex items-center justify-between">
+              <CardTitle className="flex items-center justify-between text-[#0b3d91]">
                 <span>HR Tasks</span>
                 {bankAccountTask && isBankAccountPending && (
-                  <Button size="sm" onClick={() => setDialogOpen(true)}>
+                  <Button
+                    size="sm"
+                    onClick={() => setDialogOpen(true)}
+                    className="bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] text-white hover:from-[#0a357a] hover:to-[#154f9e] shadow-md shadow-[#0b3d91]/20"
+                  >
                     <Banknote className="mr-2 h-4 w-4" />
                     Add Bank Account
                   </Button>
@@ -226,17 +238,20 @@ export default function EmployeeProfile() {
               ) : (
                 <div className="space-y-3">
                   {hrTaskList.map((task) => (
-                    <div key={task.id} className="flex items-center justify-between rounded-lg border border-border/60 p-3">
+                    <div
+                      key={task.id}
+                      className="flex items-center justify-between rounded-xl border border-[#0b3d91]/5 bg-[#f8faff] p-3 shadow-sm transition-all hover:shadow-md"
+                    >
                       <div className="flex items-center gap-3">
                         {task.status === 'completed' ? (
                           <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                         ) : task.status === 'in_progress' ? (
-                          <Clock className="h-5 w-5 text-blue-500" />
+                          <Clock className="h-5 w-5 text-[#0b3d91]" />
                         ) : (
                           <AlertCircle className="h-5 w-5 text-amber-500" />
                         )}
                         <div>
-                          <p className="font-medium">{task.taskType.replace(/_/g, ' ')}</p>
+                          <p className="font-medium text-foreground">{task.taskType.replace(/_/g, ' ')}</p>
                           <p className="text-xs text-muted-foreground">Due: {new Date(task.dueDate).toLocaleDateString()}</p>
                         </div>
                       </div>
@@ -246,7 +261,7 @@ export default function EmployeeProfile() {
                           task.status === 'completed'
                             ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
                             : task.status === 'in_progress'
-                            ? 'border-blue-200 bg-blue-50 text-blue-700'
+                            ? 'border-[#0b3d91]/20 bg-[#f0f4ff] text-[#0b3d91]'
                             : 'border-amber-200 bg-amber-50 text-amber-700'
                         }
                       >
@@ -261,53 +276,68 @@ export default function EmployeeProfile() {
         </div>
       </div>
 
+      {/* Add Bank Account Dialog - Themed */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Add Bank Account</DialogTitle>
-            <DialogDescription>Enter bank account details for {employee.firstName} {employee.lastName}.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
+        <DialogContent className="sm:max-w-md rounded-2xl border-[#0b3d91]/10 shadow-2xl shadow-[#0b3d91]/15 p-0 gap-0">
+          <div className="bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] px-6 py-5 rounded-t-2xl">
+            <DialogHeader className="space-y-1">
+              <DialogTitle className="text-white text-xl font-bold">Add Bank Account</DialogTitle>
+              <DialogDescription className="text-white/70 text-sm">
+                Enter bank account details for {employee.firstName} {employee.lastName}
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+          <div className="px-6 py-6 space-y-4 bg-white rounded-b-2xl">
             <div className="space-y-2">
-              <Label htmlFor="bankName">Bank Name</Label>
+              <Label htmlFor="bankName" className="text-sm font-medium">Bank Name</Label>
               <Input
                 id="bankName"
                 value={bankDetails.bankName}
                 onChange={(e) => setBankDetails({ ...bankDetails, bankName: e.target.value })}
                 placeholder="e.g. HDFC Bank"
+                className="border-[#0b3d91]/10 focus:border-[#0b3d91] focus:ring-[#0b3d91]/20"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="accountNumber">Account Number</Label>
+              <Label htmlFor="accountNumber" className="text-sm font-medium">Account Number</Label>
               <Input
                 id="accountNumber"
                 value={bankDetails.accountNumber}
                 onChange={(e) => setBankDetails({ ...bankDetails, accountNumber: e.target.value })}
                 placeholder="1234567890"
+                className="border-[#0b3d91]/10 focus:border-[#0b3d91] focus:ring-[#0b3d91]/20"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="ifsc">IFSC Code</Label>
+              <Label htmlFor="ifsc" className="text-sm font-medium">IFSC Code</Label>
               <Input
                 id="ifsc"
                 value={bankDetails.ifsc}
                 onChange={(e) => setBankDetails({ ...bankDetails, ifsc: e.target.value })}
                 placeholder="HDFC0001234"
+                className="border-[#0b3d91]/10 focus:border-[#0b3d91] focus:ring-[#0b3d91]/20"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="branch">Branch</Label>
+              <Label htmlFor="branch" className="text-sm font-medium">Branch</Label>
               <Input
                 id="branch"
                 value={bankDetails.branch}
                 onChange={(e) => setBankDetails({ ...bankDetails, branch: e.target.value })}
                 placeholder="e.g. Bangalore Main"
+                className="border-[#0b3d91]/10 focus:border-[#0b3d91] focus:ring-[#0b3d91]/20"
               />
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleAddBankAccount} disabled={!bankDetails.bankName || !bankDetails.accountNumber || !bankDetails.ifsc}>
+          <DialogFooter className="px-6 pb-6 gap-2">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-[#0b3d91]/20 text-[#0b3d91] hover:bg-[#0b3d91]/5">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleAddBankAccount}
+              disabled={!bankDetails.bankName || !bankDetails.accountNumber || !bankDetails.ifsc}
+              className="bg-gradient-to-r from-[#0b3d91] to-[#1a5bb5] text-white hover:from-[#0a357a] hover:to-[#154f9e] shadow-md shadow-[#0b3d91]/20"
+            >
               Save & Complete
             </Button>
           </DialogFooter>

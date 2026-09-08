@@ -89,12 +89,12 @@ async function handleMockApiRequest(
     }
 
     // 2. USE CENTRAL ROUTER: Load the central mock router to handle the delegation
-    const { executeMockApiRequest } = await server.ssrLoadModule('/src/lib/mock/mockApi.ts')
-    if (typeof server.ssrLoadModule !== 'function') {
-      // Preview server has no SSR loader — let the client-side mock fallback answer.
-      next()
-      return
-    }
+  //  const { executeMockApiRequest } = await server.ssrLoadModule('/src/lib/mock/mockApi.ts')
+  //  if (typeof server.ssrLoadModule !== 'function') {
+  //    // Preview server has no SSR loader — let the client-side mock fallback answer.
+  //    next()
+  //    return
+  //  }
 
     // Re-injected on every request: an SSR reload discards module state, and this
     // restores the disk-backed adapter before the mock services hydrate.

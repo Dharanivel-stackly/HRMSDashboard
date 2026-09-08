@@ -33,22 +33,22 @@ export default function ITTasks() {
   const list = tasks || [];
 
   return (
-    <PageContainer>
+    <PageContainer className="bg-gradient-to-b from-[#f0f4ff] to-white min-h-screen">
       <PageHeader
         title="IT Setup Tasks"
         description="Manage IT setup tasks for new employees"
       />
 
-      <div className="ui-card-elevated overflow-hidden rounded-xl border border-border/60 bg-card">
+      <div className="mt-6 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg shadow-[#0b3d91]/5 overflow-hidden transition-all hover:shadow-[#0b3d91]/10">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Employee</TableHead>
-              <TableHead>Task</TableHead>
-              <TableHead>Assigned To</TableHead>
-              <TableHead>Due Date</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="w-[60px]">Actions</TableHead>
+            <TableRow className="bg-[#f0f4ff] hover:bg-[#f0f4ff]/80">
+              <TableHead className="text-[#0b3d91] font-semibold">Employee</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Task</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Assigned To</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Due Date</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Status</TableHead>
+              <TableHead className="w-[60px] text-[#0b3d91] font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -60,7 +60,7 @@ export default function ITTasks() {
               </TableRow>
             ) : (
               list.map((task) => (
-                <TableRow key={task.id}>
+                <TableRow key={task.id} className="hover:bg-[#f0f4ff]/40 transition-colors">
                   <TableCell className="font-medium">{task.employeeName}</TableCell>
                   <TableCell>{task.taskType.replace(/_/g, ' ')}</TableCell>
                   <TableCell>{task.assignedTo}</TableCell>
@@ -84,27 +84,29 @@ export default function ITTasks() {
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-[#0b3d91] hover:bg-[#f0f4ff]">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="border-[#0b3d91]/10 shadow-md">
                         <DropdownMenuItem
                           onClick={() => handleStatusUpdate(task.id, 'in_progress')}
                           disabled={task.status === 'in_progress'}
+                          className="hover:bg-[#f0f4ff] focus:bg-[#f0f4ff]"
                         >
                           Start
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => handleStatusUpdate(task.id, 'completed')}
                           disabled={task.status === 'completed'}
+                          className="hover:bg-[#f0f4ff] focus:bg-[#f0f4ff]"
                         >
                           Complete
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => handleStatusUpdate(task.id, 'blocked')}
                           disabled={task.status === 'blocked'}
-                          className="text-destructive"
+                          className="text-destructive hover:bg-red-50 focus:bg-red-50"
                         >
                           Block
                         </DropdownMenuItem>

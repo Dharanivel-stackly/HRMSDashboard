@@ -32,13 +32,14 @@ export default function AssetAllocation() {
   const list = assets || [];
 
   return (
-    <PageContainer>
+    <PageContainer className="bg-gradient-to-b from-[#f0f4ff] to-white min-h-screen">
       <PageHeader
         title="Asset Allocation"
         description="Allocate assets and equipment to employees"
       />
 
-      <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
+      <div className="mt-6 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg shadow-[#0b3d91]/5 p-6 transition-all hover:shadow-[#0b3d91]/10">
+        <h3 className="text-base font-semibold text-[#0b3d91] mb-4">Allocate New Asset</h3>
         <AssetPicker
           employeeId="ob-1" // Placeholder; in real app use selected employee
           onAllocate={allocate}
@@ -46,15 +47,15 @@ export default function AssetAllocation() {
         />
       </div>
 
-      <div className="ui-card-elevated overflow-hidden rounded-xl border border-border/60 bg-card">
+      <div className="mt-6 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg shadow-[#0b3d91]/5 overflow-hidden transition-all hover:shadow-[#0b3d91]/10">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Employee</TableHead>
-              <TableHead>Asset</TableHead>
-              <TableHead>Tag</TableHead>
-              <TableHead>Serial</TableHead>
-              <TableHead>Status</TableHead>
+            <TableRow className="bg-[#f0f4ff] hover:bg-[#f0f4ff]/80">
+              <TableHead className="text-[#0b3d91] font-semibold">Employee</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Asset</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Tag</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Serial</TableHead>
+              <TableHead className="text-[#0b3d91] font-semibold">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -66,7 +67,7 @@ export default function AssetAllocation() {
               </TableRow>
             ) : (
               list.map((asset) => (
-                <TableRow key={asset.id}>
+                <TableRow key={asset.id} className="hover:bg-[#f0f4ff]/40 transition-colors">
                   <TableCell className="font-medium">{asset.employeeName}</TableCell>
                   <TableCell>{asset.assetType}</TableCell>
                   <TableCell>{asset.assetTag}</TableCell>

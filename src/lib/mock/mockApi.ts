@@ -37,7 +37,7 @@ export function failure(error: unknown): MockHttpResponse {
 }
 
 // --- Central API Router ---
-export async function executeMockApiRequest(
+export async function executeMockApiRequests(
   request: MockHttpRequest
 ): Promise<MockHttpResponse> {
   const { path } = request
