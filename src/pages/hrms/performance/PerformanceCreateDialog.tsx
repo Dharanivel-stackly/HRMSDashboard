@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -19,7 +19,10 @@ interface PerformanceCreateDialogProps {
   module: PerformanceModule
   open: boolean
   onOpenChange: (open: boolean) => void
-  onCreate: (values: FormValues) => void
+  onCreate: (values: FormValues) => void | Promise<void>
+  isSubmitting?: boolean
+  initialValues?: FormValues
+  isEditing?: boolean
 }
 
 const config: Record<PerformanceModule, { title: string; description: string; submit: string; fields: { name: string; label: string; type?: string; placeholder?: string }[] }> = {
@@ -68,24 +71,32 @@ const config: Record<PerformanceModule, { title: string; description: string; su
   },
 }
 
-export function PerformanceCreateDialog({ module, open, onOpenChange, onCreate }: PerformanceCreateDialogProps) {
-  const [values, setValues] = useState<FormValues>({})
+export function PerformanceCreateDialog({ module, open, onOpenChange, onCreate, isSubmitting = false, initialValues = {}, isEditing = false }: PerformanceCreateDialogProps) {
+  const [values, setValues] = useState<FormValues>(initialValues)
   const [error, setError] = useState('')
   const currentConfig = config[module]
+
+  useEffect(() => {
+    if (open) setValues(initialValues)
+  }, [initialValues, open])
 
   const updateValue = (name: string, value: string) => {
     setValues((current) => ({ ...current, [name]: value }))
     setError('')
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (currentConfig.fields.some((field) => !values[field.name]?.trim())) {
       setError('Complete all required fields before submitting.')
       return
     }
-    onCreate(values)
-    onOpenChange(false)
+    try {
+      await onCreate(values)
+      onOpenChange(false)
+    } catch {
+      setError('Unable to create the goal. Please try again.')
+    }
   }
 
   const handleOpenChange = (nextOpen: boolean) => {
@@ -100,7 +111,7 @@ export function PerformanceCreateDialog({ module, open, onOpenChange, onCreate }
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{currentConfig.title}</DialogTitle>
+          <DialogTitle>{isEditing ? currentConfig.title.replace('Create', 'Edit') : currentConfig.title}</DialogTitle>
           <DialogDescription>{currentConfig.description}</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -119,8 +130,8 @@ export function PerformanceCreateDialog({ module, open, onOpenChange, onCreate }
           ))}
           {error && <p className="text-sm text-destructive">{error}</p>}
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button type="submit">{currentConfig.submit}</Button>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>Cancel</Button>
+            <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Saving...' : isEditing ? currentConfig.submit.replace('Create', 'Update') : currentConfig.submit}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

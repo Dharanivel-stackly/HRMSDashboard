@@ -77,7 +77,8 @@ async function handleMockApiRequest(
       routePath.startsWith('/attendance') ||
       routePath.startsWith('/users') ||
       routePath.startsWith('/auth') ||
-      routePath.startsWith('/role-privileges')
+      routePath.startsWith('/role-privileges') ||
+      routePath.startsWith('/performance')
     if (!isMockRoute) {
       next()
       return

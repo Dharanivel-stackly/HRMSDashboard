@@ -59,7 +59,9 @@ export const API_ENDPOINTS = {
   },
   PERFORMANCE: {
     BASE: '/performance',
-    BY_ID: (id: string) => `/performance/${id}`,
+    GOALS: '/performance/goals',
+    GOAL_BY_ID: (id: string) => `/performance/goals/${id}`,
+    // BY_ID: (id: string) => `/performance/${id}`,
   },
   DEPARTMENTS: {
     BASE: '/departments',
