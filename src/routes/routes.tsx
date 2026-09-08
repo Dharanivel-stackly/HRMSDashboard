@@ -26,6 +26,8 @@ import AttendanceReports from '@/pages/hrms/attendance/AttendanceReports'
 import AttendanceSettings from '@/pages/hrms/attendance/AttendanceSettings'
 import Leave from '@/pages/hrms/leave/Leave'
 import Payroll from '@/pages/hrms/payroll/Payroll'
+import Payslip from '@/pages/hrms/payroll/Payslip'
+import PayrollProcessing from '@/pages/hrms/payroll/PayrollProcessing'
 import Recruitment from '@/pages/hrms/recruitment/Recruitment'
 import Performance from '@/pages/hrms/performance/Performance'
 import Goals from '@/pages/hrms/performance/Goals'
@@ -192,6 +194,16 @@ export const router = createBrowserRouter([
           </RoleRoute>
         ),
       },
+
+
+      { path: 'hrms/leave', element: <Leave /> },
+      { path: 'hrms/payroll', element: <Payroll /> },
+      { path: 'hrms/payroll/payslip', element: <Payslip /> },
+      { path: 'hrms/payroll/process', element: <PayrollProcessing /> },
+      { path: 'hrms/recruitment', element: <Recruitment /> },
+      { path: 'hrms/performance', element: <Performance /> },
+      { path: 'hrms/documents', element: <HRMSDocuments /> },
+      { path: 'hrms/reports', element: <HRMSReports /> },
 
       {
         path: 'hrms/leave',
