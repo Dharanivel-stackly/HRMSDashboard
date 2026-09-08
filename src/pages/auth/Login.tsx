@@ -8,10 +8,12 @@ import { getHomeRoute } from '@/lib/auth/defaultRoute'
 import { ApiError } from '@/lib/api/apiError'
 import { useState } from 'react'
 import { appConfig } from '@/config/app.config'
+import { useToast } from '@/hooks/useToast'
 
 export default function Login() {
   const navigate = useNavigate()
   const { login } = useAuth()
+  const { success } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -23,6 +25,10 @@ export default function Login() {
       setToken(response.accessToken)
       setRefreshToken(response.refreshToken)
       login(response.user)
+      success(
+        'Login successful',
+        `Welcome back, ${response.user.firstName}!`
+      )
       navigate(getHomeRoute(response.user))
     } catch (err) {
       const message =
@@ -38,7 +44,7 @@ export default function Login() {
   return (
     <div className="flex min-h-screen">
       {/* Left brand panel */}
-      <div className="relative hidden w-1/2 overflow-hidden bg-gradient-to-br from-[#0b3d91] via-[#1565c0] to-[#0d47a1] lg:flex">
+      <div className="relative hidden w-1/2 overflow-hidden bg-gradient-to-br from-brand-navy via-[#151a3d] to-brand-blue lg:flex">
         <div
           className="pointer-events-none absolute inset-0 opacity-40"
           style={{
@@ -58,7 +64,7 @@ export default function Login() {
       </div>
 
       {/* Right form panel */}
-      <div className="relative flex w-full items-center justify-center bg-[#f4f7fb] px-6 py-12 lg:w-1/2">
+      <div className="relative flex w-full items-center justify-center bg-brand-soft px-6 py-12 lg:w-1/2">
         <div
           className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.06]"
           aria-hidden

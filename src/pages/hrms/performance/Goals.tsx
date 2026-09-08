@@ -316,7 +316,7 @@ function StatusBadge({ status }: { status: string }) {
 //             <Target className="h-8 w-8 text-primary" />
 //           </div>
 
-//           <h1 className="text-3xl font-bold text-[#0b3d91]">
+//           <h1 className="text-3xl font-bold text-brand-navy">
 //             Welcome to Goals
 //           </h1>
 

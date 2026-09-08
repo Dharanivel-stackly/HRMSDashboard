@@ -26,6 +26,8 @@ import AttendanceReports from '@/pages/hrms/attendance/AttendanceReports'
 import AttendanceSettings from '@/pages/hrms/attendance/AttendanceSettings'
 import Leave from '@/pages/hrms/leave/Leave'
 import Payroll from '@/pages/hrms/payroll/Payroll'
+import Payslip from '@/pages/hrms/payroll/Payslip'
+import PayrollProcessing from '@/pages/hrms/payroll/PayrollProcessing'
 import Recruitment from '@/pages/hrms/recruitment/Recruitment'
 import Performance from '@/pages/hrms/performance/Performance'
 import Goals from '@/pages/hrms/performance/Goals'
@@ -34,6 +36,10 @@ import Appraisal from '@/pages/hrms/performance/Appraisal'
 import Feedback from '@/pages/hrms/performance/Feedback'
 import HRMSDocuments from '@/pages/hrms/documents/Documents'
 import HRMSReports from '@/pages/hrms/reports/Reports'
+import ApplyLeave from '@/pages/hrms/leave/ApplyLeave'
+import MyLeaveRequests from '@/pages/hrms/leave/MyLeaveRequests'
+import LeaveDetails from '@/pages/hrms/leave/LeaveDetails'
+import LeaveApprovals from '@/pages/hrms/leave/LeaveApprovals'
 import UserManagement from '@/pages/settings/UserManagement'
 import ScreenPrivileges from '@/pages/settings/ScreenPrivileges'
 
@@ -189,21 +195,53 @@ export const router = createBrowserRouter([
         ),
       },
 
+
       { path: 'hrms/leave', element: <Leave /> },
       { path: 'hrms/payroll', element: <Payroll /> },
+      { path: 'hrms/payroll/payslip', element: <Payslip /> },
+      { path: 'hrms/payroll/process', element: <PayrollProcessing /> },
       { path: 'hrms/recruitment', element: <Recruitment /> },
       { path: 'hrms/performance', element: <Performance /> },
-      { path: 'hrms/performance/goals', element: <Goals /> },
-      { path: 'hrms/performance/kpis', element: <KPIs /> },
-      { path: 'hrms/performance/appraisal', element: <Appraisal /> },
-      { path: 'hrms/performance/360-feedback', element: <Feedback /> },
       { path: 'hrms/documents', element: <HRMSDocuments /> },
       { path: 'hrms/reports', element: <HRMSReports /> },
+
       {
         path: 'hrms/leave',
         element: (
           <RoleRoute permission={PERMISSIONS.LEAVE.VIEW}>
             <Leave />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/leave/apply',
+        element: (
+          <RoleRoute permission={PERMISSIONS.LEAVE.CREATE}>
+            <ApplyLeave />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/leave/my',
+        element: (
+          <RoleRoute permission={PERMISSIONS.LEAVE.VIEW}>
+            <MyLeaveRequests />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/leave/approvals',
+        element: (
+          <RoleRoute permission={PERMISSIONS.LEAVE.APPROVE}>
+            <LeaveApprovals />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/leave/:id',
+        element: (
+          <RoleRoute permission={PERMISSIONS.LEAVE.VIEW}>
+            <LeaveDetails />
           </RoleRoute>
         ),
       },
@@ -228,6 +266,38 @@ export const router = createBrowserRouter([
         element: (
           <RoleRoute permission={PERMISSIONS.PERFORMANCE.VIEW}>
             <Performance />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/performance/goals',
+        element: (
+          <RoleRoute permission={PERMISSIONS.PERFORMANCE.VIEW}>
+            <Goals />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/performance/kpis',
+        element: (
+          <RoleRoute permission={PERMISSIONS.PERFORMANCE.VIEW}>
+            <KPIs />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/performance/appraisal',
+        element: (
+          <RoleRoute permission={PERMISSIONS.PERFORMANCE.VIEW}>
+            <Appraisal />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: 'hrms/performance/360-feedback',
+        element: (
+          <RoleRoute permission={PERMISSIONS.PERFORMANCE.VIEW}>
+            <Feedback />
           </RoleRoute>
         ),
       },

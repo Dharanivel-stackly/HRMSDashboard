@@ -79,7 +79,7 @@ export default function AttendanceReports() {
                 <FileBarChart className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="font-semibold text-[#0b3d91]">{report?.name}</h3>
+                <h3 className="font-semibold text-brand-navy">{report?.name}</h3>
                 <p className="text-sm text-muted-foreground">{report?.description}</p>
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function AttendanceReports() {
           </div>
 
           <div className="ui-card-elevated min-h-[220px] rounded-xl border border-border/60 bg-card p-5">
-            <h3 className="font-semibold text-[#0b3d91]">Preview</h3>
+            <h3 className="font-semibold text-brand-navy">Preview</h3>
             {preview ? (
               <div className="mt-4 space-y-2 text-sm">
                 <p className="text-muted-foreground">
