@@ -218,6 +218,13 @@ export const navigationConfig: NavigationGroup[] = [
             module: 'hrms',
             permission: PERMISSIONS.REPORTS.VIEW,
           },
+          {
+            label: 'Performance Reports',
+            path: ROUTES.HRMS.PERFORMANCE_REPORTS,
+            icon: TrendingUp,
+            module: 'hrms',
+            permission: PERMISSIONS.REPORTS.VIEW,
+          },
 
         ],
       }
