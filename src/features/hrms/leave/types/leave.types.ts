@@ -40,3 +40,26 @@ export interface CreateLeaveRequest {
   numberOfDays: number
   reason: string
 }
+
+export interface LeaveType {
+  id: string
+  name: string
+  code: string
+  totalDays: number
+  isPaid: boolean
+  isActive: boolean
+}
+
+export interface CreateLeaveType {
+  name: string
+  code: string
+  totalDays: number
+  isPaid: boolean
+}
+
+export interface UpdateLeaveType {
+  name: string
+  code: string
+  totalDays: number
+  isPaid: boolean
+}

@@ -31,6 +31,9 @@ import ApplyLeave from '@/pages/hrms/leave/ApplyLeave'
 import MyLeaveRequests from '@/pages/hrms/leave/MyLeaveRequests'
 import LeaveDetails from '@/pages/hrms/leave/LeaveDetails'
 import LeaveApprovals from '@/pages/hrms/leave/LeaveApprovals'
+import LeaveTypes from '@/pages/hrms/leave/LeaveTypes'
+import AddLeaveType from '@/pages/hrms/leave/AddLeaveType'
+import EditLeaveType from '@/pages/hrms/leave/EditLeaveType'
 
 export const router = createBrowserRouter([
   {
@@ -77,8 +80,12 @@ export const router = createBrowserRouter([
       { path: 'hrms/leave', element: <Leave /> },
       { path: 'hrms/leave/apply', element: <ApplyLeave /> },
       { path: 'hrms/leave/my', element: <MyLeaveRequests /> },
-      { path: 'hrms/leave/:id', element: <LeaveDetails /> },
       { path: 'hrms/leave/approvals', element: <LeaveApprovals /> },
+      { path: 'hrms/leave/types', element: <LeaveTypes /> },
+      { path: 'hrms/leave/types/new', element: <AddLeaveType />,},
+      { path: 'hrms/leave/types/:id/edit', element: <EditLeaveType />, },
+      { path: 'hrms/leave/:id', element: <LeaveDetails /> },
+      
 
       { path: 'hrms/payroll', element: <Payroll /> },
       { path: 'hrms/recruitment', element: <Recruitment /> },
