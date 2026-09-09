@@ -1,6 +1,5 @@
 import { api } from '@/lib/api/apiClient'
 import { API_ENDPOINTS } from '@/lib/api/apiEndpoints'
-import { ApiError } from '@/lib/api/apiError'
 import { environment } from '@/config/environment'
 import type {CreateLeaveRequest,CreateLeaveType, UpdateLeaveType,LeaveRequest,LeaveType,LeaveBalance,} from '../types/leave.types'
 import { mockLeaveService } from './mockLeaveService'

@@ -15,6 +15,8 @@ import {
   Gift,
   Settings2,
   ClipboardList,
+  CheckSquare,
+  PlusCircle,
 } from 'lucide-react'
 import type { NavigationGroup } from '@/types/navigation.types'
 import { ROUTES } from '@/lib/constants/routes'
@@ -133,6 +135,43 @@ export const navigationConfig: NavigationGroup[] = [
         icon: CalendarDays,
         module: 'hrms',
         permission: PERMISSIONS.LEAVE.VIEW,
+        children: [
+          {
+            label: 'Overview',
+            path: ROUTES.HRMS.LEAVE,
+            icon: LayoutDashboard,
+            module: 'hrms',
+            permission: PERMISSIONS.LEAVE.VIEW,
+          },
+          {
+            label: 'Apply Leave',
+            path: ROUTES.HRMS.LEAVE_APPLY,
+            icon: PlusCircle,
+            module: 'hrms',
+            permission: PERMISSIONS.LEAVE.CREATE,
+          },
+          {
+            label: 'My Requests',
+            path: ROUTES.HRMS.LEAVE_MY,
+            icon: UserRound,
+            module: 'hrms',
+            permission: PERMISSIONS.LEAVE.VIEW,
+          },
+          {
+            label: 'Approvals',
+            path: ROUTES.HRMS.LEAVE_APPROVALS,
+            icon: CheckSquare,
+            module: 'hrms',
+            permission: PERMISSIONS.LEAVE.APPROVE,
+          },
+          {
+            label: 'Leave Types',
+            path: ROUTES.HRMS.LEAVE_TYPES,
+            icon: Settings2,
+            module: 'hrms',
+            permission: PERMISSIONS.LEAVE.VIEW,
+          },
+        ],
       },
       {
         label: 'Payroll',
