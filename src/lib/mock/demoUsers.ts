@@ -53,6 +53,24 @@ export const DEMO_USERS = [
       permissions: EMPLOYEE_PERMISSIONS,
     } satisfies Omit<AuthUser, 'avatar'> & { avatar?: undefined },
   },
+  {
+    email: 'employee@oneenterprise.com',
+    password: 'employee123',
+    user: {
+      id: 'demo-user-3',
+      email: 'employee@oneenterprise.com',
+      firstName: 'John',
+      lastName: 'Employee',
+      roles: [ROLES.EMPLOYEE],
+      permissions: [
+        PERMISSIONS.ATTENDANCE.VIEW,
+        PERMISSIONS.LEAVE.VIEW,
+        PERMISSIONS.PAYROLL.VIEW,
+        PERMISSIONS.DOCUMENTS.VIEW,
+      ],
+      avatar: undefined,
+    },
+  }
 ]
 
 export const DEFAULT_DEMO_CREDENTIALS = {

@@ -73,22 +73,30 @@ async function handleMockApiRequest(
     }
 
     const routePath = url.pathname.replace(/^\/api/, '') || '/'
+    
+    // 1. UPDATE: Add the new modules to the intercepted routes
     const isMockRoute =
       routePath.startsWith('/attendance') ||
       routePath.startsWith('/users') ||
       routePath.startsWith('/auth') ||
       routePath.startsWith('/role-privileges') ||
       routePath.startsWith('/performance')
+      routePath.startsWith('/recruitment') ||
+      routePath.startsWith('/onboarding')
+
+      routePath.startsWith('/role-privileges')
     if (!isMockRoute) {
       next()
       return
     }
 
-    if (typeof server.ssrLoadModule !== 'function') {
-      // Preview server has no SSR loader — let the client-side mock fallback answer.
-      next()
-      return
-    }
+    // 2. USE CENTRAL ROUTER: Load the central mock router to handle the delegation
+  //  const { executeMockApiRequest } = await server.ssrLoadModule('/src/lib/mock/mockApi.ts')
+  //  if (typeof server.ssrLoadModule !== 'function') {
+  //    // Preview server has no SSR loader — let the client-side mock fallback answer.
+  //    next()
+  //    return
+  //  }
 
     // Re-injected on every request: an SSR reload discards module state, and this
     // restores the disk-backed adapter before the mock services hydrate.
