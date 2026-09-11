@@ -232,9 +232,8 @@ export const router = createBrowserRouter([
         ),
       },
 
-      { path: 'hrms/leave', element: <Leave /> },
-      { path: 'hrms/payroll', element: <Payroll /> },
-      { path: 'hrms/recruitment', element: <Recruitment /> },
+      { path: 'hrms/payroll/payslip', element: <Payslip /> },
+      { path: 'hrms/payroll/process', element: <PayrollProcessing /> },
       { path: 'hrms/recruitment/requisitions', element: <JobRequisition /> },
       { path: 'hrms/recruitment/requisitions/new', element: <NewRequisition /> },
       { path: 'hrms/recruitment/postings', element: <JobPosting /> },
@@ -264,19 +263,6 @@ export const router = createBrowserRouter([
       { path: 'hrms/onboarding/manager', element: <ManagerTasks /> },
       { path: 'hrms/onboarding/hr', element: <HRTasks /> },
       { path: 'hrms/onboarding/active', element: <EmployeeActive /> },
-
-      { path: 'hrms/performance', element: <Performance /> },
-      { path: 'hrms/documents', element: <HRMSDocuments /> },
-      { path: 'hrms/reports', element: <HRMSReports /> },
-
-      { path: 'hrms/leave', element: <Leave /> },
-      { path: 'hrms/payroll', element: <Payroll /> },
-      { path: 'hrms/payroll/payslip', element: <Payslip /> },
-      { path: 'hrms/payroll/process', element: <PayrollProcessing /> },
-      { path: 'hrms/recruitment', element: <Recruitment /> },
-      { path: 'hrms/performance', element: <Performance /> },
-      { path: 'hrms/documents', element: <HRMSDocuments /> },
-      { path: 'hrms/reports', element: <HRMSReports /> },
 
       {
         path: 'hrms/leave',
