@@ -62,6 +62,8 @@ const mockApiAdapter: AxiosAdapter = async (config) => {
     routeUrl.startsWith('/users') ||
     routeUrl.startsWith('/auth') ||
     routeUrl.startsWith('/role-privileges')
+     ||
+    routeUrl.startsWith('/performance')
   if (!isMockRoute) {
     return defaultAdapter(config)
   }
@@ -114,7 +116,7 @@ const mockApiAdapter: AxiosAdapter = async (config) => {
     ),
   })
 
-  if (!mockResponse.body.success) {
+  if ('success' in mockResponse.body && !mockResponse.body.success) {
     throw new ApiError(mockResponse.body.message, mockResponse.status, mockResponse.body)
   }
   return toAxiosResponse(config, mockResponse.status, mockResponse.body)

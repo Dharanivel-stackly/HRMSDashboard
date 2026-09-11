@@ -9,6 +9,7 @@
 export interface MockStateSnapshot {
   rolePermissions?: Record<string, string[]>
   users?: unknown[]
+  goals?: unknown[]
 }
 
 export interface MockPersistenceAdapter {
