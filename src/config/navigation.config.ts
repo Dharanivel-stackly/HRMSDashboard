@@ -15,12 +15,18 @@ import {
   Gift,
   Settings2,
   ClipboardList,
+  Gauge,
+  ClipboardCheck,
+  MessageCircleMore,
+  Target,
+  UserCog,
+  ShieldCheck,
 } from 'lucide-react'
 import type { NavigationGroup } from '@/types/navigation.types'
 import { ROUTES } from '@/lib/constants/routes'
 import { PERMISSIONS } from '@/lib/constants/permissions'
 
-/** HRMS-only nav — Attendance expands to submodule pages */
+/** HRMS-only nav — items filtered by user permissions (RBAC) */
 export const navigationConfig: NavigationGroup[] = [
   {
     label: 'MAIN',
@@ -29,6 +35,7 @@ export const navigationConfig: NavigationGroup[] = [
         label: 'Dashboard',
         path: ROUTES.DASHBOARD,
         icon: LayoutDashboard,
+        permission: PERMISSIONS.DASHBOARD.VIEW,
       },
     ],
   },
@@ -40,6 +47,7 @@ export const navigationConfig: NavigationGroup[] = [
         path: ROUTES.HRMS.DASHBOARD,
         icon: LayoutDashboard,
         module: 'hrms',
+        permission: PERMISSIONS.HRMS.DASHBOARD_VIEW,
       },
       {
         label: 'Employees',
@@ -53,77 +61,76 @@ export const navigationConfig: NavigationGroup[] = [
         path: ROUTES.HRMS.ATTENDANCE,
         icon: Clock,
         module: 'hrms',
-        permission: PERMISSIONS.ATTENDANCE.VIEW,
         children: [
           {
             label: 'Dashboard',
             path: ROUTES.HRMS.ATTENDANCE,
             icon: LayoutDashboard,
             module: 'hrms',
-            permission: PERMISSIONS.ATTENDANCE.VIEW,
+            permission: PERMISSIONS.ATTENDANCE.DASHBOARD_VIEW,
           },
           {
             label: 'My Attendance',
             path: ROUTES.HRMS.ATTENDANCE_MY,
             icon: UserRound,
             module: 'hrms',
-            permission: PERMISSIONS.ATTENDANCE.VIEW,
+            permission: PERMISSIONS.ATTENDANCE.MY_VIEW,
           },
           {
             label: 'Daily Attendance',
             path: ROUTES.HRMS.ATTENDANCE_DAILY,
             icon: ClipboardList,
             module: 'hrms',
-            permission: PERMISSIONS.ATTENDANCE.VIEW,
+            permission: PERMISSIONS.ATTENDANCE.DAILY_VIEW,
           },
           {
             label: 'Calendar',
             path: ROUTES.HRMS.ATTENDANCE_CALENDAR,
             icon: CalendarRange,
             module: 'hrms',
-            permission: PERMISSIONS.ATTENDANCE.VIEW,
+            permission: PERMISSIONS.ATTENDANCE.MY_VIEW,
           },
           {
             label: 'Corrections',
             path: ROUTES.HRMS.ATTENDANCE_CORRECTIONS,
             icon: PencilLine,
             module: 'hrms',
-            permission: PERMISSIONS.ATTENDANCE.UPDATE,
+            permission: PERMISSIONS.ATTENDANCE.CORRECTIONS_MANAGE,
           },
           {
             label: 'Shifts',
             path: ROUTES.HRMS.ATTENDANCE_SHIFTS,
             icon: Timer,
             module: 'hrms',
-            permission: PERMISSIONS.ATTENDANCE.VIEW,
+            permission: PERMISSIONS.ATTENDANCE.SHIFTS_MANAGE,
           },
           {
             label: 'Overtime',
             path: ROUTES.HRMS.ATTENDANCE_OVERTIME,
             icon: Clock,
             module: 'hrms',
-            permission: PERMISSIONS.ATTENDANCE.VIEW,
+            permission: PERMISSIONS.ATTENDANCE.OVERTIME_VIEW,
           },
           {
             label: 'Holidays',
             path: ROUTES.HRMS.ATTENDANCE_HOLIDAYS,
             icon: Gift,
             module: 'hrms',
-            permission: PERMISSIONS.ATTENDANCE.VIEW,
+            permission: PERMISSIONS.ATTENDANCE.HOLIDAYS_MANAGE,
           },
           {
             label: 'Reports',
             path: ROUTES.HRMS.ATTENDANCE_REPORTS,
             icon: BarChart3,
             module: 'hrms',
-            permission: PERMISSIONS.ATTENDANCE.VIEW,
+            permission: PERMISSIONS.ATTENDANCE.REPORTS_VIEW,
           },
           {
             label: 'Settings',
             path: ROUTES.HRMS.ATTENDANCE_SETTINGS,
             icon: Settings2,
             module: 'hrms',
-            permission: PERMISSIONS.ATTENDANCE.UPDATE,
+            permission: PERMISSIONS.ATTENDANCE.SETTINGS_MANAGE,
           },
         ],
       },
@@ -154,6 +161,13 @@ export const navigationConfig: NavigationGroup[] = [
         icon: TrendingUp,
         module: 'hrms',
         permission: PERMISSIONS.PERFORMANCE.VIEW,
+        children: [
+          { label: 'Overview', path: ROUTES.HRMS.PERFORMANCE, icon: TrendingUp, module: 'hrms', permission: PERMISSIONS.PERFORMANCE.VIEW },
+          { label: 'Goals', path: ROUTES.HRMS.PERFORMANCE_GOALS, icon: Target, module: 'hrms', permission: PERMISSIONS.PERFORMANCE.VIEW },
+          { label: 'KPI Management', path: ROUTES.HRMS.PERFORMANCE_KPIS, icon: Gauge, module: 'hrms', permission: PERMISSIONS.PERFORMANCE.VIEW },
+          { label: 'Appraisal', path: ROUTES.HRMS.PERFORMANCE_APPRAISAL, icon: ClipboardCheck, module: 'hrms', permission: PERMISSIONS.PERFORMANCE.VIEW },
+          { label: '360 Feedback', path: ROUTES.HRMS.PERFORMANCE_FEEDBACK, icon: MessageCircleMore, module: 'hrms', permission: PERMISSIONS.PERFORMANCE.VIEW },
+        ],
       },
       {
         label: 'Documents',
@@ -168,6 +182,23 @@ export const navigationConfig: NavigationGroup[] = [
         icon: BarChart3,
         module: 'hrms',
         permission: PERMISSIONS.REPORTS.VIEW,
+      },
+    ],
+  },
+  {
+    label: 'ADMIN',
+    items: [
+      {
+        label: 'Users & Roles',
+        path: ROUTES.SETTINGS.USERS,
+        icon: UserCog,
+        permission: PERMISSIONS.USERS.VIEW,
+      },
+      {
+        label: 'Screen Privileges',
+        path: ROUTES.SETTINGS.PRIVILEGES,
+        icon: ShieldCheck,
+        permission: PERMISSIONS.PRIVILEGES.VIEW,
       },
     ],
   },

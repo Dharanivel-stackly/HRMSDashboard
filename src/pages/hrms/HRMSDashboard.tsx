@@ -31,7 +31,8 @@ const getDaysBetween = (from: string, to: string) => {
 
 const staticHrmsStats = [
   {
-    label: 'Total Employees',
+    label: 'Total Employee',
+    value: '842',
     icon: Users,
     accent: 'purple' as const,
     badge: '+18 this month',

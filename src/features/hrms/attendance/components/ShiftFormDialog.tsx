@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -20,17 +21,43 @@ import {
 } from '@/components/ui/select'
 import { DEPARTMENTS } from '../constants/attendance.constants'
 import { shiftFormSchema, type ShiftFormData } from '../validation/attendance.schema'
-import type { Shift } from '../types/attendance.types'
+import type { CreateShiftPayload, Shift } from '../types/attendance.types'
 
 interface ShiftFormDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onSubmit: (shift: Shift) => void
+  onSubmit: (payload: CreateShiftPayload) => void | Promise<void>
+  isLoading?: boolean
+  shift?: Shift | null
 }
 
 const departmentOptions = DEPARTMENTS.filter((d) => d !== 'All Departments')
 
-export function ShiftFormDialog({ open, onOpenChange, onSubmit }: ShiftFormDialogProps) {
+const emptyDefaults: ShiftFormData = {
+  code: '',
+  name: '',
+  startTime: '09:00',
+  endTime: '18:00',
+  crossMidnight: false,
+  graceMinutes: 15,
+  breakMinutes: 45,
+  minWorkHours: 8,
+  halfDayThreshold: 4,
+  overtimeThreshold: 8.5,
+  departments: departmentOptions[0],
+  effectiveDate: new Date().toISOString().slice(0, 10),
+  status: 'active',
+}
+
+export function ShiftFormDialog({
+  open,
+  onOpenChange,
+  onSubmit,
+  isLoading,
+  shift,
+}: ShiftFormDialogProps) {
+  const isEdit = Boolean(shift)
+
   const {
     register,
     handleSubmit,
@@ -40,26 +67,36 @@ export function ShiftFormDialog({ open, onOpenChange, onSubmit }: ShiftFormDialo
     formState: { errors },
   } = useForm<ShiftFormData>({
     resolver: zodResolver(shiftFormSchema),
-    defaultValues: {
-      code: '',
-      name: '',
-      startTime: '09:00',
-      endTime: '18:00',
-      crossMidnight: false,
-      graceMinutes: 15,
-      breakMinutes: 45,
-      minWorkHours: 8,
-      halfDayThreshold: 4,
-      overtimeThreshold: 8.5,
-      departments: departmentOptions[0],
-      effectiveDate: new Date().toISOString().slice(0, 10),
-      status: 'active',
-    },
+    defaultValues: emptyDefaults,
   })
 
-  const handleFormSubmit = (data: ShiftFormData) => {
-    onSubmit({
-      id: `shift-${Date.now()}`,
+  useEffect(() => {
+    if (!open) return
+
+    if (shift) {
+      reset({
+        code: shift.code,
+        name: shift.name,
+        startTime: shift.startTime,
+        endTime: shift.endTime,
+        crossMidnight: shift.crossMidnight,
+        graceMinutes: shift.graceMinutes,
+        breakMinutes: shift.breakMinutes,
+        minWorkHours: shift.minWorkHours,
+        halfDayThreshold: shift.halfDayThreshold,
+        overtimeThreshold: shift.overtimeThreshold,
+        departments: shift.departments[0] ?? departmentOptions[0],
+        effectiveDate: shift.effectiveDate,
+        status: shift.status,
+      })
+      return
+    }
+
+    reset(emptyDefaults)
+  }, [open, shift, reset])
+
+  const handleFormSubmit = async (data: ShiftFormData) => {
+    await onSubmit({
       code: data.code.toUpperCase(),
       name: data.name,
       startTime: data.startTime,
@@ -74,12 +111,12 @@ export function ShiftFormDialog({ open, onOpenChange, onSubmit }: ShiftFormDialo
       effectiveDate: data.effectiveDate,
       status: data.status,
     })
-    reset()
+    reset(emptyDefaults)
     onOpenChange(false)
   }
 
   const handleClose = (nextOpen: boolean) => {
-    if (!nextOpen) reset()
+    if (!nextOpen) reset(emptyDefaults)
     onOpenChange(nextOpen)
   }
 
@@ -87,7 +124,7 @@ export function ShiftFormDialog({ open, onOpenChange, onSubmit }: ShiftFormDialo
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Create Shift</DialogTitle>
+          <DialogTitle>{isEdit ? 'Edit Shift' : 'Create Shift'}</DialogTitle>
           <DialogDescription>
             Configure shift timing, grace period, break and overtime rules.
           </DialogDescription>
@@ -194,7 +231,9 @@ export function ShiftFormDialog({ open, onOpenChange, onSubmit }: ShiftFormDialo
             <Button type="button" variant="outline" onClick={() => handleClose(false)}>
               Cancel
             </Button>
-            <Button type="submit">Create Shift</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Saving...' : isEdit ? 'Save Changes' : 'Create Shift'}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
