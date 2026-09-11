@@ -83,7 +83,7 @@ export default function AttendanceDashboard() {
       <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-5">
           <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
-            <h3 className="text-base font-semibold text-[#0b3d91]">Weekly Attendance Trend</h3>
+            <h3 className="text-base font-semibold text-brand-navy">Weekly Attendance Trend</h3>
             <p className="mt-1 text-xs text-muted-foreground">Present / Absent / Late</p>
             <div className="mt-5 flex h-44 items-end gap-3">
               {data.trend.map((point) => (
@@ -112,7 +112,7 @@ export default function AttendanceDashboard() {
           </div>
 
           <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
-            <h3 className="text-base font-semibold text-[#0b3d91]">Department-wise Distribution</h3>
+            <h3 className="text-base font-semibold text-brand-navy">Department-wise Distribution</h3>
             <div className="mt-4 space-y-3">
               {data.departmentDistribution.map((dept) => {
                 const total = dept.present + dept.absent + dept.late + dept.onLeave
@@ -156,7 +156,7 @@ export default function AttendanceDashboard() {
 
           <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="text-base font-semibold text-[#0b3d91]">Pending Corrections</h3>
+              <h3 className="text-base font-semibold text-brand-navy">Pending Corrections</h3>
               <Button
                 variant="ghost"
                 size="sm"
@@ -181,7 +181,7 @@ export default function AttendanceDashboard() {
           </div>
 
           <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
-            <h3 className="text-base font-semibold text-[#0b3d91]">Late / Absent Today</h3>
+            <h3 className="text-base font-semibold text-brand-navy">Late / Absent Today</h3>
             <div className="mt-3 space-y-2">
               {data.lateOrAbsent.map((row) => (
                 <div
