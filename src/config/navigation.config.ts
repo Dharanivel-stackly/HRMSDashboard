@@ -217,7 +217,52 @@ export const navigationConfig: NavigationGroup[] = [
         icon: BarChart3,
         module: 'hrms',
         permission: PERMISSIONS.REPORTS.VIEW,
-      },
+        children: [
+          {
+            label: 'Employee Reports',
+            path: ROUTES.HRMS.EMPLOYEE_REPORTS,
+            icon: Users,
+            module: 'hrms',
+            permission: PERMISSIONS.REPORTS.VIEW,
+          },
+          {
+            label: 'Attendance Reports',
+            path: ROUTES.HRMS.ATTENDANCE_REPORTS_RS,
+            icon: ClipboardCheck,
+            module: 'hrms',
+            permission: PERMISSIONS.REPORTS.VIEW,
+          },
+          {
+            label: 'Leave Reports',
+            path: ROUTES.HRMS.LEAVE_REPORTS,
+            icon: CalendarDays,
+            module: 'hrms',
+            permission: PERMISSIONS.REPORTS.VIEW,
+          },
+          {
+            label: 'Payroll Reports',
+            path: ROUTES.HRMS.PAYROLL_REPORTS,
+            icon: DollarSign,
+            module: 'hrms',
+            permission: PERMISSIONS.REPORTS.VIEW,
+          },
+          {
+            label: 'Recruitment Reports',
+            path: ROUTES.HRMS.RECRUITMENT_REPORTS,
+            icon: UserPlus,
+            module: 'hrms',
+            permission: PERMISSIONS.REPORTS.VIEW,
+          },
+          {
+            label: 'Performance Reports',
+            path: ROUTES.HRMS.PERFORMANCE_REPORTS,
+            icon: TrendingUp,
+            module: 'hrms',
+            permission: PERMISSIONS.REPORTS.VIEW,
+          },
+
+        ],
+      }
     ],
   },
   {
