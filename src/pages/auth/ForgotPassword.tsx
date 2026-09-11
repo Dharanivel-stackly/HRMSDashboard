@@ -114,3 +114,4 @@ const handleSubmit = async (data: ForgotPasswordFormData) => {
     </div>
   )
 }
+}
