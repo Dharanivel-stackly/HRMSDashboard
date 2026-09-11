@@ -1,3 +1,4 @@
+// src/lib/api/apiClient.ts
 import axios, {
   type AxiosAdapter,
   type AxiosResponse,
@@ -6,6 +7,7 @@ import axios, {
 import { getToken, clearTokens } from '@/lib/auth/auth'
 import { ApiError } from './apiError'
 import { environment } from '@/config/environment'
+//import { executeMockApiRequests } from '@/lib/mock/mockApi'
 import { executeMockApiRequest } from '@/lib/mock/mockApiRouter'
 import { parseRequestBody, serializeRequestBody } from '@/lib/api/requestBody'
 
@@ -49,6 +51,13 @@ function parseRoutePath(url: string): { path: string; query: Record<string, stri
 const mockApiAdapter: AxiosAdapter = async (config) => {
   const routeUrl = config.url ?? ''
   const isMockRoute =
+    //routeUrl.startsWith('/attendance') ||
+    //routeUrl.startsWith('/users') ||
+    //routeUrl.startsWith('/auth') ||
+    routeUrl.startsWith('/recruitment') ||
+    routeUrl.startsWith('/onboarding') ||
+    routeUrl.startsWith('/notifications')
+
     routeUrl.startsWith('/attendance') ||
     routeUrl.startsWith('/users') ||
     routeUrl.startsWith('/auth') ||
@@ -76,7 +85,6 @@ const mockApiAdapter: AxiosAdapter = async (config) => {
           ? undefined
           : serializeRequestBody(config.data),
     })
-
     const contentType = response.headers.get('content-type') ?? ''
     if (contentType.includes('application/json')) {
       const body = await response.json()
@@ -109,7 +117,6 @@ const mockApiAdapter: AxiosAdapter = async (config) => {
   if (!mockResponse.body.success) {
     throw new ApiError(mockResponse.body.message, mockResponse.status, mockResponse.body)
   }
-
   return toAxiosResponse(config, mockResponse.status, mockResponse.body)
 }
 
@@ -141,10 +148,8 @@ apiClient.interceptors.response.use(
         clearTokens()
         window.location.href = '/login'
       }
-
       const message = error.response?.data?.message || error.message || 'An unexpected error occurred'
       const status = error.response?.status || 500
-
       return Promise.reject(new ApiError(message, status, error.response?.data))
     }
     return Promise.reject(error)
