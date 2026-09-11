@@ -39,12 +39,15 @@ export function Sidebar() {
   const { user, logout } = useAuth()
   const { locale, setLocale, language, t } = useLocale()
 
-  const canSeeItem = (item: NavigationItem): boolean => {
-    if (item.children?.length) {
-      return item.children.some((child) => canSeeItem(child))
-    }
-    return !item.permission || can(item.permission as Permission)
+const canSeeItem = (item: NavigationItem): boolean => {
+  if (item.permission && !can(item.permission as Permission)) {
+    return false
   }
+  if (item.children?.length) {
+    return item.children.some((child) => canSeeItem(child))
+  }
+  return true
+}
 
   const isUnderModule = (modulePath: string) =>
     location.pathname === modulePath ||
