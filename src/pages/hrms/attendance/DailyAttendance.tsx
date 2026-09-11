@@ -1,11 +1,14 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Download, CheckCheck } from 'lucide-react'
 import { PageContainer } from '@/components/layout/PageContainer'
 import { PageHeader } from '@/components/common/PageHeader'
+import { LoadingState } from '@/components/common/LoadingState'
+import { ErrorState } from '@/components/common/ErrorState'
 import { Button } from '@/components/ui/button'
 import { AttendanceFiltersBar } from '@/features/hrms/attendance/components/AttendanceFilters'
 import { AttendanceTable } from '@/features/hrms/attendance/components/AttendanceTable'
-import { mockDailyAttendance } from '@/features/hrms/attendance/mock/attendance.mock'
+import { useDailyAttendance } from '@/features/hrms/attendance/hooks/useAttendance'
+import { exportDailyAttendanceCsv } from '@/features/hrms/attendance/utils/exportDailyAttendance'
 import type { AttendanceFilters } from '@/features/hrms/attendance/types/attendance.types'
 
 export default function DailyAttendance() {
@@ -18,40 +21,16 @@ export default function DailyAttendance() {
     search: '',
   })
 
-  const records = useMemo(() => {
-    return mockDailyAttendance.filter((row) => {
-      if (
-        filters.branch &&
-        filters.branch !== 'All Branches' &&
-        row.branch !== filters.branch
-      ) {
-        return false
-      }
-      if (
-        filters.department &&
-        filters.department !== 'All Departments' &&
-        row.department !== filters.department
-      ) {
-        return false
-      }
-      if (filters.shift && filters.shift !== 'All Shifts' && row.shift !== filters.shift) {
-        return false
-      }
-      if (filters.status && filters.status !== 'all' && row.status !== filters.status) {
-        return false
-      }
-      if (filters.search) {
-        const q = filters.search.toLowerCase()
-        if (
-          !row.employeeName.toLowerCase().includes(q) &&
-          !row.employeeCode.toLowerCase().includes(q)
-        ) {
-          return false
-        }
-      }
-      return true
-    })
-  }, [filters])
+  const { data: records = [], isLoading, isError, refetch } = useDailyAttendance(filters)
+
+  const handleExport = () => {
+    if (records.length === 0) return
+    exportDailyAttendanceCsv(records, filters)
+  }
+
+  if (isError) {
+    return <ErrorState onRetry={() => refetch()} />
+  }
 
   return (
     <PageContainer>
@@ -64,7 +43,7 @@ export default function DailyAttendance() {
               <CheckCheck className="mr-2 h-4 w-4" />
               Approve Selected
             </Button>
-            <Button>
+            <Button onClick={handleExport} disabled={isLoading || records.length === 0}>
               <Download className="mr-2 h-4 w-4" />
               Export
             </Button>
@@ -87,11 +66,11 @@ export default function DailyAttendance() {
         </p>
       </div>
 
-      <AttendanceTable
-        records={records}
-        onView={() => undefined}
-        onCorrect={() => undefined}
-      />
+      {isLoading ? (
+        <LoadingState rows={6} />
+      ) : (
+        <AttendanceTable records={records} onView={() => undefined} onCorrect={() => undefined} />
+      )}
     </PageContainer>
   )
 }
