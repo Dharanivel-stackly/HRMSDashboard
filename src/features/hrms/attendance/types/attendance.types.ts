@@ -177,3 +177,87 @@ export interface AttendanceReportType {
   name: string
   description: string
 }
+
+export interface AttendanceDashboardData {
+  kpis: AttendanceKpis
+  trend: AttendanceTrendPoint[]
+  departmentDistribution: DepartmentDistribution[]
+  pendingCorrections: CorrectionRequest[]
+  lateOrAbsent: AttendanceRecord[]
+  session: CheckInSession
+}
+
+export interface MyAttendanceData {
+  summary: MyAttendanceSummary
+  calendarDays: CalendarDay[]
+  session: CheckInSession
+}
+
+export interface AttendanceSettingsData {
+  fullDayMinHours: number
+  halfDayThreshold: number
+  defaultGraceMinutes: number
+  overtimeStartsAfter: number
+  autoCreateOtRequest: boolean
+  requireManagerApproval: boolean
+  correctionWindowDays: number
+  attachmentRequired: 'optional' | 'required' | 'none'
+  autoNotifyEmployee: boolean
+}
+
+export interface GenerateReportParams {
+  reportId: string
+  dateFrom: string
+  dateTo: string
+  filters: AttendanceFilters
+}
+
+export interface GenerateReportResult {
+  reportId: string
+  reportName: string
+  generatedAt: string
+  rowCount: number
+  message: string
+}
+
+export interface CreateShiftPayload {
+  code: string
+  name: string
+  startTime: string
+  endTime: string
+  crossMidnight: boolean
+  graceMinutes: number
+  breakMinutes: number
+  minWorkHours: number
+  halfDayThreshold: number
+  overtimeThreshold: number
+  departments: string[]
+  effectiveDate: string
+  status: ShiftStatus
+}
+
+export interface CreateCorrectionPayload {
+  employeeName: string
+  department: string
+  attendanceDate: string
+  existingCheckIn?: string
+  existingCheckOut?: string
+  requestedCheckIn?: string
+  requestedCheckOut?: string
+  correctionType: CorrectionType
+  reason: string
+  attachmentName?: string
+  approver: string
+}
+
+export interface CreateHolidayPayload {
+  name: string
+  date: string
+  type: HolidayType
+  branch: string
+  companyWide: boolean
+  published: boolean
+}
+
+export type UpdateHolidayPayload = CreateHolidayPayload
+export type UpdateShiftPayload = CreateShiftPayload
