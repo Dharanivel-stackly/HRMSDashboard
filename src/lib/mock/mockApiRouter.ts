@@ -2,6 +2,7 @@ import { executeAttendanceMockRequest } from '@/lib/mock/mockAttendanceApiRouter
 import { executeUsersMockRequest } from '@/lib/mock/mockUsersApiRouter'
 import { executeAuthMockRequest } from '@/lib/mock/mockAuthApiRouter'
 import { executePrivilegesMockRequest } from '@/lib/mock/mockPrivilegesApiRouter'
+import { executePerformanceMockRequest } from '@/lib/mock/mockPerformanceApiRouter'
 import type { MockHttpRequest, MockHttpResponse } from '@/lib/mock/mockAttendanceApiRouter'
 import { executeNotificationMockRequest } from './mockNotificationApi'
 import { executeOnboardingMockRequest } from './mockOnboardingApi'
@@ -36,6 +37,10 @@ export async function executeMockApiRequest(
     if (request.path.startsWith('/notifications')) {
       return executeNotificationMockRequest(request)
     }
+
+  if (request.path.startsWith('/performance')) {
+    return executePerformanceMockRequest(request)
+  }
 
   return {
     status: 404,

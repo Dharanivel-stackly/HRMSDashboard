@@ -11,7 +11,7 @@ import type {
   UpdateHolidayPayload,
   UpdateShiftPayload,
 } from '@/features/hrms/attendance/types/attendance.types'
-import type { ApiResponse } from '@/types/api.types'
+import type { ApiResponse, PaginatedResponse } from '@/types/api.types'
 import { parseRequestBody } from '@/lib/api/requestBody'
 
 export type MockHttpRequest = {
@@ -23,7 +23,7 @@ export type MockHttpRequest = {
 
 export type MockHttpResponse = {
   status: number
-  body: ApiResponse<unknown> | { success: false; message: string }
+  body: ApiResponse<unknown> | PaginatedResponse<unknown> | { success: false; message: string }
 }
 
 function success<T>(data: T, message = 'OK'): MockHttpResponse {

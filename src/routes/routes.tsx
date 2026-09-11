@@ -36,6 +36,10 @@ import Appraisal from '@/pages/hrms/performance/Appraisal'
 import Feedback from '@/pages/hrms/performance/Feedback'
 import HRMSDocuments from '@/pages/hrms/documents/Documents'
 import HRMSReports from '@/pages/hrms/reports/Reports'
+
+// import UserManagement from '@/pages/settings/UserManagement'
+// import ScreenPrivileges from '@/pages/settings/ScreenPrivileges'
+
 import JobRequisition from '@/pages/hrms/recruitment/JobRequisition'
 import JobPosting from '@/pages/hrms/recruitment/JobPosting'
 import CandidateApplication from '@/pages/hrms/recruitment/CandidateApplication'
@@ -74,6 +78,13 @@ import EditLeaveType from '@/pages/hrms/leave/EditLeaveType'
 import UserManagement from '@/pages/settings/UserManagement'
 import ScreenPrivileges from '@/pages/settings/ScreenPrivileges'
 
+
+import EmployeeReports from '@/pages/hrms/reports/employees/EmployeeReports'
+import AttendanceReportsPage from '@/pages/hrms/reports/attendance/AttendanceReports'
+import LeaveReports from '@/pages/hrms/reports/leave/LeaveReports'
+import PayrollReports from '@/pages/hrms/reports/payroll/PayrollReports'
+import RecruitmentReports from '@/pages/hrms/reports/recruitment/RecruitmentReports'
+import { PerformanceReports } from '@/pages/hrms/reports/performance/PerformanceReports'
 export const router = createBrowserRouter([
   {
     path: ROUTES.LOGIN,
@@ -238,6 +249,8 @@ export const router = createBrowserRouter([
 
       { path: 'hrms/payroll', element: <Payroll /> },
       { path: 'hrms/recruitment', element: <Recruitment /> },
+      { path: 'hrms/payroll/payslip', element: <Payslip /> },
+      { path: 'hrms/payroll/process', element: <PayrollProcessing /> },
       { path: 'hrms/recruitment/requisitions', element: <JobRequisition /> },
       { path: 'hrms/recruitment/requisitions/new', element: <NewRequisition /> },
       { path: 'hrms/recruitment/postings', element: <JobPosting /> },
@@ -267,19 +280,6 @@ export const router = createBrowserRouter([
       { path: 'hrms/onboarding/manager', element: <ManagerTasks /> },
       { path: 'hrms/onboarding/hr', element: <HRTasks /> },
       { path: 'hrms/onboarding/active', element: <EmployeeActive /> },
-
-      { path: 'hrms/performance', element: <Performance /> },
-      { path: 'hrms/documents', element: <HRMSDocuments /> },
-      { path: 'hrms/reports', element: <HRMSReports /> },
-
-      { path: 'hrms/leave', element: <Leave /> },
-      { path: 'hrms/payroll', element: <Payroll /> },
-      { path: 'hrms/payroll/payslip', element: <Payslip /> },
-      { path: 'hrms/payroll/process', element: <PayrollProcessing /> },
-      { path: 'hrms/recruitment', element: <Recruitment /> },
-      { path: 'hrms/performance', element: <Performance /> },
-      { path: 'hrms/documents', element: <HRMSDocuments /> },
-      { path: 'hrms/reports', element: <HRMSReports /> },
 
       {
         path: 'hrms/leave',
@@ -409,6 +409,12 @@ export const router = createBrowserRouter([
           </RoleRoute>
         ),
       },
+      { path: 'hrms/reports/employees', element: <EmployeeReports /> },
+      { path: 'hrms/reports/attendance', element: <AttendanceReportsPage /> },
+      { path: 'hrms/reports/leave', element: <LeaveReports /> },
+      { path: 'hrms/reports/payroll', element: <PayrollReports /> },
+      { path: 'hrms/reports/recruitment', element: <RecruitmentReports /> },
+      { path: 'hrms/reports/performance', element: <PerformanceReports /> }
     ],
   },
 ])
