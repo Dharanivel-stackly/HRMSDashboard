@@ -1,4 +1,4 @@
-import type {LeaveBalance,LeaveRequest,LeaveType,CreateLeaveRequest,} from '../types/leave.types'
+import type {LeaveBalance,LeaveRequest,LeaveType,CreateLeaveRequest, CreateLeaveType, UpdateLeaveType} from '../types/leave.types'
 import {MOCK_LEAVE_BALANCE,MOCK_LEAVE_REQUESTS,MOCK_LEAVE_TYPES,} from '@/lib/mock/mockLeaveData'
 import { ApiError } from '@/lib/api/apiError'
 
@@ -10,12 +10,19 @@ let leaveBalances: LeaveBalance[] = MOCK_LEAVE_BALANCE.map(
   (balance) => ({ ...balance })
 )
 let nextId = 3
+let leaveTypes: LeaveType[] = [...MOCK_LEAVE_TYPES]
+let nextLeaveTypeId = 4
 
-export const mockLeaveService = {
-  async getLeaveTypes(): Promise<LeaveType[]> {
-    await delay()
-    return MOCK_LEAVE_TYPES
-  },
+ export const mockLeaveService = {
+//   async getLeaveTypes(): Promise<LeaveType[]> {
+//     await delay()
+//     return MOCK_LEAVE_TYPES
+//   },
+
+async getLeaveTypes(): Promise<LeaveType[]> {
+  await delay()
+  return leaveTypes
+},
 
   async getLeaveBalance(): Promise<LeaveBalance[]> {
   await delay()
@@ -332,5 +339,132 @@ async rejectLeaveRequest(
   ]
 
   return updatedRequest
+},
+async createLeaveType(
+  data: CreateLeaveType
+): Promise<LeaveType> {
+  await delay()
+
+  // const duplicateCode = leaveTypes.some(
+  //   (type) =>
+  //     type.code.toLowerCase() ===
+  //     data.code.toLowerCase()
+  // )
+
+  // if (duplicateCode) {
+  //   throw new ApiError(
+  //     'Leave type code already exists',
+  //     400
+  //   )
+  // }
+
+const duplicateCode = leaveTypes.some(
+  (type) =>
+    type.code.toLowerCase() ===
+    data.code.trim().toLowerCase()
+)
+
+if (duplicateCode) {
+  throw new ApiError(
+    'Leave type code already exists',
+    400
+  )
+}
+
+  const leaveType: LeaveType = {
+    id: `leave-type-${String(nextLeaveTypeId).padStart(3, '0')}`,
+    name: data.name.trim(),
+    code: data.code.trim().toUpperCase(),
+    totalDays: data.totalDays,
+    isPaid: data.isPaid,
+    isActive: true,
+  }
+
+  nextLeaveTypeId += 1
+
+  leaveTypes = [
+    ...leaveTypes,
+    leaveType,
+  ]
+
+  return leaveType
+},
+async updateLeaveType(
+  id: string,
+  data: UpdateLeaveType
+): Promise<LeaveType> {
+  await delay()
+
+  const index = leaveTypes.findIndex(
+    (type) => type.id === id
+  )
+
+  if (index === -1) {
+    throw new ApiError(
+      'Leave type not found',
+      404
+    )
+  }
+
+  const duplicateCode = leaveTypes.some(
+    (type) =>
+      type.id !== id &&
+      type.code.toLowerCase() ===
+        data.code.trim().toLowerCase()
+  )
+
+  if (duplicateCode) {
+    throw new ApiError(
+      'Leave type code already exists',
+      400
+    )
+  }
+
+  const updatedLeaveType: LeaveType = {
+    ...leaveTypes[index],
+    name: data.name.trim(),
+    code: data.code.trim().toUpperCase(),
+    totalDays: data.totalDays,
+    isPaid: data.isPaid,
+  }
+
+  leaveTypes = [
+    ...leaveTypes.slice(0, index),
+    updatedLeaveType,
+    ...leaveTypes.slice(index + 1),
+  ]
+
+  return updatedLeaveType
+},
+async toggleLeaveTypeStatus(
+  id: string
+): Promise<LeaveType> {
+  await delay()
+
+  const index = leaveTypes.findIndex(
+    (type) => type.id === id
+  )
+
+  if (index === -1) {
+    throw new ApiError(
+      'Leave type not found',
+      404
+    )
+  }
+
+  const current = leaveTypes[index]
+
+  const updatedLeaveType: LeaveType = {
+    ...current,
+    isActive: !current.isActive,
+  }
+
+  leaveTypes = [
+    ...leaveTypes.slice(0, index),
+    updatedLeaveType,
+    ...leaveTypes.slice(index + 1),
+  ]
+
+  return updatedLeaveType
 },
 }

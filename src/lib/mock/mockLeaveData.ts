@@ -7,6 +7,7 @@ export const MOCK_LEAVE_TYPES: LeaveType[] = [
     code: 'CL',
     totalDays: 12,
     isPaid: true,
+    isActive: true,
   },
   {
     id: 'leave-type-002',
@@ -14,6 +15,7 @@ export const MOCK_LEAVE_TYPES: LeaveType[] = [
     code: 'SL',
     totalDays: 10,
     isPaid: true,
+    isActive: true,
   },
   {
     id: 'leave-type-003',
@@ -21,6 +23,7 @@ export const MOCK_LEAVE_TYPES: LeaveType[] = [
     code: 'EL',
     totalDays: 15,
     isPaid: true,
+    isActive: true,
   },
 ]
 

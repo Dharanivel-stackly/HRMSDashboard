@@ -24,6 +24,13 @@ export const ROUTES = {
     ATTENDANCE_SETTINGS: '/hrms/attendance/settings',
 
     LEAVE: '/hrms/leave',
+    LEAVE_APPLY: '/hrms/leave/apply',
+    LEAVE_MY: '/hrms/leave/my',
+    LEAVE_APPROVALS: '/hrms/leave/approvals',
+    LEAVE_TYPES: '/hrms/leave/types',
+    LEAVE_TYPE_NEW: '/hrms/leave/types/new',
+    LEAVE_TYPE_EDIT: (id: string) => `/hrms/leave/types/${id}/edit`,
+    LEAVE_DETAIL: (id: string) => `/hrms/leave/${id}`,
     PAYROLL: '/hrms/payroll',
     RECRUITMENT: {
       DASHBOARD: '/hrms/recruitment',

@@ -21,6 +21,19 @@ export default function ForgotPassword() {
   const [showOtp, setShowOtp] = useState(false)
   const [otpError, setOtpError] = useState<string | null>(null)
 
+  const handleSubmit = async (data: ForgotPasswordFormData) => {
+    setIsLoading(true)
+    try {
+      await authService.forgotPassword(data)
+     sessionStorage.setItem(OTP_STORAGE_KEY, DUMMY_OTP)
+      setEmail(data.email)
+      setOtpError(null)
+      setShowOtp(true)
+    } catch {
+      // Error handled by API client interceptor
+    } finally {
+      setIsLoading(false)
+    }
 
   // const handleSubmit = async (data: ForgotPasswordFormData) => {
   //   setIsLoading(true)
@@ -51,6 +64,7 @@ const handleSubmit = async (data: ForgotPasswordFormData) => {
     setIsLoading(false)
   }
 }
+
 
   const handleVerifyOtp = (data: OtpFormData) => {
     const savedOtp = sessionStorage.getItem(OTP_STORAGE_KEY)
@@ -113,4 +127,4 @@ const handleSubmit = async (data: ForgotPasswordFormData) => {
       </div>
     </div>
   )
-}
+}}

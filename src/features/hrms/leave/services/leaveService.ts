@@ -1,7 +1,7 @@
 import { api } from '@/lib/api/apiClient'
 import { API_ENDPOINTS } from '@/lib/api/apiEndpoints'
 import { environment } from '@/config/environment'
-import type {CreateLeaveRequest,LeaveRequest,LeaveType,LeaveBalance,} from '../types/leave.types'
+import type {CreateLeaveRequest,CreateLeaveType, UpdateLeaveType,LeaveRequest,LeaveType,LeaveBalance,} from '../types/leave.types'
 import { mockLeaveService } from './mockLeaveService'
 
 export const leaveService = {
@@ -11,6 +11,17 @@ export const leaveService = {
   }
 
   throw new Error('Leave types API endpoint is not configured')
+},
+async createLeaveType(
+  data: CreateLeaveType
+): Promise<LeaveType> {
+  if (environment.useMockApi) {
+    return mockLeaveService.createLeaveType(data)
+  }
+
+  throw new Error(
+    'Create leave type API endpoint is not configured'
+  )
 },
 
 async getLeaveBalance(): Promise<LeaveBalance[]> {
@@ -60,6 +71,18 @@ async getLeaveBalance(): Promise<LeaveBalance[]> {
 
     return response.data
   },
+  async updateLeaveType(
+  id: string,
+  data: UpdateLeaveType
+): Promise<LeaveType> {
+  if (environment.useMockApi) {
+    return mockLeaveService.updateLeaveType(id, data)
+  }
+
+  throw new Error(
+    'Update leave type API endpoint is not configured'
+  )
+},
 
   async cancelLeaveRequest(
   id: string
@@ -106,6 +129,17 @@ async rejectLeaveRequest(
   )
 
   return response.data
+},
+async toggleLeaveTypeStatus(
+  id: string
+): Promise<LeaveType> {
+  if (environment.useMockApi) {
+    return mockLeaveService.toggleLeaveTypeStatus(id)
+  }
+
+  throw new Error(
+    'Toggle leave type status API endpoint is not configured'
+  )
 },
 }
 

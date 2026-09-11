@@ -1,12 +1,4 @@
-export type LeaveStatus =| 'PENDING'| 'APPROVED'| 'REJECTED'| 'CANCELLED'
-
-export interface LeaveType {
-  id: string
-  name: string
-  code: string
-  totalDays: number
-  isPaid: boolean
-}
+export type LeaveStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED'
 
 export interface LeaveBalance {
   leaveTypeId: string
@@ -39,4 +31,27 @@ export interface CreateLeaveRequest {
   toDate: string
   numberOfDays: number
   reason: string
+}
+
+export interface LeaveType {
+  id: string
+  name: string
+  code: string
+  totalDays: number
+  isPaid: boolean
+  isActive: boolean
+}
+
+export interface CreateLeaveType {
+  name: string
+  code: string
+  totalDays: number
+  isPaid: boolean
+}
+
+export interface UpdateLeaveType {
+  name: string
+  code: string
+  totalDays: number
+  isPaid: boolean
 }
