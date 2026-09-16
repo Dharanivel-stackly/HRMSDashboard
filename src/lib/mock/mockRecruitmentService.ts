@@ -121,8 +121,8 @@ export const mockRecruitmentService = {
     if (params?.experienceMin !== undefined) data = data.filter(c => c.experienceYears >= params.experienceMin!)
     if (params?.experienceMax !== undefined) data = data.filter(c => c.experienceYears <= params.experienceMax!)
     
-    const page = params?.page ? Number(params.page) : 1
-    const limit = params?.limit ? Number(params.limit) : 10
+    const page = (params as any)?.page ? Number((params as any).page) : 1
+    const limit = (params as any)?.limit ? Number((params as any).limit) : 10
     const start = (page - 1) * limit
     const paginated = data.slice(start, start + limit)
     

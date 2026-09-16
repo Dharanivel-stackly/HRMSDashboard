@@ -10,7 +10,7 @@ export function useOnboardingEmployees(params?: {
 }) {
   return useQuery({
     queryKey: ['onboardingEmployees', params],
-    queryFn: () => onboardingService.getOnboardingEmployees(params),
+    queryFn: () => onboardingService.getOnboardingEmployees(params as any),
   })
 }
 

@@ -15,7 +15,7 @@ export default function Orientation() {
 
   const orientationTasks = tasks?.filter((t) => t.category === 'manager' || t.category === 'hr') || [];
 
-  const handleToggle = (id: string, status: 'pending' | 'completed') => {
+  const handleToggle = (id: string, status: 'pending' | 'completed' | 'in_progress' | 'blocked') => {
     updateStatus(
       { taskId: id, status },
       { onSuccess: () => refetch() }

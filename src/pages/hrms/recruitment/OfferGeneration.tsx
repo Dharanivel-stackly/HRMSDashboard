@@ -62,7 +62,7 @@ export default function OfferGeneration() {
   const handleSendOfferClick = (candidate: Candidate) => {
     setSelectedCandidate(candidate)
     setOfferForm({
-      salary: candidate.salaryMin ? candidate.salaryMin : 1200000,
+      salary: 1200000,
       benefits: 'Health Insurance, Performance Bonus, Flexible Hours',
       joiningDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
       notes: '',

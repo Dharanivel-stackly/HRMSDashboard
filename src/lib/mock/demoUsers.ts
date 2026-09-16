@@ -2,6 +2,7 @@ import type { AuthUser } from '@/types/auth.types'
 import { ROLES } from '@/lib/constants/roles'
 import { ALL_PERMISSIONS } from '@/lib/auth/rolePermissions'
 import { EMPLOYEE_PERMISSIONS, HR_MANAGER_PERMISSIONS } from '@/lib/auth/rolePermissions'
+import { PERMISSIONS } from '@/lib/constants/permissions'
 
 /** @deprecated Use mockUserService — kept for credential reference in docs */
 export const DEMO_USERS = [

@@ -81,7 +81,7 @@ export default function JobPosting() {
   const [viewingPost, setViewingPost] = useState<JobPosting | null>(null)
   
   const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<JobPostingFormData>({
-    resolver: zodResolver(jobPostingSchema),
+    resolver: zodResolver(jobPostingSchema) as any,
     defaultValues: {
       title: '',
       department: 'Engineering',
@@ -289,7 +289,7 @@ export default function JobPosting() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit(editingPost ? handleUpdate : handleCreate)}>
+          <form onSubmit={handleSubmit((editingPost ? handleUpdate : handleCreate) as any)}>
             <div className="space-y-6 px-6 py-6">
               {/* Section: Basic Info */}
               <div className="space-y-4 rounded-lg border border-slate-200 bg-slate-50/50 p-4">
