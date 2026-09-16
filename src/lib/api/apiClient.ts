@@ -51,19 +51,15 @@ function parseRoutePath(url: string): { path: string; query: Record<string, stri
 const mockApiAdapter: AxiosAdapter = async (config) => {
   const routeUrl = config.url ?? ''
   const isMockRoute =
-    //routeUrl.startsWith('/attendance') ||
-    //routeUrl.startsWith('/users') ||
-    //routeUrl.startsWith('/auth') ||
-    routeUrl.startsWith('/recruitment') ||
-    routeUrl.startsWith('/onboarding') ||
-    routeUrl.startsWith('/notifications')
-
     routeUrl.startsWith('/attendance') ||
     routeUrl.startsWith('/users') ||
     routeUrl.startsWith('/auth') ||
-    routeUrl.startsWith('/role-privileges')
-     ||
+    routeUrl.startsWith('/recruitment') ||
+    routeUrl.startsWith('/onboarding') ||
+    routeUrl.startsWith('/notifications') ||
+    routeUrl.startsWith('/role-privileges') ||
     routeUrl.startsWith('/performance')
+  
   if (!isMockRoute) {
     return defaultAdapter(config)
   }
