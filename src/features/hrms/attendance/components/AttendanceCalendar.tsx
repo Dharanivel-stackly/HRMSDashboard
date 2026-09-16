@@ -57,7 +57,7 @@ export function AttendanceCalendar({
     <div className="grid gap-5 lg:grid-cols-[1.6fr_1fr]">
       <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-[#0b3d91]">{monthLabel}</h3>
+          <h3 className="text-lg font-semibold text-brand-navy">{monthLabel}</h3>
           <div className="flex flex-wrap gap-2 text-[11px] text-muted-foreground">
             {Object.entries(STATUS_DOT).map(([key, color]) => (
               <span key={key} className="inline-flex items-center gap-1.5 capitalize">
@@ -107,7 +107,7 @@ export function AttendanceCalendar({
       </div>
 
       <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-5">
-        <h3 className="text-base font-semibold text-[#0b3d91]">Day Detail</h3>
+        <h3 className="text-base font-semibold text-brand-navy">Day Detail</h3>
         {selected ? (
           <div className="mt-4 space-y-4">
             <p className="text-sm text-muted-foreground">{selected.date}</p>

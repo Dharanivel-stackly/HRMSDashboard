@@ -2,11 +2,16 @@ import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { PageContainer } from '@/components/layout/PageContainer'
 import { PageHeader } from '@/components/common/PageHeader'
+import { LoadingState } from '@/components/common/LoadingState'
+import { ErrorState } from '@/components/common/ErrorState'
 import { Button } from '@/components/ui/button'
 import { CorrectionFormDialog } from '@/features/hrms/attendance/components/CorrectionFormDialog'
 import { CorrectionTimeline } from '@/features/hrms/attendance/components/CorrectionTimeline'
-import { mockCorrections } from '@/features/hrms/attendance/mock/attendance.mock'
-import type { CorrectionRequest, CorrectionStatus } from '@/features/hrms/attendance/types/attendance.types'
+import {
+  useCorrections,
+  useCreateCorrection,
+} from '@/features/hrms/attendance/hooks/useAttendance'
+import type { CorrectionStatus } from '@/features/hrms/attendance/types/attendance.types'
 import { cn } from '@/lib/utils/cn'
 
 const tabs: Array<{ id: CorrectionStatus | 'all'; label: string }> = [
@@ -17,16 +22,14 @@ const tabs: Array<{ id: CorrectionStatus | 'all'; label: string }> = [
 ]
 
 export default function AttendanceCorrections() {
-  const [corrections, setCorrections] = useState<CorrectionRequest[]>(mockCorrections)
   const [tab, setTab] = useState<CorrectionStatus | 'all'>('all')
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  const filtered =
-    tab === 'all' ? corrections : corrections.filter((c) => c.status === tab)
+  const { data: corrections = [], isLoading, isError, refetch } = useCorrections(tab)
+  const createCorrection = useCreateCorrection()
 
-  const handleCreate = (correction: CorrectionRequest) => {
-    setCorrections((prev) => [correction, ...prev])
-    setTab('pending')
+  if (isError) {
+    return <ErrorState onRetry={() => refetch()} />
   }
 
   return (
@@ -60,7 +63,9 @@ export default function AttendanceCorrections() {
         ))}
       </div>
 
-      {filtered.length === 0 ? (
+      {isLoading ? (
+        <LoadingState rows={4} />
+      ) : corrections.length === 0 ? (
         <div className="ui-card-elevated rounded-xl border border-border/60 bg-card p-12 text-center">
           <p className="text-muted-foreground">No correction requests in this view.</p>
           <Button className="mt-4" onClick={() => setDialogOpen(true)}>
@@ -69,13 +74,17 @@ export default function AttendanceCorrections() {
           </Button>
         </div>
       ) : (
-        <CorrectionTimeline corrections={filtered} />
+        <CorrectionTimeline corrections={corrections} />
       )}
 
       <CorrectionFormDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        onSubmit={handleCreate}
+        isLoading={createCorrection.isPending}
+        onSubmit={async (payload) => {
+          await createCorrection.mutateAsync(payload)
+          setTab('pending')
+        }}
       />
     </PageContainer>
   )

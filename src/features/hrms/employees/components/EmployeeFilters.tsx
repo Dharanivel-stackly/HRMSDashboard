@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { X } from 'lucide-react'
 import type { EmployeeFilters } from '../types/employee.types'
 import { DEPARTMENT_OPTIONS, EMPLOYEE_STATUS_OPTIONS, EMPLOYMENT_TYPE_OPTIONS } from '../constants/employee.constants'
+import { useCallback } from 'react'
 
 interface EmployeeFiltersProps {
   filters: EmployeeFilters
@@ -18,9 +19,13 @@ interface EmployeeFiltersProps {
 }
 
 export function EmployeeFiltersBar({ filters, onFilterChange }: EmployeeFiltersProps) {
-  const handleSearchChange = (search: string) => {
-    onFilterChange({ ...filters, search })
-  }
+  const handleSearchChange = useCallback(
+    (search: string) => {
+      if (search === filters.search) return
+      onFilterChange({ ...filters, search })
+    },
+    [filters, onFilterChange]
+  )
 
   const handleClearFilters = () => {
     onFilterChange({})

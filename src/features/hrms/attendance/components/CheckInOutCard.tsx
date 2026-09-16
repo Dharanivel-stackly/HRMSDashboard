@@ -49,7 +49,7 @@ export function CheckInOutCard({ session, onCheckIn, onCheckOut }: CheckInOutCar
 
   return (
     <div className="ui-card-elevated overflow-hidden rounded-xl border border-border/60 bg-card">
-      <div className="bg-gradient-to-r from-[#0b3d91] to-[#1a73e8] px-6 py-5 text-white">
+      <div className="bg-gradient-to-r from-brand-navy to-brand-blue px-6 py-5 text-white">
         <p className="text-sm text-white/80">{dateLabel}</p>
         <p className="mt-1 text-3xl font-bold tracking-tight">{timeLabel}</p>
       </div>

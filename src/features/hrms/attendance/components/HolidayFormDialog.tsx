@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -20,17 +21,36 @@ import {
 } from '@/components/ui/select'
 import { BRANCHES, HOLIDAY_TYPE_LABELS } from '../constants/attendance.constants'
 import { holidayFormSchema, type HolidayFormData } from '../validation/attendance.schema'
-import type { Holiday } from '../types/attendance.types'
+import type { CreateHolidayPayload, Holiday } from '../types/attendance.types'
 
 interface HolidayFormDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onSubmit: (holiday: Holiday) => void
+  onSubmit: (payload: CreateHolidayPayload) => void | Promise<void>
+  isLoading?: boolean
+  holiday?: Holiday | null
 }
 
 const branchOptions = BRANCHES.filter((b) => b !== 'All Branches')
 
-export function HolidayFormDialog({ open, onOpenChange, onSubmit }: HolidayFormDialogProps) {
+const emptyDefaults: HolidayFormData = {
+  name: '',
+  date: '',
+  type: 'public',
+  branch: branchOptions[0],
+  companyWide: true,
+  published: false,
+}
+
+export function HolidayFormDialog({
+  open,
+  onOpenChange,
+  onSubmit,
+  isLoading,
+  holiday,
+}: HolidayFormDialogProps) {
+  const isEdit = Boolean(holiday)
+
   const {
     register,
     handleSubmit,
@@ -40,32 +60,42 @@ export function HolidayFormDialog({ open, onOpenChange, onSubmit }: HolidayFormD
     formState: { errors },
   } = useForm<HolidayFormData>({
     resolver: zodResolver(holidayFormSchema),
-    defaultValues: {
-      name: '',
-      date: '',
-      type: 'public',
-      branch: branchOptions[0],
-      companyWide: true,
-      published: false,
-    },
+    defaultValues: emptyDefaults,
   })
 
-  const handleFormSubmit = (data: HolidayFormData) => {
-    onSubmit({
-      id: `hol-${Date.now()}`,
+  useEffect(() => {
+    if (!open) return
+
+    if (holiday) {
+      reset({
+        name: holiday.name,
+        date: holiday.date,
+        type: holiday.type,
+        branch: holiday.companyWide ? branchOptions[0] : holiday.branch,
+        companyWide: holiday.companyWide,
+        published: holiday.published,
+      })
+      return
+    }
+
+    reset(emptyDefaults)
+  }, [open, holiday, reset])
+
+  const handleFormSubmit = async (data: HolidayFormData) => {
+    await onSubmit({
       name: data.name,
       date: data.date,
       type: data.type,
-      branch: data.companyWide ? 'All Branches' : data.branch,
+      branch: data.branch,
       companyWide: data.companyWide,
       published: data.published,
     })
-    reset()
+    reset(emptyDefaults)
     onOpenChange(false)
   }
 
   const handleClose = (nextOpen: boolean) => {
-    if (!nextOpen) reset()
+    if (!nextOpen) reset(emptyDefaults)
     onOpenChange(nextOpen)
   }
 
@@ -75,9 +105,11 @@ export function HolidayFormDialog({ open, onOpenChange, onSubmit }: HolidayFormD
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Add Holiday</DialogTitle>
+          <DialogTitle>{isEdit ? 'Edit Holiday' : 'Add Holiday'}</DialogTitle>
           <DialogDescription>
-            Create a holiday and publish it for attendance calculation.
+            {isEdit
+              ? 'Update holiday details and publish status.'
+              : 'Create a holiday and publish it for attendance calculation.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -167,7 +199,9 @@ export function HolidayFormDialog({ open, onOpenChange, onSubmit }: HolidayFormD
             <Button type="button" variant="outline" onClick={() => handleClose(false)}>
               Cancel
             </Button>
-            <Button type="submit">Add Holiday</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Saving...' : isEdit ? 'Save Changes' : 'Add Holiday'}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
